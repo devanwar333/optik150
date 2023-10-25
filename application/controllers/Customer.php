@@ -92,6 +92,15 @@ class Customer extends CI_Controller
         $res = $this->M_customer->listCustomer($start, $end);
         echo json_encode($res);
     }
+    public function listCustomerSelect2()
+    {
+        $search = $this->input->get('search', TRUE) ?? "";
+        $page = $this->input->get('page', TRUE);
+     
+        $res = $this->M_customer->listCustomerBySelect2($search, $page);
+        
+        echo json_encode($res);
+    }
     public function listCustomer_dp()
     {
         $start = $this->input->post('tgl1');

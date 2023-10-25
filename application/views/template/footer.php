@@ -81,6 +81,65 @@
 <script type="text/javascript">
   $('#notifikasi').slideDown('slow').delay(5000).slideUp('slow');
 </script>
+ <?php if ($this->session->userdata('level') == "kasir" || $this->session->userdata("level") == "admin") { ?>
+    <script>
+      document.onkeyup = KeyCheck;
+
+      function KeyCheck(e) {
+        var KeyID = (window.event) ? event.keyCode : e.keyCode;
+        if (KeyID == 113) {
+          $('#modalLaporanPenjualanBarang').modal('show');
+         	// $("#btn-penjualan").click()
+        }
+
+        if (KeyID == 115) {
+          if ("<?= $this->session->userdata('saldo') ?>" == 0 && $('#saldo_response').val() == 0) {
+            //$('#modalSaldo').modal('show');
+	     $.ajax({
+              type: "POST",
+              url: "<?php echo site_url('Ajax/getResume'); ?>",
+              success: function(msg) {
+                $('#resumewoi').html(msg);
+              }
+            });
+            $('#modalLaporanPenjualanResume').modal('show');
+          } else {
+            $.ajax({
+              type: "POST",
+              url: "<?php echo site_url('Ajax/getResume'); ?>",
+              success: function(msg) {
+                $('#resumewoi').html(msg);
+              }
+            });
+            $('#modalLaporanPenjualanResume').modal('show');
+          }
+        }
+        $('#triggerSaldo').submit(function(ev) {
+          ev.preventDefault();
+          $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            cache: false,
+            data: $(this).serialize(),
+            success: function(res) {
+              $('#modalSaldo').modal('hide');
+              $.ajax({
+                type: "POST",
+                url: "<?php echo site_url('Ajax/getResume'); ?>",
+                success: function(msg) {
+                  console.log(msg)
+                  $('#resumewoi').html(msg);
+                  $('#modalLaporanPenjualanResume').modal('show');
+
+                  $('#label_saldo_lap').text($('#saldo_response').val())
+                }
+              });
+            }
+          })
+        })
+      }
+    </script>
+  <?php } ?>
 
 <script type="text/javascript">
   $(document).ready(function() {

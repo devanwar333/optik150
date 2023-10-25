@@ -6,17 +6,21 @@ class M_penjualan extends CI_Model
 	function simpan_penjualan($nofak, $total, $jml_uang, $jml_uang2, $kurang, $kembalian, $bayar, $bayar2, $diskon, $nohp, $status)
 	{
 		$idadmin = $this->session->userdata('idadmin');
-		$this->db->query("INSERT INTO tbl_jual (jual_nofak,jual_total,jual_jml_uang,jual_jml_uang2,jual_kurang_uang,jual_kembalian,jual_user_id,jual_keterangan,jual_keterangan2,diskon,no_hp,status) VALUES ('$nofak','$total','$jml_uang','$jml_uang2','$kurang','$kembalian','$idadmin','$bayar','$bayar2','$diskon','$nohp','$status')");
+		$tipe = $status;
+		$this->db->query("INSERT INTO tbl_jual (jual_nofak,jual_total,jual_jml_uang,jual_jml_uang2,jual_kurang_uang,jual_kembalian,jual_user_id,jual_keterangan,jual_keterangan2,diskon,no_hp,status,tipe) VALUES ('$nofak','$total','$jml_uang','$jml_uang2','$kurang','$kembalian','$idadmin','$bayar','$bayar2','$diskon','$nohp','$status','$tipe')");
+		$totalPembayaran = $total;
+		$biaya1 = $jml_uang;		
+		$biaya2 = $jml_uang2;
 		$data_resume = [
 			'resume_nofak' => $nofak,
 			'method_types' => $bayar,
-			'amount' => $jml_uang,
+			'amount' => $biaya1,
 			'created_at' => date('Y-m-d H:i:s')
 		];
 		$data_resume2 = [
 			'resume_nofak' => $nofak,
 			'method_types' => $bayar2,
-			'amount' => $jml_uang2,
+			'amount' => $biaya2,
 			'created_at' => date('Y-m-d H:i:s')
 		];
 		$this->db->insert('tbl_resume', $data_resume);
@@ -39,6 +43,8 @@ class M_penjualan extends CI_Model
 			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$item[qty]' where barang_id='$item[id]'");
 			$this->db->query("update saldo set saldo=saldo+'$jml_uang' where id=1");
 			$this->db->query("update saldo set saldo=saldo-'$kembalian' where id=1");
+			log_message('error', 'simpan_penjualan - '. $item['id'].'-'.$item['qty']);
+
 		}
 		return true;
 	}
@@ -70,6 +76,8 @@ class M_penjualan extends CI_Model
 			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$item[qty]' where barang_id='$item[id]'");
 			$this->db->query("update saldo set saldo=saldo+'$jml_uang' where id=1");
 			$this->db->query("update saldo set saldo=saldo-'$kembalian' where id=1");
+			log_message('error', 'simpan_penjualan_cabang - '. $item['id'].'-'.$item['qty']);
+
 		}
 		return true;
 	}
@@ -85,7 +93,7 @@ class M_penjualan extends CI_Model
 		$produk = $produk[0];
 		$jual_total = $select->jual_total;
 		if ($count == 0) {
-			
+
 			$total = $qty * $produk["barang_harjul"];
 			$data = array(
 				'd_jual_nofak' 			=>	$nofak,
@@ -109,9 +117,12 @@ class M_penjualan extends CI_Model
 
 			// Kurangi Stok Sesuai Qty
 			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$qty' where barang_id='$kobar'");
+			log_message('error', 'edit_penjualan_cabang 1 - '. $kobar.'-'.$qty);
+
 		} else {
-			
+
 			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$qty' where barang_id='$kobar'");
+			log_message('error', 'edit_penjualan_cabang - '. $kobar.'-'.$qty);
 			$qty++;
 			// Pengurangan Stok Barang
 			//
@@ -133,7 +144,7 @@ class M_penjualan extends CI_Model
 			$this->db->query("UPDATE tbl_detail_jual SET d_jual_qty='$qty',d_jual_total='$total' WHERE d_jual_nofak='$nofak' AND d_jual_barang_id='$kobar'");
 		}
 
-		
+
 		// $this->db->query("update saldo set saldo=saldo+'$jml_uang' where id=1");
 		// $this->db->query("update saldo set saldo=saldo-'$kembalian' where id=1");
 
@@ -160,6 +171,8 @@ class M_penjualan extends CI_Model
 			);
 			$this->db->insert('tbl_detail_jual_dp', $data);
 			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$item[qty]' where barang_id='$item[id]'");
+			log_message('error', 'simpan_penjualan1 - '. $item['id'].'-'.$item['qty']);
+
 		}
 		return true;
 	}
@@ -167,11 +180,14 @@ class M_penjualan extends CI_Model
 	function get_nofak()
 	{
 		$now = date('Y-m-d');
-		$q = $this->db->query("SELECT jual_nofak FROM tbl_jual WHERE DATE(jual_tanggal) ='$now'");
-		$kd = "";
-		$kd = $q->num_rows();
-		$kd += 1;
+		// $q = $this->db->query("SELECT jual_nofak FROM tbl_jual WHERE DATE(jual_tanggal) ='$now'");
+		$q = $this->db->query("SELECT RIGHT(jual_nofak,6) AS kd_max FROM tbl_jual WHERE DATE(jual_tanggal)='$now' ORDER BY jual_nofak DESC LIMIT 1")->row();
+		// $kd = "";
+		// $kd = $q->result();
+
+		$kd = (int)($q->kd_max) + 1;
 		$kd = sprintf("%06d", $kd);
+		// print_r($kd);
 		// if ($q->num_rows() > 0) {
 		// 	foreach ($q->result() as $k) {
 		// 		$tmp = ((int)$k->kd_max) + 1;
@@ -269,6 +285,8 @@ class M_penjualan extends CI_Model
 		$this->db->where('barang_id', $id);
 		$data = ['barang_stok' => $newQty];
 		$res = $this->db->update('tbl_barang', $data);
+		log_message('error', 'update_stok_barang - '. $id.'-'.$id);
+
 		return $res;
 	}
 
@@ -285,6 +303,10 @@ class M_penjualan extends CI_Model
 		$this->db->order_by('A.jual_tanggal', 'DESC');
 		$res =	$this->db->get()->result();
 		return $res;
+	}
+	function get_history_penjualan_by_nofak($id) 
+	{
+		return $this->db->select('*')->from('tbl_jual')->where('jual_nofak', $id)->get()->row();
 	}
 	function get_penjualan_paket($id)
 	{

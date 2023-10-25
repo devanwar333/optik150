@@ -189,16 +189,14 @@
                       <th style="text-align:right;">
                         <select name="jual_keterangan" id="cara_bayar1" class="form-control">
                           <option value="">-- Pilih Cara Bayar --</option>
-                          <option value="Cash">Cash</option>
-                          <option value="Uang Muka">Uang Muka</option>
-                          <option value="Lunas">Lunas</option>
-                          <option value="Debit">Debit</option>
-                          <option value="Kredit">Kredit</option>
-                          <option value="Transfer">Transfer</option>
-                          <option value="OVO">OVO</option>
-                          <option value="LINK">LINK</option>
-                          <option value="DANA">DANA</option>
-                          <option value="Lain-Lain">Lain-Lain</option>
+                          <?php
+                              foreach ($carabarang as $item) {
+                            ?>
+                             <option value="<?= $item->cara_bayar ?>"><?= $item->cara_bayar ?></option>
+                            <?php
+                              
+                            }
+                            ?>
                         </select>
                         <!-- <input type="text" id="diskon" value="<?= $penjualan[0]['jual_keterangan'] ?>" name="diskon" class="diskon form-control input-sm" style="text-align:right;margin-bottom:5px;width:150px" required> -->
                       </th>
@@ -207,15 +205,14 @@
                       <th style="text-align:right;">
                         <select name="jual_keterangan2" id="cara_bayar2" class="form-control">
                           <option value="">-- Pilih Cara Bayar --</option>
-                          <option value="Uang Muka">Uang Muka</option>
-                          <option value="Lunas">Lunas</option>
-                          <option value="Debit">Debit</option>
-                          <option value="Kredit">Kredit</option>
-                          <option value="Transfer">Transfer</option>
-                          <option value="OVO">OVO</option>
-                          <option value="LINK">LINK</option>
-                          <option value="DANA">DANA</option>
-                          <option value="Lain-Lain">Lain-Lain</option>
+                          <?php
+                              foreach ($carabarang as $item) {
+                            ?>
+                             <option value="<?= $item->cara_bayar ?>"><?= $item->cara_bayar ?></option>
+                            <?php
+                              
+                            }
+                            ?>
                         </select>
                       </th>
                     <?php   }  ?>
@@ -249,7 +246,7 @@
                   <tr>
                     <td style="width:760px;" rowspan="2"><button type="submit" class="btn btn-success btn-lg"> SAVE</button></td>
                     <th>Total Yang Harus Dibayar (Rp) : </th>
-                    <th style="text-align:right;"><input type="text" id="totalbayar_edit" value="<?= $total ?>" min="0" class="form-control input-sm" style="text-align:right;margin-bottom:5px;width:150px" readonly></th>
+                    <th style="text-align:right;"><input type="text" id="totalbayar_edit" name="total_penjualan" value="<?= $total ?>" min="0" class="form-control input-sm" style="text-align:right;margin-bottom:5px;width:150px" readonly></th>
                     <input type="hidden" name="nofak" value="<?= $this->uri->segment(3) ?>">
                     <input type="hidden" name="jual_tanggal" value="<?= $penjualan[0]['jual_tanggal'] ?>">
                   </tr>
@@ -268,7 +265,7 @@
                   </tr>
                   <tr>
                     <td></td>
-                    <th>Kembalian(Rp) :</th>
+                    <th id="label_kembalian">Kembalian(Rp) :</th>
                     <th style="text-align:right;"><input type="text" id="kembalian_edit" name="jual_kembalian" class="form-control input-sm" style="text-align:right;margin-bottom:5px;"></th>
                   </tr>
 
@@ -350,7 +347,7 @@
                   $('#satuan_ket').val(res[2])
                   $('#stok_ket').val(res[3])
                 } else {
-                  $('#add_barang').modal('show')
+                  //$('#add_barang').modal('show')
                 }
                 $('.ajax_list_barang').hide()
               })
@@ -401,25 +398,46 @@
         let tes2 = $('#cara_bayar2').val('<?= $penjualan[0]["jual_keterangan2"] ?>').trigger('change')
         console.log("carabayar1", tes, tes2)
       });
-
-      $("#tunai_edit").keyup(function() {
-        var tunai = $("#tunai_edit").val();
-        var tunai2 = $("#tunai_edit2").val();
-        var total_atas = $("#total").val();
-        var grand_total = $("#totalbayar_edit").val();
-        var kembalian = $("#kembalian_edit").val();
-        var total_tunai = tunai + tunai2
-        var hitung = grand_total - total_tunai
-        $("#kembalian_edit").val(hitung)
+$("#tunai_edit").keyup(function() {
+        hitung()
+       
       });
       $("#tunai_edit2").keyup(function() {
+     
+        hitung()
+      });
+  
+
+      $("#cara_bayar2").change(function(){
+        if($(this).val()!=""){
+          $("#tunai_edit2").prop("readonly",false)
+
+        }else{
+          $("#tunai_edit2").val(0)
+          $("#tunai_edit2").prop("readonly",true)
+          hitung()
+        }
+      })
+      function hitung() {
         var tunai = $("#tunai_edit").val();
         var tunai2 = $("#tunai_edit2").val();
         var total_atas = $("#total").val();
         var grand_total = $("#totalbayar_edit").val();
+    
         var kembalian = $("#kembalian_edit").val();
-        var total_tunai = parseInt(tunai) + parseInt(tunai2)
-        var hitung = grand_total - total_tunai
-        $("#kembalian_edit").val(hitung)
-      });
+        var total_tunai = (parseInt(tunai)|| 0) +(parseInt(tunai2) || 0)
+        var hitung = (parseInt(grand_total)|| 0) - (parseInt(total_tunai)|| 0)
+       
+     
+        if(hitung<0){
+          $("#label_kembalian").text("Kembalian(Rp) :")
+
+          $("#kembalian_edit").val(hitung *-1)
+        }else {
+          $("#label_kembalian").text("Kekurangan(Rp) :")
+
+          $("#kembalian_edit").val(hitung)
+        }
+       
+      }
     </script>

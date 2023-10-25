@@ -13,14 +13,14 @@
         <button type="button" class="btn btn-primary btn-sm mr-3" data-toggle="modal" data-target="#add_hutang_karyawan" style="float:left;">
           (+) Bayar
         </button>
-        <button class="btn btn-primary btn-sm" onclick="batal(<?= $jual['jual_nofak']; ?>)" style="float:left;">
+        <!--<button class="btn btn-primary btn-sm" onclick="batal('<?= $jual['jual_nofak']; ?>')" style="float:left;">
           (-) Cancel
-        </button>
+        </button>-->
       <?php endif ?>
       <?php if ($jual['status'] == 'COMPLETE') : ?>
-        <button type="button" class="btn btn-primary btn-sm mr-3" onclick="batal(<?= $jual['jual_nofak']; ?>)" style="float:left;">
+       <!-- <button type="button" class="btn btn-primary btn-sm mr-3" onclick="batal('<?= $jual['jual_nofak']; ?>')" style="float:left;">
           (-) Cancel
-        </button>
+        </button>-->
       <?php endif ?>
       <?php if ($this->session->userdata('level') == 'penjualan') { ?>
         <button type="button" class="btn btn-success btn-sm mr-3" onclick="window.open('<?= base_url() ?>/history_penjualan/cetak_faktur_cabang/faktur/<?= $jual['jual_nofak'] ?>','_blank')">
@@ -29,7 +29,9 @@
         <button class="btn btn-primary btn-sm mr-3" onclick="window.open('<?= base_url() ?>/history_penjualan/cetak_faktur_cabang/sj/<?= $jual['jual_nofak'] ?>','_blank')" style="float:left;">
           CETAK SURAT JALAN
         </button>
-
+        <button class="btn btn-warning btn-sm mr-3" type='button' onclick="location.href ='<?= base_url() ?>penjualan'" style="float:right;">
+        <i class="fas fa-arrow-left"></i>&nbsp;KEMBALI PENJUALAN CABANG
+        </button>
       <?php } ?>
 
       <h6 class="m-0 font-weight-bold text-primary text-center">KETERANGAN PENJUALAN</h6>
@@ -204,14 +206,14 @@
             id: id
           },
           success: function(data) {
-            console.log(data);
+            console.log("tes" ,data);
             if (data) {
               Swal.fire(
                 'Canceled!',
                 'Order has been Cancel.',
                 'success'
               )
-              window.location.href = "<?= base_url('history_penjualan') ?>"
+             window.location.href = "<?= base_url('history_penjualan') ?>"
             }
           },
           // error: function(xhr, status, error) {

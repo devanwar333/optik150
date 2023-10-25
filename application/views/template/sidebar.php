@@ -70,7 +70,7 @@
 
       <?php
       $show = 0;
-      if ($this->session->userdata('level') == 'admin' || $this->session->userdata('level') == 'kasir' && $show) { ?>
+      if ($this->session->userdata('level') == 'admin' ) { ?>
         <!------------------------- DATA BARANG --------------------------------->
         <!-- Divider -->
         <hr class="sidebar-divider">

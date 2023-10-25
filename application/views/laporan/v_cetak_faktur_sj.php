@@ -4,16 +4,13 @@
     <title>Faktur Penjualan Barang</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="<?php echo base_url('assets/admin/css/laporan.css') ?>" />
-
-    <link href="<?= base_url('assets/admin/'); ?>css/sb-admin-2.min.css" rel="stylesheet">
     <style>
-        * {
-            color: #000;
-        }
-    </style>
+        
+        </style>
 </head>
 
 <body onload="window.print()">
+<!-- <body > -->
     <div id="laporan">
         <table align="center" style="width:302px; border-bottom:3px double;border-top:none;border-right:none;border-left:none;margin-top:5px;margin-bottom:20px;">
 
@@ -37,29 +34,29 @@
             ?>
             <center><img src="<?= base_url('assets/logo/') ?><?= $data4['fitur']; ?>" alt="logo" width="130px"></center>
             <center>
-                <h4><?= $data1['fitur']; ?></h4>
+                <h4 style="font-size:10pt"><?= $data1['fitur']; ?></h4>
             </center>
-            <center><?= $data2['fitur']; ?></center>
-            <center><?= $data3['fitur']; ?></center>
+            <center style="font-size:10pt"><?= $data2['fitur']; ?></center>
+            <center style="font-size:10pt"><?= $data3['fitur']; ?></center>
             <br>
             <hr style="width:302px">
             <br>
             <tr>
-                <th style="text-align:left;">No Faktur</th>
-                <th style="text-align:left;">: <?php echo $b['jual_nofak']; ?></th>
+                <th style="text-align:left;font-size:10pt">No Faktur</th>
+                <th style="text-align:left;font-size:10pt">: <?php echo $b['jual_nofak']; ?></th>
 
             </tr>
             <tr>
-                <th style="text-align:left;">Tanggal</th>
-                <th style="text-align:left;">: <?= $b['jual_tanggal']
+                <th style="text-align:left;font-size:10pt">Tanggal</th>
+                <th style="text-align:left;font-size:10pt">: <?= $b['jual_tanggal']
                                                 ?></th>
             </tr>
             <?php
 
             ?>
             <tr>
-                <th style="text-align:left;">Nama Cabang</th>
-                <th style="text-align:left;">: <?php echo $b['cabang']; ?></th>
+                <th style="text-align:left;font-size:10pt">Nama Cabang</th>
+                <th style="text-align:left;font-size:10pt">: <?php echo $b['cabang']; ?></th>
 
             </tr>
 
@@ -74,11 +71,11 @@
             <thead>
 
                 <tr>
-                    <th style="width:25px;">No</th>
-                    <th style="width:25px;">Nama Barang</th>
-                    <th style="width:25px;">Qty</th>
-                    <th style="width:25px;">Keterangan</th>
-                    <th style="width:25px;">SubTotal</th>
+                    <th style="width:25px;font-size:10pt">No</th>
+                    <th style="width:25px;font-size:10pt">Nama Barang</th>
+                    <th style="width:25px;font-size:10pt">Qty</th>
+                    <th style="width:25px;font-size:10pt">Keterangan</th>
+                    <th style="width:25px;font-size:10pt">SubTotal</th>
                 </tr>
             </thead>
             <tbody>
@@ -94,13 +91,13 @@
                     $total = $i['d_jual_total'];
                 ?>
                     <tr>
-                        <td style="text-align:center;"><?php echo $no; ?></td>
-                        <td style="text-align:center;"><?php echo $nabar; ?></td>
+                        <td style="text-align:center;font-size:10pt"><?php echo $no; ?></td>
+                        <td style="text-align:center;font-size:10pt"><?php echo $nabar; ?></td>
 
 
-                        <td style="text-align:center;"><?php echo $qty; ?></td>
-                        <td style="text-align:center;"><?php echo $diskon; ?></td>
-                        <td style="text-align:center;"><?php echo 'Rp ' . number_format($total); ?></td>
+                        <td style="text-align:center;font-size:10pt"><?php echo $qty; ?></td>
+                        <td style="text-align:center;font-size:10pt"><?php echo $diskon; ?></td>
+                        <td style="text-align:center;font-size:10pt"><?php echo 'Rp ' . number_format($total); ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
@@ -112,36 +109,36 @@
         <table align="center" style="width:302px; border:none;margin-top:5px;margin-bottom:20px;">
 
             <tr>
-                <th style="text-align:left;">Keterangan</th>
-                <th style="text-align:left;">: <?php echo $b['diskon']; ?></th>
+                <th style="text-align:left;font-size:12pt">Keterangan</th>
+                <th style="text-align:left;font-size:12pt">: <?php echo $b['diskon']; ?></th>
             </tr>
 
             <tr>
-                <th style="text-align:left;">Total Bayar</th>
-                <th style="text-align:left;">: <?php echo 'Rp ' . number_format($b['jual_total']) . ',-'; ?></th>
+                <th style="text-align:left;font-size:12pt">Total Bayar</th>
+                <th style="text-align:left;font-size:12pt">: <?php echo 'Rp ' . number_format($b['jual_total']) . ',-'; ?></th>
             </tr>
 
             <tr>
-                <th style="text-align:left;">Tunai</th>
-                <th style="text-align:left;">: <?php echo 'Rp ' . number_format($b['jual_jml_uang']) . ',-'; ?></th>
+                <th style="text-align:left;font-size:12pt">Tunai</th>
+                <th style="text-align:left;font-size:12pt">: <?php echo 'Rp ' . number_format($b['jual_jml_uang']) . ',-'; ?></th>
             </tr>
             <?php if ($b['jual_jml_uang'] != "") { ?>
                 <tr>
-                    <th style="text-align:left;">Tunai 2</th>
-                    <th style="text-align:left;">: <?php echo 'Rp ' . number_format($b['jual_jml_uang2']) . ',-'; ?></th>
+                    <th style="text-align:left;font-size:12pt">Tunai 2</th>
+                    <th style="text-align:left;font-size:12pt">: <?php echo 'Rp ' . number_format($b['jual_jml_uang2']) . ',-'; ?></th>
                 </tr>
             <?php } ?>
 
             <?php if ($b['jual_kembalian'] != 0) { ?>
                 <tr>
-                    <th style="text-align:left;">Kembalian</th>
-                    <th style="text-align:left;">: <?php echo 'Rp ' . number_format($b['jual_kembalian']) . ',-'; ?></th>
+                    <th style="text-align:left;font-size:12pt">Kembalian</th>
+                    <th style="text-align:left;font-size:12pt">: <?php echo 'Rp ' . number_format($b['jual_kembalian']) . ',-'; ?></th>
                 </tr>
             <?php } ?>
             <?php if ($b['jual_kurang_uang'] != 0) { ?>
                 <tr>
-                    <th style="text-align:left;">Kurang</th>
-                    <th style="text-align:left;">: <?php echo 'Rp ' . number_format($b['jual_kurang_uang']) . ',-'; ?></th>
+                    <th style="text-align:left;font-size:12pt">Kurang</th>
+                    <th style="text-align:left;font-size:12pt">: <?php echo 'Rp ' . number_format($b['jual_kurang_uang']) . ',-'; ?></th>
                 </tr>
             <?php } ?>
             <td></td>
@@ -156,14 +153,14 @@
             </tr>
             <?php if ($b['status'] != 'KREDIT') { ?>
                 <tr>
-                    <th style="text-align:left;">Metode Pembayaran</th>
-                    <th style="text-align:left;">: <?php echo $b['jual_keterangan']; ?> <?php if (!empty($b['jual_keterangan2'])) echo ",$b[jual_keterangan2]"; ?></th>
+                    <th style="text-align:left;font-size:10pt">Metode Pembayaran</th>
+                    <th style="text-align:left;font-size:10pt">: <?php echo $b['jual_keterangan']; ?> <?php if (!empty($b['jual_keterangan2'])) echo ",$b[jual_keterangan2]"; ?></th>
                 </tr>
             <?php } else {
             ?>
                 <tr>
-                    <th style="text-align:left;">Status</th>
-                    <th style="text-align:left;">: Kredit</th>
+                    <th style="text-align:left;font-size:10pt">Status</th>
+                    <th style="text-align:left;font-size:10pt">: Kredit</th>
                 </tr>
             <?php
             } ?>
@@ -197,81 +194,7 @@
             </tr>
         </table>
 
-        <div class="card-body">
-            <?php
-            $data1 = $this->db->query("select * from tbl_setting where id=2")->row_array();
-            $data2 = $this->db->query("select * from tbl_setting where id=3")->row_array();
-            $data3 = $this->db->query("select * from tbl_setting where id=4")->row_array();
-            $data4 = $this->db->query("select * from tbl_setting where id=5")->row_array();
-            ?>
-            <center><img src="<?= base_url('assets/logo/') ?><?= $data4['fitur']; ?>" alt="logo" width="130px"></center>
-            <center>
-                <h4><?= $data1['fitur']; ?></h4>
-            </center>
-            <center><?= $data2['fitur']; ?></center>
-            <br>
-            <?php
-
-            $select = $this->db->query("SELECT jual_nofak FROM tbl_jual WHERE jual_nofak='$b[jual_nofak]'")->result();
-            $count = count($select);
-            $count++;
-            $count = sprintf("%04d", $count);
-            $today = date("dmY");
-            $bulan = date("m");
-            $tahun = date("Y");
-            $kode = "DOCSJ$today/$bulan/$count";
-            ?>
-            <div class="row">
-                <div class="col-sm-8">
-                    <h2 class="font-weight-bold">Medan</h2>
-                    <span class="font-weight-bold" style="font-size: 19px;">SURAT JALAN </span> <span>No. <?= $kode ?> </span><br />
-                    <span class="font-weight-bold" style="font-size: 19px;">No. Faktur </span> <span><?php echo $b['jual_nofak']; ?> </span>
-                </div>
-                <div class="col-sm-4">
-                    Medan, <?= date('d-m-Y') ?> <br />
-                    Kepada Yth :<br />
-                    <?php echo $b['cabang']; ?>
-                </div>
-            </div>
-            <div class="table-responsive mt-3">
-                <p>Kami kirimkan barang-barang tersebut dibawah ini dengan kendaraan ....................................................... No.........................................</p>
-                <table class="table table-bordered" style="font-size: 15px;">
-                    <thead>
-                        <tr>
-                            <th style="width: 15%;">Banyaknya</th>
-                            <th>Nama Barang</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        foreach ($data->result_array() as $i) {
-                            $no++;
-
-                            $nabar = $i['d_jual_barang_nama'];
-                            $satuan = $i['d_jual_barang_satuan'];
-                            $qty = $i['d_jual_qty'];
-                            $diskon = $i['d_jual_diskon'];
-                            $total = $i['d_jual_total'];
-
-                        ?>
-                            <tr>
-                                <td><?= $qty ?></td>
-                                <td><?= $nabar ?></td>
-                            </tr>
-                        <?php }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row col-sm-8 mx-auto">
-                <div class="col-sm-6">
-                    <p>Tanda Terima</p>
-                </div>
-                <div class="col-sm-6">
-                    <p class="text-right">Hormat Kami</p>
-                </div>
-            </div>
-        </div>
+     
     </div>
 </body>
 

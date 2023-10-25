@@ -23,6 +23,8 @@ class M_peminjaman_barang extends CI_Model
 
        $this->db->insert('peminjaman_barang',$data);
        $this->db->query("update tbl_barang set barang_stok=barang_stok-'$jmlh' where barang_id='$id'");
+       log_message('error', 'hapusData - '. $id.'-'.$jmlh);
+
    }
    
    function hapusData($id){
@@ -32,6 +34,8 @@ class M_peminjaman_barang extends CI_Model
 
         $this->db->delete('peminjaman_barang',['id' => $id]);
         $this->db->query("update tbl_barang set barang_stok=barang_stok+'$angka' where barang_id='$id_barang'");
+        log_message('error', 'hapusData - '. $id_barang.'-'.$angka);
+
    }
 
    function editData(){
@@ -64,6 +68,8 @@ class M_peminjaman_barang extends CI_Model
             $angka = $jml - $t;
             $this->db->query("update tbl_barang set barang_stok=barang_stok-'$angka' where barang_id='$id_barang'");
         }
+        log_message('error', 'editData - '. $id_barang.'-'.$angka);
+
     }
 
 }

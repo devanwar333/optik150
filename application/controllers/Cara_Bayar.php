@@ -25,15 +25,8 @@ class Cara_Bayar extends CI_Controller
             $row = array();
             $row[] = $no;
             $row[] = $value->cara_bayar;
-            $row[] = "
-            <div class='row ml-1'>
-                <button type='button' class='btn btn-success btn-sm' onclick='get(" . "\"" . $value->id . "\")'>
-                <i class='fas fa-eye fa-xs'></i>
-                </button>
-                <button type='button' class='btn btn-danger btn-sm' onclick='remove(" . "\"" . $value->id . "\")' >
-                    <i class='fas fa-trash fa-xs'></i>
-                </button>
-            </div>";
+            $row[] = $value->status;
+
             $data[] = $row;
         }
 
@@ -66,6 +59,14 @@ class Cara_Bayar extends CI_Controller
             'cara_bayar' => $this->input->post('cara_bayar'),
             'created_at' => date('Y-m-d H:i:s')
         ];
+	$check = $this->M_Cara_Bayar->getFirstByName( $this->input->post('cara_bayar'));
+        if($check!=null) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(422)
+                ->set_output(json_encode("Cara Pembayar Telah Ada"));
+          
+        }
         $res = $this->M_Cara_Bayar->create($data);
         echo json_encode($res);
     }

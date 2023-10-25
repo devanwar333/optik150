@@ -60,6 +60,7 @@
             <th class="text-center">Harga</th>
             <th class="text-center">Qty</th>
             <th class="text-center">Harga Total</th>
+            <th class="text-center">Keterangan</th>
           </tr>
           <?php $no=1; foreach($barang as $b){ ?>
           <tr>
@@ -68,6 +69,7 @@
             <td class="text-center"><?= number_format($b['d_beli_harga']); ?></td>
             <td class="text-center"><?= $b['d_beli_jumlah']; ?></td>
             <td class="text-center"><?= number_format($b['d_beli_total']); ?></td>
+            <td class="text-center"><?= $b['keterangan']; ?></td>
           </tr>
           <?php } ?>
       </table>

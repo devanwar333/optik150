@@ -13,6 +13,7 @@ class Penjualan_edit extends CI_Controller
         $this->load->model('m_suplier');
         $this->load->model('m_penjualan');
         $this->load->model('M_customer');
+        $this->load->model('m_cara_bayar');
     }
 
     public function index()
@@ -27,7 +28,7 @@ class Penjualan_edit extends CI_Controller
         $this->db->join('tbl_detail_jual B', 'B.d_jual_nofak = A.jual_nofak');
         $data["penjualan"] = $this->db->get()->result_array();
         $data["paket"] = $this->m_barang->getBarangPaket();
-
+        $data['carabarang'] = $this->m_cara_bayar->list();
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
         $this->load->view('template/topbar', $data);
@@ -122,6 +123,8 @@ class Penjualan_edit extends CI_Controller
                 'd_jual_total'      => $this->input->post('jumlah_ket') * $this->input->post('harga_ket')
             );
             $this->db->insert('tbl_detail_jual', $data);
+            log_message('error', 'add_to_cart - '.$i['barang_id']." - ".$i['barang_stok'] );
+
             $this->db->update('tbl_barang', ['barang_stok' => $i['barang_stok'] - $this->input->post('jumlah_ket')]);
         } else {
             foreach ($cari_produk as $value) {
@@ -164,6 +167,8 @@ class Penjualan_edit extends CI_Controller
         $produk = $this->m_barang->get_barang2($nabar);
         $i = $produk->row_array();
         $qty_baru = $this->input->post('d_jual_qty');
+        log_message('error', 'update_qty_detail - '." - ".$i['barang_stok'] );
+
         $this->db->update('tbl_barang', ['barang_stok' => $i['barang_stok'] - $qty_baru]);
         $qty_lama = $cari_produk['d_jual_qty'];
         $harga_lama = $cari_produk['d_jual_barang_harjul'];
@@ -186,16 +191,20 @@ class Penjualan_edit extends CI_Controller
         $this->db->where('jual_nofak', $data['nofak']);
         unset($data['nofak']);
         $this->db->update('tbl_jual', $data);
+      	 $totalPembayaran = $data['total_penjualan'];
+     
+        $biaya1 = $data['jual_jml_uang'] ;
+        $biaya2 = $data['jual_jml_uang2'] ;
         $resume1 = [
             'resume_nofak' => $id,
             'method_types' => $data['jual_keterangan'],
-            'amount' => $data['jual_jml_uang'],
+            'amount' =>  $biaya1,
             'created_at' => $data['jual_tanggal']
         ];
         $resume2 = [
             'resume_nofak' => $id,
             'method_types' => $data['jual_keterangan2'],
-            'amount' => $data['jual_jml_uang2'],
+            'amount' => $biaya2,
             'created_at' => $data['jual_tanggal']
         ];
         $this->db->insert('tbl_resume', $resume1);
@@ -230,6 +239,8 @@ class Penjualan_edit extends CI_Controller
             );
             $this->db->insert('tbl_detail_jual', $data);
             $this->db->update('tbl_barang', ['barang_stok' => $i['barang_stok'] - $this->input->post('jumlah_ket')]);
+            log_message('error', 'add_to_cart_paket - '.$i['barang_id']." - ".$i['barang_stok'] );
+
         } else {
             foreach ($cari_produk as $value) {
                 $harga = $value['d_jual_barang_harjul'];

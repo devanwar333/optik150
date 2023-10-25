@@ -563,7 +563,7 @@
                             $('#satuan_ket').val(res[2])
                             $('#stok_ket').val(res[3])
                         } else {
-                            $('#add_barang').modal('show')
+                            //$('#add_barang').modal('show')
                         }
                         $('.ajax_list_barang').hide()
                     })

@@ -96,8 +96,10 @@ class History_penjualan_cabang extends CI_Controller
     $qty_jual = $select_barang->d_jual_qty;
 
     $grand_total = 0;
+    log_message('error', 'updateQty - 1 - '.$barang_id." - ".$qty_jual);
 
     $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok + '$qty_jual' WHERE barang_id='$barang_id'");
+    log_message('error', 'updateQty - 2 - '.$barang_id." - ".$qty);
 
     $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok - '$qty' WHERE barang_id='$barang_id'");
 
@@ -148,16 +150,22 @@ class History_penjualan_cabang extends CI_Controller
   }
 
 
-  function removeItems($nofak, $id_jual, $barang_id, $qty)
+  function removeItems($nofak, $id_jual)
   {
     // Select Stok
+    $detailJual = $this->db->query("SELECT * FROM tbl_detail_jual WHERE d_jual_nofak='$nofak' and d_jual_id='$id_jual'")->row();
+    $barang_id = $detailJual->d_jual_barang_id;
     $data = $this->db->query("SELECT barang_stok FROM tbl_barang WHERE barang_id='$barang_id'")->row();
     $qty_barang = $data->barang_stok;
-    $qty = (int)$qty + (int)$qty_barang;
+    $qty = (int)$detailJual->d_jual_qty + (int)$qty_barang;
 
     // Update Stok
+    log_message('error', 'removeItems - '.$barang_id." - ".$qty);
+
     $this->db->query("UPDATE tbl_barang SET barang_stok='$qty' WHERE barang_id='$barang_id'");
     $this->db->query("DELETE FROM tbl_detail_jual WHERE d_jual_id='$id_jual'");
+    $totalJual = $this->db->query("SELECT sum(tbl_detail_jual.d_jual_total) as total FROM tbl_detail_jual WHERE d_jual_nofak='$nofak'")->row();
+    $this->db->query("UPDATE tbl_jual SET jual_total='$totalJual->total' WHERE jual_nofak='$nofak'");
 
     redirect('history_penjualan_cabang/edit/' . $nofak);
   }
@@ -170,6 +178,8 @@ class History_penjualan_cabang extends CI_Controller
       $qty = $jd['d_jual_qty'];
       $barang_id = $jd['d_jual_barang_id'];
       // Update Stok
+      log_message('error', 'hapus_penjualan_cabang - '.$barang_id." - ".$qty);
+
       $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok + '$qty' WHERE barang_id='$barang_id'");
     }
 

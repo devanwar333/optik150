@@ -17,6 +17,9 @@ class Barang extends CI_Controller
 		$this->load->model('m_barang');
 		$this->load->library('Excel');
 		///$this->load->library('barcode');
+		if ($this->session->userdata('level') != TRUE) {
+            redirect(base_url());
+        }
 	}
 
 	public function index()
@@ -29,6 +32,50 @@ class Barang extends CI_Controller
 		$this->load->view('template/topbar', $data);
 		$this->load->view('barang/index', $data);
 		$this->load->view('template/footer', $data);
+	}
+	public function list_ajax()
+	{
+		$role = $this->session->userdata('level');
+	
+		$list = $this->m_barang->get_datatables();
+		$data = array();
+		$no = $_POST['start'];
+		foreach ($list as $value) {
+
+			$no++;
+			$row = array();
+			$row[] = $no;
+			$row[] = $value->barang_id;
+			$row[] = $value->barang_nama;
+			$row[] = $value->barang_satuan;
+			$row[] = $value->barang_harpok;
+			$row[] = $value->barang_harjul;
+			$row[] = $value->barang_stok;
+			$row[] = $value->barang_min_stok;
+			$row[] = $value->kategori_nama;
+			$row[] = $value->serial_number;
+			$row[] =
+				"
+			<div class='row ml-1'>
+                <button type='button' class='btn btn-success btn-sm' data-toggle='modal' data-target='#modal-edit' onclick='get(" . "\"" . $value->id . "\")'>
+                <i class='fas fa-edit fa-xs'>Edit</i>
+                </button>".
+				($role == "admin" ? "
+                <button type='button' class='btn btn-danger btn-sm' onclick='remove(" . "\"" . $value->id . "\")' >
+                    <i class='fas fa-trash fa-xs'>Delete</i>
+                </button>
+				" : "" ). "
+            </div>";
+			$data[] = $row;
+		}
+		$output = array(
+			"draw" => $_POST['draw'],
+			"data" => $data,
+			"recordsTotal" => $this->m_barang->count_all(),
+			"recordsFiltered" => $this->m_barang->count_filtered(),
+			
+		);
+		echo json_encode($output);
 	}
 
 	function tambah_barang()
@@ -61,7 +108,32 @@ class Barang extends CI_Controller
 		// $this->session->set_flashdata('msg','Berhasil');
 		redirect('barang');
 	}
-
+	function update()
+	{
+		$id = $this->input->post('id');
+		$data = $this->input->post();
+		$data['updated_by'] = $this->session->userdata('username');
+		$role = $this->session->userdata('level');
+		$res = false;
+		if($role == "admin") {
+			$res = $this->m_barang->update($id, $data);
+		}else if($role == "kasir") {
+			$res = $this->m_barang->updateStock($id, $data);
+		}
+		echo json_encode($res);
+	}
+	function get()
+	{
+		$id = $this->input->post('id');
+		$res = $this->m_barang->get($id);
+		echo json_encode($res);
+	}
+	function remove()
+	{
+		$id = $this->input->post('id');
+		$res = $this->m_barang->remove($id);
+		echo json_encode($res);
+	}
 	public function edit_barang1()
 	{
 		$id = $this->input->post('id');
@@ -264,6 +336,7 @@ class Barang extends CI_Controller
 	}
 	public function import()
 	{
+		$failedKodebarang=[];
 		if (isset($_FILES["fileExcel"]["name"])) {
 			$path = $_FILES["fileExcel"]["tmp_name"];
 			$object = PHPExcel_IOFactory::load($path);
@@ -283,7 +356,7 @@ class Barang extends CI_Controller
 					$barang_tgl_last_update = $worksheet->getCellByColumnAndRow(10, $row)->getValue();
 					$barang_kategori_id = $worksheet->getCellByColumnAndRow(11, $row)->getValue();
 					$serial_number  = $worksheet->getCellByColumnAndRow(12, $row)->getValue();
-					$temp_data[] = array(
+					$newData= array(
 						'barang_id'	=> $barang_id,
 						'barang_nama'	=> $barang_nama,
 						'barang_satuan'	=> $barang_satuan,
@@ -297,16 +370,33 @@ class Barang extends CI_Controller
 						'barang_kategori_id'	=> $barang_kategori_id,
 						'serial_number'	=> $serial_number,
 					);
+					
+					try {
+						$exist = $this->m_barang->get_barang1($barang_id)->row();
+						if($exist!=null) {
+							log_message('error', 'IMPORT - update - '.$barang_id." - ".$barang_stok);
+
+							$this->db->where('barang_id',$barang_id);
+							$this->db->update('tbl_barang', $newData);
+						} else {
+							log_message('error', 'IMPORT -insert - '.$barang_id." - ".$barang_stok);
+
+							$this->db->insert('tbl_barang', $newData);
+						}
+					} catch (Exception $e) {
+						array_push($failedKodebarang,$barang_id);
+					}
+					
 				}
 			}
-			$insert = $this->m_barang->addImportToExcel($temp_data);
-			if ($insert) {
+			if(count($failedKodebarang)>0) {
+				$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-remove"></span> Terjadi Kesalahan pada '.implode(', ',$failedKodebarang));
+
+			}else {
 				$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-ok"></span> Data Berhasil di Import ke Database');
-				redirect($_SERVER['HTTP_REFERER']);
-			} else {
-				$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-remove"></span> Terjadi Kesalahan');
-				redirect($_SERVER['HTTP_REFERER']);
 			}
+			redirect($_SERVER['HTTP_REFERER']);
+			
 		} else {
 			echo "Tidak ada file yang masuk";
 		}

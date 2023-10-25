@@ -39,64 +39,7 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
   <link href="<?= base_url('assets/admin/'); ?>css/jquery-ui.css" rel="stylesheet">
   <link href="<?= base_url('assets/plugins/'); ?>select2/select2.min.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
-  <?php if ($this->session->userdata('level') == "kasir" || $this->session->userdata("level") == "admin") { ?>
-    <script>
-      document.onkeyup = KeyCheck;
-
-      function KeyCheck(e) {
-        var KeyID = (window.event) ? event.keyCode : e.keyCode;
-        if (KeyID == 113) {
-          $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Ajax/getJual'); ?>",
-            success: function(msg) {
-              $('#teswoii').html(msg);
-            }
-          });
-          $('#modalLaporanPenjualan').modal('show');
-        }
-
-        if (KeyID == 115) {
-          if ("<?= $this->session->userdata('saldo') ?>" == 0 && $('#saldo_response').val() == 0) {
-            $('#modalSaldo').modal('show');
-          } else {
-            $.ajax({
-              type: "POST",
-              url: "<?php echo site_url('Ajax/getResume'); ?>",
-              success: function(msg) {
-                $('#resumewoi').html(msg);
-              }
-            });
-            $('#modalLaporanPenjualanResume').modal('show');
-          }
-        }
-        $('#triggerSaldo').submit(function(ev) {
-          ev.preventDefault();
-          $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            cache: false,
-            data: $(this).serialize(),
-            success: function(res) {
-              $('#modalSaldo').modal('hide');
-              $.ajax({
-                type: "POST",
-                url: "<?php echo site_url('Ajax/getResume'); ?>",
-                success: function(msg) {
-                  console.log(msg)
-                  $('#resumewoi').html(msg);
-                  $('#modalLaporanPenjualanResume').modal('show');
-
-                  $('#label_saldo_lap').text($('#saldo_response').val())
-                }
-              });
-            }
-          })
-        })
-      }
-    </script>
-  <?php } ?>
-
+ 
   <style>
     .select2-selection {
       -webkit-box-shadow: 0;
@@ -200,6 +143,36 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
 </head>
 
 <body id="page-top">
+<div class="modal fade bd-example-modal-sm" id="modalLaporanPenjualanBarang" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Penjualan Barang Pertanggal</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="form_penjualan_summary" action="<?= base_url('Laporan/lap_penjualan_summary_cetak') ?>" method="post" target="_blank">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-12">
+                <label> Tanggal </label>
+                <input type="date" class="form-control" name="tanggal" value="<?php echo date('Y-m-d'); ?>" placeholder="Tanggal" required>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button  type="submit" class="btn btn-primary">Proses</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <form id="form_penjualan_summary" action="<?= base_url('Laporan/lap_penjualan_summary_cetak') ?>" method="post" target="_blank">
+    <button id="btn-penjualan" type="submit" style="display:none"></button>
+  </form>
   <!-- Modal -->
   <div class="modal fade modal-fullscreen" id="modalLaporanPenjualanResume" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -213,7 +186,6 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
         <div class="modal-body">
           <div id="resumewoi">
             <input type="hidden" id="saldo_response" value="0" />
-            tes.
           </div>
         </div>
         <div class="modal-footer">

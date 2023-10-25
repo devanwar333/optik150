@@ -101,6 +101,10 @@
                   <label>Jumlah :</label>
                   <input type="number" id="jumlah" name="jumlah" class="form-control" min="0" required />
                 </div>
+                <div class="form-group col-sm-2">
+                  <label>Keterangan :</label>
+                  <input type="text" id="keterangan" name="keterangan" class="form-control" />
+                </div>
                 <div class="form-group ml-3">
                   <label>&nbsp;</label><br />
                   <button class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
@@ -127,6 +131,7 @@
                       <th>Satuan</th>
                       <th>Harga Beli</th>
                       <th>Jumlah Beli</th>
+                      <th>Keterangan</th>
                       <th>Sub Total</th>
                       <th>Aksi</th>
                     </tr>
@@ -138,6 +143,7 @@
                       <th>Satuan</th>
                       <th>Harga Pokok</th>
                       <th>Jumlah Beli</th>
+                      <th>Keterangan</th>
                       <th>Sub Total</th>
                       <th>Aksi</th>
                     </tr>
@@ -152,6 +158,7 @@
                         <td style="text-align:center;"><?= $items['satuan']; ?></td>
                         <td style="text-align:right;"><?php echo number_format($items['price']); ?></td>
                         <td style="text-align:center;"><?php echo number_format($items['qty']); ?></td>
+                        <td style="text-align:right;"><?php echo $items['keterangan']; ?></td>
                         <td style="text-align:right;"><?php echo number_format($items['subtotal']); ?></td>
                         <td style="text-align:center;"><a href="<?php base_url() ?>pembelian/remove/<?= $items['rowid']; ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a></td>
                       </tr>
@@ -160,8 +167,9 @@
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td colspan="6" style="text-align:center;">Total</td>
+                      <td colspan="6" style="text-align:center;font-weight:bold;">Total</td>
                       <td style="text-align:right;">Rp. <?php echo number_format($this->cart->total()); ?></td>
+                      <td></td>
                     </tr>
                   </tfoot>
                 </table>

@@ -27,6 +27,8 @@ class M_barang_rusak extends CI_Model
 
 		$this->db->insert('barang_rusak', $data);
 		$this->db->query("update tbl_barang set barang_stok=barang_stok-'$jmlh' where barang_id='$id'");
+		log_message('error', 'add_to_cart_paket - '.$this->input->post('barang')." - ".$this->input->post('jumlah'));
+
 	}
 
 	public function edit_barang()
@@ -51,10 +53,12 @@ class M_barang_rusak extends CI_Model
 
 		$t = $tampung['jumlah'];
 
+		log_message('error', 'edit_barang - '.$id_barang." - ".$jml);
 
 		if ($t > $jml) {
 			$angka = $t - $jml;
 			$this->db->query("update tbl_barang set barang_stok=barang_stok+'$angka'where barang_id='$id_barang'");
+			
 		} else if ($t < $jml) {
 			$angka = $jml - $t;
 			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$angka' where barang_id='$id_barang'");
@@ -68,6 +72,8 @@ class M_barang_rusak extends CI_Model
 		$id_barang = $tampung['id_barang'];
 
 		$this->db->delete('barang_rusak', ['id_rusak' => $id]);
+		log_message('error', 'hapus_barang - '.$id_barang." - ".$angka);
+
 		$this->db->query("update tbl_barang set barang_stok=barang_stok+'$angka' where barang_id='$id_barang'");
 	}
 }

@@ -11,11 +11,7 @@
                     if ($dat != "") { ?>
                         <div id="notifikasi" class="alert alert-success"><strong>Sukses! </strong> <?= $dat; ?></div>
                     <?php } ?>
-                    <?php
-                    $dat1 = $this->session->flashdata('error');
-                    if ($dat1 != "") { ?>
-                    <div id="notifikasi" class="alert alert-danger"><strong>Gagal </strong> <?= $dat1; ?></div>
-                    <?php } ?>
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -161,15 +157,10 @@
                     </div>
 
                     <!-- Modal body -->
-                    <?php echo form_open('Laporan/filter_barang_by_name') ?>
+                    <?php echo form_open('Laporan/filter_barang_by_kategori') ?>
                     <div class="modal-body">
-                        <div class="form-group ">
-                            <label class="control-label col-xs-3">Nama Barang</label>
-                            <div class="col-xs-9">
-                                <input type="text" class="form-control" name="nama_barang" placeholder="Search * Applicable" require>
-                            </div>
-                        </div>
-                        <!-- <div class="form-group ">
+
+                        <div class="form-group">
                             <label class="control-label col-xs-3">Kategori Barang</label>
                             <div class="col-xs-9">
                                 <select class="form-control" name="kategori_nama">
@@ -179,7 +170,7 @@
                                     <?php } ?>
                                 </select>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
 
                     <!-- Modal footer -->
@@ -193,7 +184,7 @@
         </div>
 
         <!---------------------------------------------Laporan Penjualan KASIR--------------------------------------------->
-       
+
         <div class="modal fade" id="penjualan_kasir">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -203,9 +194,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <!-- Modal body -->
-                          <?php
-                    $attributes = array('id' => 'penjualan_kasir_form',"target"=>"_blank");
-                     echo form_open('Laporan/lap_penjualan_kasir_cetak', $attributes) ?>
+                    <?php echo form_open('Laporan/lap_penjualan_periode_cetak', 'target="_blank"') ?>
                     <div class="modal-body">
 
                         <div class="form-group">
@@ -224,17 +213,69 @@
 
                         <label class="control-label col-xs-6">Nama Customer</label>
                         <div class="col-xs-9">
-                            <select name="id_customer" id="nama_customer" class="form-control" >
-                            <option value="" selected disabled>Pilih Customer</option>
-                            
+                            <select name="nama_customer" id="nama_customer" class="form-control" onchange="listCustomer_Barang()">
+                                <option value="" selected>Customer</option>
+                                <?php foreach ($customer->result() as $value) { ?>
+                                    <option value="<?= $value->no_hp ?>"><?= $value->nama . " - " . $value->no_hp ?></option>
+                                <?php } ?>
                             </select>
                         </div>
+                        <label class="control-label col-xs-6">Kategori Barang</label>
+                        <div class="col-xs-9">
+                            <select name="kategori_barang" class="form-control">
+                                <option value="" selected>Kategori Barang</option>
+                                <?php foreach ($kat->result() as $value) { ?>
+                                    <option value="<?= $value->kategori_id ?>"><?= $value->kategori_nama ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <label class="control-label col-xs-6">Barang</label>
+                        <div class="col-xs-9">
+                            <select name="nama_barang" id="nama_barang" class="form-control">
+                                <option value="" selected>Barang</option>
+                            </select>
+                        </div>
+                        <label class="control-label col-xs-6">Cara Bayar</label>
+                        <div class="col-xs-9">
+                            <select name="cara_bayar" id="cara_bayar" class="form-control">
+                                <option value="all" selected>Cara Bayar</option>
+                                <?php foreach ($cara_bayar as $value) { ?>
+                                    <option value="<?= $value->cara_bayar ?>"><?= $value->cara_bayar ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <label class="control-label col-xs-6 mt-3">Tampilkan</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="percustomer" name="percustomer" checked>
+                            <label class="form-check-label" for="percustomer">
+                                Per Customer
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="perkatbarang" name="perkatbarang" checked>
+                            <label class="form-check-label" for="perkatbarang">
+                                Per Kategori Barang
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="perbarang" name="perbarang" checked>
+                            <label class="form-check-label" for="perbarang">
+                                Per Barang
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="percarabayar" name="percarabayar" checked>
+                            <label class="form-check-label" for="percarabayar">
+                                Per Cara Bayar
+                            </label>
+                        </div>
+
+
+
                     </div>
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button id="resetbtn" type="button" class="btn btn-info" >Reset</button>
-
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button class="btn btn-success"><span class="fa fa-print"></span> Cetak</button>
                     </div>
@@ -253,7 +294,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <!-- Modal body -->
-                    <form id="form_penjualan_kasir_dp" action="<?= base_url('Laporan/laporan_penjualan_kasir_dp_cetak') ?>" method="post" target="_blank">
+                    <form id="form_penjualan_kasir_dp" action="<?= base_url('Laporan/laporan_penjualan_kasir_dp') ?>" method="post" target="_blank">
                         <div class="modal-body">
 
                             <div class="form-group">
@@ -266,9 +307,56 @@
                             <div class="form-group">
                                 <label class="control-label col-xs-3">Tanggal Akhir</label>
                                 <div class="col-xs-9">
-                                    <input type="date" class="form-control" name="tgl2" value=""  placeholder="Tanggal" required>
+                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listCustomer_dp()" placeholder="Tanggal" required>
                                 </div>
                             </div>
+
+                            <label class="control-label col-xs-6">Nama Customer</label>
+                            <div class="col-xs-9">
+                                <select name="nama_customer" class="form-control" onchange="listCustomer_Barang_dp()">
+                                    <option value="" selected>Customer</option>
+                                    <?php foreach ($customer->result() as $value) { ?>
+                                        <option value="<?= $value->no_hp ?>"><?= $value->nama . " - " . $value->no_hp ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <label class="control-label col-xs-6">Kategori Barang</label>
+                            <div class="col-xs-9">
+                                <select name="kategori_barang" class="form-control">
+                                    <option value="" selected>Kategori Barang</option>
+                                    <?php foreach ($kat->result() as $value) { ?>
+                                        <option value="<?= $value->kategori_id ?>"><?= $value->kategori_nama ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <label class="control-label col-xs-6">Barang</label>
+                            <div class="col-xs-9">
+                                <select name="nama_barang" class="form-control">
+                                    <option value="" selected>Barang</option>
+                                </select>
+                            </div>
+
+                            <label class="control-label col-xs-6 mt-3">Tampilkan</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="percustomer2" name="percustomer" checked>
+                                <label class="form-check-label" for="percustomer">
+                                    Per Customer
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="perkatbarang2" name="perkatbarang" checked>
+                                <label class="form-check-label" for="perkatbarang">
+                                    Per Kategori Barang
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="perbarang2" name="perbarang" checked>
+                                <label class="form-check-label" for="perbarang">
+                                    Per Barang
+                                </label>
+                            </div>
+
+
                         </div>
 
                         <!-- Modal footer -->
@@ -290,7 +378,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <!-- Modal body -->
-                    <form id="form_laporan_pembelian" action="<?= base_url('Laporan/laporan_pembelian_cetak') ?>" method="post" target="_blank">
+                    <form id="form_laporan_pembelian" action="<?= base_url('Laporan/laporan_pembelian') ?>" method="post" target="_blank">
                         <div class="modal-body">
                             <div class="form-group">
                                 <label class="control-label col-xs-3">Tanggal Awal</label>
@@ -301,19 +389,24 @@
                             <div class="form-group">
                                 <label class="control-label col-xs-3">Tanggal Akhir</label>
                                 <div class="col-xs-9">
-                                    <input type="date" class="form-control" name="tgl2" value=""  placeholder="Tanggal" required>
+                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listSupplier_pembelian()" placeholder="Tanggal" required>
                                 </div>
                             </div>
                             <label class="control-label col-xs-6">Supplier</label>
                             <div class="col-xs-9">
-                                <select name="supplier" class="form-control" >
-                                    <option value="" selected>-</option>
+                                <select name="supplier" class="form-control" onchange="listSupplier_pembelianBarang()">
+                                    <option value="-" selected>Supplier</option>
                                     <?php foreach ($supplier->result() as $value) { ?>
                                         <option value="<?= $value->suplier_id ?>"><?= $value->suplier_nama ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
-                            
+                            <label class="control-label col-xs-6">Barang</label>
+                            <div class="col-xs-9">
+                                <select name="nama_barang" class="form-control">
+                                    <option value="" selected>Barang</option>
+                                </select>
+                            </div>
                         </div>
                         <!-- Modal footer -->
                         <div class="modal-footer">
@@ -346,19 +439,52 @@
                             <div class="form-group">
                                 <label class="control-label col-xs-3">Tanggal Akhir</label>
                                 <div class="col-xs-9">
-                                    <input type="date" class="form-control" name="tgl2" value=""  placeholder="Tanggal" required>
+                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listPenjualan_cabang()" placeholder="Tanggal" required>
                                 </div>
                             </div>
                             <label class="control-label col-xs-6">Cabang</label>
                             <div class="col-xs-9">
-                                <select name="cabang" class="form-control" >
-                                    <option value="" selected>-</option>
+                                <select name="cabang" class="form-control" onchange="listPenjualan_cabangBarang()">
+                                    <option value="-" selected>Cabang</option>
                                     <?php foreach ($cabang as $value) { ?>
                                         <option value="<?= $value->nama_cabang ?>"><?= $value->nama_cabang ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
-                            
+                            <label class="control-label col-xs-6">Kategori Barang</label>
+                            <div class="col-xs-9">
+                                <select name="kategori_barang" id="kategori_barang" class="form-control">
+                                    <option value="" selected>Kategori Barang</option>
+                                    <?php foreach ($kat->result() as $value) { ?>
+                                        <option value="<?= $value->kategori_id ?>"><?= $value->kategori_nama ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <label class="control-label col-xs-6">Barang</label>
+                            <div class="col-xs-9">
+                                <select name="nama_barang" class="form-control">
+                                    <option value="" selected>Barang</option>
+                                </select>
+                            </div>
+                            <label class="control-label col-xs-6 mt-3">Tampilkan</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="percabang" name="percabang" checked>
+                                <label class="form-check-label" for="percabang">
+                                    Per Cabang
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="perkatbarang1" name="perkatbarang" checked>
+                                <label class="form-check-label" for="perkatbarang1">
+                                    Per Kategori Barang
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="perbarang1" name="perbarang" checked>
+                                <label class="form-check-label" for="perbarang1">
+                                    Per Barang
+                                </label>
+                            </div>
                         </div>
                         <!-- Modal footer -->
                         <div class="modal-footer">
@@ -877,6 +1003,39 @@
                 })
             }
 
+            function listCustomer_dp() {
+                let select = $("#form_penjualan_kasir_dp").find('select[name=nama_customer]');
+                let select_barang = $("#form_penjualan_kasir_dp").find('select[name=nama_barang]');
+                let start = $("#form_penjualan_kasir_dp").find('input[name=tgl1]').val();
+                let end = $("#form_penjualan_kasir_dp").find('input[name=tgl2]').val();
+                $.ajax({
+                    url: "<?= base_url('Customer/listCustomer_dp') ?>",
+                    method: "post",
+                    dataType: "json",
+                    data: {
+                        tgl1: start,
+                        tgl2: end
+                    },
+                    success: function(data) {
+                        if (data) {
+                            let html = '<option value="">Pilih Customer(opsional)</option>';
+                            $.each(data, function(index, value) {
+                                html += '"<option value="' + value.no_hp + '">' + value.nama + " - " + value.no_hp + '</option>';
+                            });
+                            $(select).html(html);
+                            let html2 = '<option value="">Pilih Barang(opsional)</option>';
+                            $.each(data, function(index, value) {
+                                html2 += '"<option value="' + value.d_jual_barang_id + '">' + value.d_jual_barang_nama + '</option>';
+                            });
+                            $(select_barang).html(html2);
+                        }
+                    },
+                    error: function(e) {
+                        console.log(e);
+                    }
+                })
+            }
+
             function listCustomer_Barang() {
                 let select_barang = $("#nama_barang");
                 let nama_customer = $("#nama_customer").val();
@@ -1062,38 +1221,12 @@
                     }
                 })
             }
-	
         </script>
         <script>
             $(document).ready(function() {
                 $('select').select2({
                     width: '300px',
                 })
-                $("#nama_customer").select2({
-                    width: '300px',
-                    ajax: {
-                        delay: 250,
-                        url: "<?= base_url('Customer/listCustomerSelect2') ?>",
-                        data: function (params) {
-                            var query = {
-                                search: params.term,
-                                page: params.page || 1
-                            }
 
-                            // Query parameters will be ?search=[term]&page=[page]
-                            return query;
-                            },
-                        processResults: function (data) {
-                            var data = JSON.parse(data)
-                            
-                            return data;
-                        },
-                    }
-                })
- 		$("#resetbtn").click(function(){
-
-                $('#penjualan_kasir_form')[0].reset()
-                $("#nama_customer").empty();
-            })
             });
         </script>

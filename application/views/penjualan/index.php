@@ -89,7 +89,7 @@
         </div>
         <div class="form-group col-sm-2">
           <label>Jumlah :</label>
-          <input type="number" readonly id="jumlah_ket" name="jumlah_ket" class="form-control" min="0" />
+          <input type="number" id="jumlah_ket" name="jumlah_ket" class="form-control" min="0" />
         </div>
         <div class="form-group col-sm-3">
           <label>&nbsp;</label><br />
@@ -216,7 +216,7 @@
           <div class="form-group col-sm-2">
             <label class="font-weight-bold">Cara Bayar 1 :</label>
             <?php if ($this->session->userdata('level') == "penjualan") { ?>
-              <input type="hidden" name="bayar" value="Cash">
+              <input type="hidden" name="bayar" value="CASH">
             <?php } ?>
             <select required name="bayar" id="bayar" class="form-control" <?php if ($this->session->userdata('level') == "penjualan") {
                                                                             echo "disabled";
@@ -290,9 +290,8 @@
             ?>
               <td class="col-sm-6" rowspan="3">
                 <input type="hidden" name="jenis_cetak" id="jenis_cetak" />
-                <small class="text-danger">Cetak Faktur ( Cetak Surat Jalan dan Faktur ) , Cetak Surat Jalan hanya cetak surat jalan </small><br /><br />
-                <button type="submit" class="btn btn-success btn-lg" onclick="submitForm('faktur')"> CETAK FAKTUR</button><br />
-                <br /><button type="submit" class="btn btn-info btn-lg" onclick="submitForm('sj')"> CETAK SURAT JALAN</button>
+                <!-- <small class="text-danger">Cetak Faktur ( Cetak Surat Jalan dan Faktur ) , Cetak Surat Jalan hanya cetak surat jalan </small><br /><br /> -->
+                <button type="submit" class="btn btn-success btn-lg" onclick="submitForm('faktur')"> SIMPAN</button><br />
               </td>
 
             <?php
@@ -471,6 +470,14 @@
       swal.fire("Penjualan", "Uang tidak cukup untuk bayar Lunas, silahkan pilih status DP untuk melanjutkan !", "warning")
       return false;
     }
+	if(bayar > total) {
+      Swal.fire(
+          'Gagal!',
+          'Jumlah Tunai 1 dan Tunai 2 tidak boleh lebih dari total pembayaran',
+          'failed'
+        )
+      return false;
+    }
     if (bayar >= total && status == 'COMPLETE') {
       return true;
     }
@@ -579,7 +586,7 @@
               $('#satuan_ket').val(res[2])
               $('#stok_ket').val(res[3])
             } else {
-              $('#add_barang').modal('show')
+              //$('#add_barang').modal('show')
             }
             $('.ajax_list_barang').hide()
           })

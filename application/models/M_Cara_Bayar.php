@@ -65,6 +65,7 @@ class M_Cara_Bayar extends CI_Model
     {
         $this->db->select('*');
         $this->db->from($this->table);
+	$this->db->where('status','ACTIVE');
         $data = $this->db->get()->result();
         return $data;
     }
@@ -77,7 +78,16 @@ class M_Cara_Bayar extends CI_Model
         $data = $this->db->get()->row_array();
         return $data;
     }
-
+   public function getFirstByName($name)
+    {
+        $this->db->select('*');
+        $this->db->where('cara_bayar', $name);
+        $data = $this->db->get($this->table)->result_array();
+        if(count($data)<=0) {
+            return null;
+        }
+        return $data[0];
+    }
     public function getById($id)
     {
         $this->db->select('*');

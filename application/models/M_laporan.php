@@ -81,6 +81,18 @@ class M_laporan extends CI_Model
 		}
 		return $hsl;
 	}
+	function laporan_penjualan_kasir($tanggal1, $tanggal2,$id_customer)
+	{
+		$query = "SELECT jual_nofak, tbl_customer.nama, tbl_jual.no_hp, DATE_FORMAT(jual_tanggal,'%d %M %Y') AS jual_tanggal,sum(tbl_detail_jual.d_jual_total) as total, tbl_jual.jual_keterangan , tbl_jual.jual_keterangan2 FROM tbl_jual JOIN tbl_detail_jual ON tbl_jual.jual_nofak=tbl_detail_jual.d_jual_nofak and tbl_jual.status in ('COMPLETE','KREDIT','DP') JOIN tbl_customer ON tbl_jual.no_hp=tbl_customer.no_hp WHERE DATE(tbl_jual.jual_tanggal) between '$tanggal1' AND '$tanggal2' AND cabang=''";
+		if($id_customer!="") {
+			$query .= " AND tbl_customer.id =".$id_customer;
+		}
+		$query .= " GROUP BY jual_nofak";
+		$query .= " ORDER BY jual_nofak asc";
+		$hsl = $this->db->query($query);
+		return $hsl;
+	}
+
 	function laporan_penjualan_kasir_all($tanggal1, $tanggal2,$nama_barang,$nama_customer,$kategori_brg,$cara_bayar)
 	{
 		$query = "SELECT jual_nofak,tbl_jual.no_hp, DATE_FORMAT(jual_tanggal,'%d %M %Y') AS jual_tanggal,d_jual_barang_id,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harpok,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total,tbl_customer.nama FROM tbl_jual JOIN tbl_detail_jual ON tbl_jual.jual_nofak=tbl_detail_jual.d_jual_nofak JOIN tbl_customer ON tbl_jual.no_hp=tbl_customer.no_hp WHERE DATE(tbl_jual.jual_tanggal) between '$tanggal1' AND '$tanggal2' AND cabang=''";
@@ -142,6 +154,18 @@ class M_laporan extends CI_Model
 
 		return $hsl;
 	}
+	function get_penjualan_kasir_dp($tanggal1, $tanggal2)
+	{
+		
+		$query = "select tbl_resume.resume_nofak as jual_nofak, tbl_customer.nama, DATE_FORMAT(tbl_jual.jual_tanggal,'%d %M %Y') as jual_tanggal, tbl_jual.jual_total, (select sum(amount) from tbl_resume where resume_nofak=tbl_jual.jual_nofak ) as total_pembayaran,(select created_at from tbl_resume as tr where resume_nofak= tbl_jual.jual_nofak order by created_at desc limit 1) as tgl_pelunasan from tbl_resume inner join tbl_jual on tbl_jual.jual_nofak=tbl_resume.resume_nofak and tbl_jual.tipe='DP' inner join tbl_customer on tbl_customer.no_hp=tbl_jual.no_hp where DATE(tbl_resume.created_at) >='$tanggal1' and DATE(tbl_resume.created_at)<='$tanggal2' group by tbl_resume.resume_nofak";
+
+	
+		$query .= " ORDER BY tbl_jual.jual_nofak asc";
+
+		$hsl = $this->db->query($query);
+		
+		return $hsl;
+	}
 	function get_penjualan_dp($tanggal1, $tanggal2, $nama_customer, $nama_barang, $kategori_brg = "")
 	{
 		$query = "SELECT jual_nofak,tbl_jual.no_hp, DATE_FORMAT(jual_tanggal,'%d %M %Y') AS jual_tanggal,d_jual_barang_id,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harpok,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total,tbl_customer.nama,tbl_detail_jual.d_jual_barang_kat_id FROM tbl_jual JOIN tbl_detail_jual ON tbl_jual.jual_nofak=tbl_detail_jual.d_jual_nofak JOIN tbl_customer ON tbl_jual.no_hp=tbl_customer.no_hp WHERE DATE(tbl_jual.jual_tanggal) between '$tanggal1' AND '$tanggal2' AND tbl_jual.status='DP'";
@@ -160,6 +184,18 @@ class M_laporan extends CI_Model
 
 		$query .= " ORDER BY jual_nofak DESC";
 		$hsl = $this->db->query($query);
+		return $hsl;
+	}
+	function get_penjualan_cabang_cetak($tanggal1, $tanggal2, $cabang)
+	{
+		$query = "SELECT jual_nofak,cabang,DATE_FORMAT(jual_tanggal,'%d %M %Y') AS jual_tanggal, tbl_jual.jual_keterangan, tbl_jual.jual_keterangan2 ,sum(d_jual_total) as  total FROM tbl_jual JOIN tbl_detail_jual ON jual_nofak=d_jual_nofak WHERE DATE(tbl_jual.jual_tanggal) between '$tanggal1' AND '$tanggal2' AND cabang!=''";
+		if ($cabang != "") {
+			$query .= " AND tbl_jual.cabang='$cabang'";
+		}
+		$query .= " GROUP BY jual_nofak";
+		$query .= " ORDER BY cabang asc, jual_nofak asc ";
+		$hsl = $this->db->query($query);
+	
 		return $hsl;
 	}
 	function get_penjualan_cabang($tanggal1, $tanggal2, $cabang, $nama_barang, $kategori = "")
@@ -243,6 +279,25 @@ class M_laporan extends CI_Model
 		if ($nama_barang) {
 			$this->db->where('tbl_detail_beli.d_beli_barang_id', $nama_barang);
 		}
+		$res = $this->db->get()->result();
+		return $res;
+	}
+	function get_pembelian_cetak($tanggal1, $tanggal2, $supplier)
+	{
+		$this->db->select("*");
+		$this->db->select("sum(tbl_detail_beli.d_beli_total) as total");
+		$this->db->from('tbl_beli');
+		$this->db->where('beli_tanggal >=', date('Y-m-d', strtotime($tanggal1)));
+		$this->db->where('beli_tanggal <=', date('Y-m-d', strtotime($tanggal2)));
+		$this->db->join('tbl_detail_beli', 'tbl_beli.beli_nofak=tbl_detail_beli.d_beli_nofak');
+		$this->db->join('tbl_barang', 'tbl_detail_beli.d_beli_barang_id=tbl_barang.barang_id');
+		$this->db->join('tbl_suplier', 'tbl_beli.beli_suplier_id=tbl_suplier.suplier_id');
+		if ($supplier) {
+			$this->db->where('tbl_beli.beli_suplier_id', $supplier);
+		}
+		$this->db->group_by('tbl_beli.beli_nofak'); 
+		$this->db->order_by("tbl_suplier.suplier_id", "asc");
+		$this->db->order_by("tbl_beli.beli_nofak", "asc");
 		$res = $this->db->get()->result();
 		return $res;
 	}
@@ -413,6 +468,38 @@ class M_laporan extends CI_Model
 		$res = $this->db->get()->result_array();
 		return $res;
 	}
+	public function queryResumePenjualanDPBayar($start, $end)
+	{
+		$this->db->select('sum(amount) as total');
+		$this->db->from('tbl_resume');
+		$this->db->join('tbl_jual', 'tbl_jual.jual_nofak=tbl_resume.resume_nofak');
+		$this->db->where('DATE(tbl_resume.created_at) >=', $start);
+		$this->db->where('DATE(tbl_resume.created_at) <=', $end);
+		$this->db->where('tbl_jual.status =', 'DP');
+		$this->db->where('tbl_resume.amount >=', 0);
+		
+		$res = $this->db->get()->row();
+	
+		return $res;
+	}
+	public function queryResumePenjualanDPUtang($start, $end)
+	{
+		$res = $this->db->query("select sum(a.total) as total from (SELECT tbl_jual.jual_total- sum(amount) as total FROM `tbl_resume` inner join tbl_jual on tbl_resume.resume_nofak= tbl_jual.jual_nofak WHERE DATE(created_at)>='$start' and DATE(created_at)<='$end' and tbl_jual.tipe='DP' and tbl_jual.status='DP' group by resume_nofak) as a")->row();
+		return $res;
+	}
+	public function queryResumePenjualan($start, $end)
+	{
+		$this->db->select('*,sum(tbl_resume.amount) as total');
+		$this->db->from('tbl_resume');
+		$this->db->where('DATE(tbl_resume.created_at) >=', $start);
+		$this->db->where('DATE(tbl_resume.created_at) <=', $end);
+		$this->db->where('tbl_resume.amount >=', '0');
+		$this->db->where('method_types !=', "");
+		$this->db->group_by('method_types');
+		$res = $this->db->get()->result_array();
+		return $res;
+	}
+	
 	public function queryResumeCash($start, $end)
 	{
 		$this->db->select('*,sum(amount) as cash');

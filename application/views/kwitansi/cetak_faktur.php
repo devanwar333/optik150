@@ -47,13 +47,13 @@
 
         @media print {
             @page {
-                size: landscape
+                size: potrait
             }
         }
     </style>
 </head>
 
-<body class="container p-5" onload="window.print()">
+<body class="" onload="window.print()">
     <?php
     $bulantahun = date('mY');
     $nomor = 4;

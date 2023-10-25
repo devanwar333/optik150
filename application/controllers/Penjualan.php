@@ -94,7 +94,7 @@ class Penjualan extends CI_Controller
                 $html .= "<li class='item_barang' data-value='$v[value]'>$v[label]</li>";
             }
         } else {
-            $html .= "<li data-value='tambah_barang' class='item_barang'>(+) Tambah Data Barang</li>";
+            //$html .= "<li data-value='tambah_barang' class='item_barang'>(+) Tambah Data Barang</li>";
         }
 
         echo $html;
@@ -110,7 +110,7 @@ class Penjualan extends CI_Controller
                 $html .= "<li class='item_barang' data-value='$v[value]'>$v[label]</li>";
             }
         } else {
-            $html .= "<li data-value='tambah_barang' class='item_barang'>(+) Tambah Data Barang</li>";
+           // $html .= "<li data-value='tambah_barang' class='item_barang'>(+) Tambah Data Barang</li>";
         }
 
         echo $html;
@@ -123,6 +123,17 @@ class Penjualan extends CI_Controller
         $jml_uang1 = $this->input->post("jml_uang");
         $cara_bayar = $this->input->post("cara_bayar");
         $kurang = $this->input->post("kurang");
+        $jual  = $this->db->query("select * from tbl_jual where jual_nofak='$nofak' ")->row();
+   
+        if($jual == null) {
+            $this->session->set_flashdata('msg2', 'Data transaksi dp tidak ditemukan');
+            redirect('history_penjualan');
+        }
+
+        if($jual->status == "COMPLETE") {
+            $this->session->set_flashdata('msg2', 'Data transaksi dp sudah berhasil dibayar');
+            redirect('history_penjualan');
+        }
         if ($bayar == $kurang) {
             $jml_uang = (int)$bayar + (int)$jml_uang1;
 
@@ -135,6 +146,27 @@ class Penjualan extends CI_Controller
 
             $this->db->where('jual_nofak', $nofak);
             $this->db->update('tbl_jual', $data);
+            $today = date('Y-m-d');
+            $endToday = date('Y-m-d',strtotime("+1 day"));
+            $resume  = $this->db->query("select * from tbl_resume where resume_nofak='$nofak' and amount < 0 and created_at between '$today' and '$endToday' ")->row_array();
+            
+            if($resume!=null) {
+                $updateResume = [
+                    'method_types' => $cara_bayar,
+                    'amount' => $bayar,
+                    'created_at' => date('Y-m-d H:i:s'),
+                ];
+                $this->db->where('id', $resume['id']);
+                $this->db->update('tbl_resume', $updateResume);
+            }else {
+                $this->db->insert('tbl_resume', [
+                    'resume_nofak' => $nofak,
+                    'method_types' => $cara_bayar,
+                    'amount' => $bayar,
+                    'created_at' => date('Y-m-d H:i:s'),
+                ]);
+            }
+           
             redirect('history_penjualan');
         } else {
             $this->session->set_flashdata('msg2', 'Data gagal ditambahkan! uang anda kurang');
@@ -428,6 +460,7 @@ class Penjualan extends CI_Controller
     }
     function simpan_penjualan_cabang()
     {
+	
         // jika uang1 > total = kembalian
         // jika uang1 < uang2 = kurang -> status = DP
 
@@ -439,8 +472,10 @@ class Penjualan extends CI_Controller
                 continue;
             array_push($payment1, $byr->cara_bayar);
         }
+
         // Jika Bayar1 > Total Bayat
         if (in_array($this->input->post('bayar'), $payment1)) {
+
             $bayar = $this->input->post('bayar', TRUE);
             $bayar2 = $this->input->post('bayar2', TRUE);
             $total_belanja = $this->input->post('total'); ////sama tambahin ini juga jar kalau di kameranya
@@ -459,12 +494,12 @@ class Penjualan extends CI_Controller
                 $kurang = $total_belanja - $total_a;
                 $kembalian = 0;
             }
-
+		var_dump("123");
             $status = $this->input->post('status');
-
+		
 
             // if (!empty($total) && !empty($jml_uang)) {
-            if (($total == 0) && ($jml_uang == 0)) {
+            if (($total) && ($jml_uang)) {
 
 
                 $nofak = $this->m_penjualan->get_nofak();
@@ -493,7 +528,7 @@ class Penjualan extends CI_Controller
 
                     if ($jenis_cetak != "" && $this->session->userdata('level') == 'penjualan') {
                         if ($jenis_cetak == 'faktur') {
-                            $this->cetak_faktur_sj();
+                            redirect('history_penjualan/in_detail/' . $nofak);
                         }
                         if ($jenis_cetak == 'sj') {
                             $this->cetak_surat_jalan();
@@ -505,10 +540,15 @@ class Penjualan extends CI_Controller
                     redirect('penjualan');
                 }
             } else {
+
                 echo $this->session->set_flashdata('error', 'Penjualan Gagal di Simpan, Mohon Periksa Kembali Semua Inputan Anda!');
                 redirect('penjualan');
             }
-        }
+        } else {
+		echo $this->session->set_flashdata('error', 'Penjualan Gagal di Simpan, Mohon Periksa Kembali Tipe Pembayaran Anda');
+                redirect('penjualan');
+	}
+
     }
 
     function cetak_faktur_sj()
@@ -526,13 +566,13 @@ class Penjualan extends CI_Controller
     {
         $x['data'] = $this->m_penjualan->cetak_faktur();
         $this->load->view('laporan/v_faktur', $x);
-        //$this->session->unset_userdata('nofak');
+        // $this->session->unset_userdata('nofak');
     }
     function cetak_faktur_cabang()
     {
         $x['data'] = $this->m_penjualan->cetak_faktur_cabang();
         $this->load->view('laporan/v_faktur_cabang', $x);
-        //$this->session->unset_userdata('nofak');
+        // $this->session->unset_userdata('nofak');
     }
 
     function cetak_faktur_dp()

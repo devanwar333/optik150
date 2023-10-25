@@ -11,6 +11,7 @@ class M_barang extends CI_Model
 	{
 		parent::__construct();
 		$this->load->database();
+		$this->load->helper('string_helper');
 	}
 
 	private function _get_datatables_query()
@@ -87,6 +88,55 @@ class M_barang extends CI_Model
 		$this->db->distinct('kategori_nama');
 		$this->db->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id');
 		$res = 	$this->db->get()->result();
+		return $res;
+	}
+	public function update($id, $data)
+	{
+		$this->db->where('id', $id);
+		unset($data['id']);
+		$res = $this->db->update($this->table, $data);
+		return $res;
+	}
+	public function updateStock($id, $data)
+	{
+		$this->db->where('id', $id);
+		$newData = [
+			'barang_stok' => $data['barang_stok'],
+			'updated_by' => $data['updated_by'],
+			'updated_at' => date('Y-m-d H:i:s')
+		];
+		$res = $this->db->update($this->table, $newData);
+		return $res;
+	}
+	public function remove($id)
+	{
+		$this->db->where('id', $id);
+		$res = 	$this->db->delete($this->table);
+		return $res;
+	}
+	public function get_list_barang_by_nama($nama_barang)
+	{	
+		
+		$start = startsWith($nama_barang,"*");
+		$end = endsWith($nama_barang,"*");
+		$type = "";
+		if ($start == TRUE && $end == TRUE) {
+			$type ="both";
+		}else if($start == TRUE) {
+			$type ="before";
+		} else if($end == TRUE) {
+			$type ="after";
+		} else {
+			$type = "none";
+		}
+
+		$query = str_replace("*","",$nama_barang);
+		$res = $this->db->select('*')
+			->from($this->table)
+			->like('barang_nama', $query, $type)
+			->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id')
+			
+			->get()->result();
 		return $res;
 	}
 	public function get_byKategori($kategori_nama)
@@ -176,7 +226,11 @@ class M_barang extends CI_Model
 
 		$this->db->insert('tbl_barang', $data);
 	}
-
+	function get($id)
+	{
+		$res = $this->db->select('*')->from($this->table)->where('id', $id)->get()->row_array();
+		return $res;
+	}
 	///baruu
 	function get_barang($kobar)
 	{
@@ -233,6 +287,8 @@ class M_barang extends CI_Model
 		}
 
 		$this->db->where('barang_id', $_POST['barang_id']);
+		log_message('error', 'edit_barang - '. $_POST['barang_id']." - ".$_POST['stok']);
+
 		$this->db->update('tbl_barang', $data);
 	}
 
@@ -277,11 +333,19 @@ class M_barang extends CI_Model
 		$this->db->like('barang_nama', "FREE");
 		return $this->db->get()->result();
 	}
+	public function updateBarang($id, $data)
+	{
+		$this->db->where('id', $id);
+		$this->db->update('tbl_barang', $data);
+		log_message('error', 'edit_barang - '. $id);
 
+	}
 	public function UpdateGambar($id, $data)
 	{
 		$this->db->where('id', $id);
 		$this->db->update('tbl_barang', $data);
+		log_message('error', 'UpdateGambar - '. $id);
+
 	}
 
 	// ahmad updated

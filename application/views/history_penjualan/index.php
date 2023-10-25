@@ -11,7 +11,7 @@
             <?php
             $dat = $this->session->flashdata('msg');
             if ($dat != "") { ?>
-                <div id="notifikasi" class="alert alert-success"><strong>Sukses! </strong> <?= $dat; ?></div>
+                <div id="notifikasi" class="alert alert-success"><?= $dat; ?></div>
             <?php } ?>
             <h6 class="m-0 font-weight-bold text-primary">Daftar History Penjualan</h6>
         </div>

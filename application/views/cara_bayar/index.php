@@ -16,7 +16,8 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Cara Bayar</th>
-                                    <th>Action</th>
+				    <th>Status</th>
+                                   <!-- <th>Action</th>-->
                                 </tr>
                             </thead>
                             <tbody>
@@ -154,6 +155,14 @@
                                     'success'
                                 )
                                 table.ajax.reload();
+                            },
+			    error: function(xhr, status, error) {
+                              
+                                Swal.fire(
+                                    'Error!',
+                                    xhr.responseJSON,
+                                    'failed'
+                                )
                             }
                         })
                     }

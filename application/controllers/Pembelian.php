@@ -31,13 +31,13 @@ class Pembelian extends CI_Controller
 		$x['brg'] = $this->m_barang->get_barang1($kobar);
 		$this->load->view('pembelian/detail_barang_beli', $x);
 	}
-
 	function add_to_cart()
 	{
 
 		$nofak = $this->input->post('nofak');
 		$tgl = $this->input->post('tgl');
 		$suplier = $this->input->post('suplier');
+		$keterangan = $this->input->post('keterangan');
 		$this->session->set_userdata('nofak', $nofak);
 		$this->session->set_userdata('tglfak', $tgl);
 		$this->session->set_userdata('suplier', $suplier);
@@ -49,6 +49,7 @@ class Pembelian extends CI_Controller
 			'name'     => $i['barang_nama'],
 			'satuan'   => $i['barang_satuan'],
 			'price'    => $this->input->post('harpok'),
+			'keterangan'    => $keterangan,
 			'qty'      => $this->input->post('jumlah')
 		);
 		$this->cart->insert($data);
@@ -57,7 +58,6 @@ class Pembelian extends CI_Controller
 		// exit();
 		redirect('pembelian');
 	}
-
 	function remove()
 	{
 
@@ -68,7 +68,6 @@ class Pembelian extends CI_Controller
 		));
 		redirect('pembelian');
 	}
-
 	function simpan_pembelian()
 	{
 
@@ -104,7 +103,7 @@ class Pembelian extends CI_Controller
 				$html .= "<li class='item_barang' data-value='$v[value]'>$v[label]</li>";
 			}
 		} else {
-			$html .= "<li data-value='tambah_barang' class='item_barang'>(+) Tambah Data Barang</li>";
+			//$html .= "<li data-value='tambah_barang' class='item_barang'>(+) Tambah Data Barang</li>";
 		}
 
 		echo $html;
@@ -120,9 +119,10 @@ class Pembelian extends CI_Controller
 				$html .= "<li class='item_barang' data-value='$v[value]'>$v[label]</li>";
 			}
 		} else {
-			$html .= "<li data-value='tambah_barang' class='item_barang'>(+) Tambah Data Barang</li>";
+			//$html .= "<li data-value='tambah_barang' class='item_barang'>(+) Tambah Data Barang</li>";
 		}
 
 		echo $html;
 	}
+
 }

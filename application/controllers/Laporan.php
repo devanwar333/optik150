@@ -142,6 +142,16 @@ class Laporan extends CI_Controller
 		$data['listBarang'] = $this->m_barang->get_list_barang($kategori_nama);
 		$this->load->view('laporan/cetak_barang_byKategori', $data);
 	}
+	function filter_barang_by_name()
+	{
+		$nama_barang = $this->input->post('nama_barang');
+		$data['listBarang'] = $this->m_barang->get_list_barang_by_nama($nama_barang);
+		if(count($data['listBarang'])<=0) {
+			echo $this->session->set_flashdata('error', 'Nama Barang dari '.$nama_barang. " Tidak ditemukan.");
+			redirect('laporan');
+		}
+		$this->load->view('laporan/cetak_barang_by_nama', $data);
+	}
 	function lap_data_barang_kategori()
 	{
 		$input_kategori = $this->input->post('kategori_nama');
@@ -227,7 +237,18 @@ class Laporan extends CI_Controller
 		$list = iterator_to_array($it, false);
 		return $list;
 	}
+	function lap_penjualan_kasir_cetak()
+	{
 
+		$tanggal1 = $this->input->post('tgl1');
+		$tanggal2 = $this->input->post('tgl2');
+		$id_customer = $this->input->post('id_customer');
+
+		$data['tanggal1'] = $this->input->post('tgl1');
+		$data['tanggal2'] = $this->input->post('tgl2');
+		$data['data'] = $this->m_laporan->laporan_penjualan_kasir($tanggal1,$tanggal2,$id_customer)->result_array();
+		$this->load->view('laporan/penjualan_per_periode/cetak-penjualan', $data);
+	}
 	function lap_penjualan_periode_cetak()
 	{
 
@@ -371,6 +392,20 @@ class Laporan extends CI_Controller
 		// $x['data'] = $this->m_laporan->get_data_jual_periode($tanggal1, $tanggal2, $nama_customer, $nama_barang);
 		$this->load->view('laporan/penjualan_per_periode/cetak', $x);
 	}
+
+	function laporan_penjualan_kasir_dp_cetak() {
+
+		$tanggal1 = $this->input->post('tgl1');
+		$tanggal2 = $this->input->post('tgl2');
+		$x['tanggal1'] = $this->input->post('tgl1');
+		$x['tanggal2'] = $this->input->post('tgl2');
+		
+		$x['data']= $this->m_laporan->get_penjualan_kasir_dp($tanggal1, $tanggal2)->result_array();
+		
+		$this->load->view('laporan/penjualan_kasir_dp/cetak_penjualan', $x);
+
+	}
+
 	function laporan_penjualan_kasir_dp()
 	{
 		$tanggal1 = $this->input->post('tgl1');
@@ -480,91 +515,35 @@ class Laporan extends CI_Controller
 		// $x['data'] = $this->m_laporan->get_penjualan_dp($tanggal1, $tanggal2, $nama_customer, $nama_barang);
 		$this->load->view('laporan/penjualan_kasir_dp/cetak', $x);
 	}
+	
+
 	function penjualan_cabang()
 	{
 		$tanggal1 = $this->input->post('tgl1');
 		$tanggal2 = $this->input->post('tgl2');
 		$cabang = $this->input->post('cabang');
-		$nama_barang = $this->input->post('nama_barang');
-		$kat_barang = $this->input->post('kat_barang');
 
 		$x['tanggal1'] = $this->input->post('tgl1');
 		$x['tanggal2'] = $this->input->post('tgl2');
 		$x['cabang'] = $this->input->post('cabang');
-		$x['barang'] = $nama_barang;
-
-		// Tampilkan
-		if ($this->input->post('percabang') != false) {
-			$percabang = 1;
-		} else {
-			$percabang = 0;
-		}
-		if ($this->input->post('perkatbarang') != false) {
-			$perkatbarang = 1;
-		} else {
-			$perkatbarang = 0;
-		}
-		if ($this->input->post('perbarang') != false) {
-			$perbarang = 1;
-		} else {
-			$perbarang = 0;
-		}
-		
-
-		$x['percabang'] = $percabang;
-		$x['perkatbarang'] = $perkatbarang;
-		$x['perbarang'] = $perbarang;
-
-
-
-		// Penjualan Cabang
-		$data1 =  $this->m_laporan->get_penjualan_cabang($tanggal1, $tanggal2, $cabang, $nama_barang)->result_array();
-		
-		$cabang_arr = array();
-		$group_cabang = $this->_group_by($data1, 'cabang');
-
-		foreach ($group_cabang as $idx => $cbg) {
-			$cbg_item = new stdClass();
-			$cbg_item->cabang = $cbg;
-			$cbg_item->items  = $this->m_laporan->get_penjualan_cabang($tanggal1, $tanggal2, $cbg, $nama_barang)->result_array();
-			array_push($cabang_arr, $cbg_item);
-		}
-
-		$x["data1"] = $cabang_arr;
-
-		// Penjualan Barang
-		$data2 =  $this->m_laporan->get_penjualan_cabang($tanggal1, $tanggal2, $cabang, $nama_barang)->result_array();
-		$barang_arr = array();
-		$group_barang = $this->_group_by($data2, 'd_jual_barang_nama');
-		foreach ($group_barang as $idx => $brg) {
-			$cbg = new stdClass();
-			$cbg->barang = $brg;
-			$cbg->items  = $this->m_laporan->get_penjualan_cabang($tanggal1, $tanggal2, $cabang, $brg)->result_array();
-			array_push($barang_arr, $cbg);
-		}
-
-		$x["data2"] = $barang_arr;
-
-
-		// Penjualan Kategori
-		$data3 =  $this->m_laporan->get_penjualan_cabang($tanggal1, $tanggal2, $cabang, $nama_barang,$kat_barang)->result_array();
-		$katbar_arr = array();
-		$group_kat_barang = $this->_group_by($data2, 'd_jual_barang_kat_id');
-		foreach ($group_kat_barang as $idx => $kat_brg) {
-			$katbar = new stdClass();
-			$katbar->kategori =  $kat_brg == 0 ? "unknown" : $this->m_kategori->getKategoriById($kat_brg)->kategori_nama;
-			$katbar->items  = $this->m_laporan->get_penjualan_cabang($tanggal1, $tanggal2,  $cabang, $nama_barang,$kat_brg)->result_array();
-			array_push($katbar_arr, $katbar);
-		}
-
-		$x["data3"] = $katbar_arr;
-
-		
-
-		
-		$x['jml'] = $this->m_laporan->get_total_penjualan_cabang($tanggal1, $tanggal2, $cabang, $nama_barang);
-		$this->load->view('laporan/penjualan_cabang/cetak', $x);
+		$x['data'] = $this->m_laporan->get_penjualan_cabang_cetak($tanggal1, $tanggal2, $cabang)->result_array();
+	
+	
+		$this->load->view('laporan/penjualan_cabang/cetak_penjualan', $x);
 	}
+
+	function laporan_pembelian_cetak()
+	{
+		$tanggal1 = $this->input->post('tgl1');
+		$tanggal2 = $this->input->post('tgl2');
+		$supplier = $this->input->post('supplier');
+		$x['tanggal1'] = $this->input->post('tgl1');
+		$x['tanggal2'] = $this->input->post('tgl2');
+		$x['supplier'] = $this->m_suplier->rowSupplier($supplier);
+		$x['data'] = $this->m_laporan->get_pembelian_cetak($tanggal1, $tanggal2, $supplier);
+		$this->load->view('laporan/pembelian/cetak_pembelian', $x);
+	}
+
 	function laporan_pembelian()
 	{
 		$tanggal1 = $this->input->post('tgl1');
@@ -693,7 +672,9 @@ GROUP BY jual_keterangan";
 		$data['saldo'] = $this->input->post('saldo');
 		$data['start'] = $start;
 		$data['end'] = $end;
-		$data['getPenjualan'] = $this->m_laporan->queryResume($start, $end);
+
+		$data['getSisaDP'] = $this->m_laporan->queryResumePenjualanDPUtang($start, $end);
+		$data['getPenjualan'] = $this->m_laporan->queryResumePenjualan($start, $end);
 		$data['cashKasir'] = $this->m_laporan->queryResumeCash($start, $end);
 		$data['pengeluaran'] = $this->m_laporan->queryPengeluaran($start, $end);
 
@@ -746,4 +727,23 @@ GROUP BY jual_keterangan";
 		$x['data'] = $this->m_laporan->get_laporan_pengeluaran($tanggal1, $tanggal2);
 		$this->load->view('laporan/pengeluaran_toko/cetak', $x);
 	}
+	function lap_penjualan_summary_cetak()
+	{
+		$tanggal = $this->input->post('tanggal');
+	
+		$date = date('Y-m-d');
+		if($tanggal !=null) {
+			$date = $tanggal;
+		}
+		
+		$data = $this->db->select('*,sum(d_jual_qty) as total_qty')->from('tbl_jual')->group_by('d_jual_barang_id')
+		->where('DATE(jual_tanggal)', $date)
+			
+		->where('jual_user_id', "!=",null)->where('cabang', "")->join('tbl_detail_jual', 'tbl_detail_jual.d_jual_nofak=tbl_jual.jual_nofak and tbl_jual.status in ("COMPLETE","KREDIT","DP")')->get()->result_array();
+		
+		$x['tanggal'] = $date;
+		$x['data'] = $data;
+		$this->load->view('laporan/penjualan_summary_kasir/cetak', $x);
+	}
+	
 }

@@ -78,11 +78,7 @@
                 </div>
                 <div class="form-group col-sm-2">
                     <label>Harga(Rp) :</label>
-                    <?php if ($this->session->userdata('level') == "penjualan") { ?>
-                        <input type="text" readonly id="harga_ket_cabang" name="harga_ket" class="form-control" />
-                    <?php } else { ?>
-                        <input type="text" readonly id="harga_ket" name="harga_ket" class="form-control" />
-                    <?php  } ?>
+                    <input type="text" readonly id="harga_ket_cabang" name="harga_ket" class="form-control" />
                 </div>
                 <div class="form-group col-sm-4">
                     <label>Keterangan :</label>
@@ -140,25 +136,31 @@
                             ?>
                             <?php foreach ($penjualan as $items) :
                                 $total += $items['d_jual_total'];
-                            ?>
+                            ?> 
                                 <tr>
-                                    <td><?= $items['d_jual_barang_id']; ?></td>
-                                    <td><?= $items['d_jual_barang_nama']; ?></td>
-                                    <td style="text-align:center;"><?= $items['d_jual_barang_satuan']; ?></td>
-                                    <td style="text-align:right;"><?php echo number_format($items['d_jual_barang_harjul']); ?></td>
-                                    <td style="text-align:right;"><?php echo $items['d_jual_diskon']; ?></td>
-                                    <td style="text-align:center;">
-                                        <form action="<?= base_url('history_penjualan_cabang/updateQty/' . $items['d_jual_id']) ?>" method="post">
-                                            <input type="hidden" value="<?= $items['d_jual_qty'] ?>" name="qty">
-                                            <input type="hidden" value="<?= $items['d_jual_nofak'] ?>" name="nofak_items">
-                                            <input type="hidden" value="<?= $items['d_jual_barang_id'] ?>" name="barang_id">
-                                            <input type="hidden" value="<?= $items['d_jual_barang_harjul'] ?>" name="harjul_items">
-                                            <input type="text" name="qty" value="<?php echo number_format($items['d_jual_qty']); ?>">
-                                        </form>
-                                    </td>
-                                    <td style="text-align:right;"><?php echo number_format($items['d_jual_total']); ?></td>
+                                    <form action="<?= base_url('history_penjualan_cabang/updateQty/' . $items['d_jual_id']) ?>" method="post">
+                                
+                                        <td><?= $items['d_jual_barang_id']; ?></td>
+                                        <td><?= $items['d_jual_barang_nama']; ?></td>
+                                        <td style="text-align:center;"><?= $items['d_jual_barang_satuan']; ?></td>
+                                        <td style="text-align:right;"><?php echo number_format($items['d_jual_barang_harjul']); ?></td>
+                                        <td style="text-align:right;"><?php echo $items['d_jual_diskon']; ?></td>
+                                        <td style="text-align:center;">
+                                        
+                                                <input type="hidden" value="<?= $items['d_jual_qty'] ?>" name="qty">
+                                                <input type="hidden" value="<?= $items['d_jual_nofak'] ?>" name="nofak_items">
+                                                <input type="hidden" value="<?= $items['d_jual_barang_id'] ?>" name="barang_id">
+                                                <input type="hidden" value="<?= $items['d_jual_barang_harjul'] ?>" name="harjul_items">
+                                                <input type="text" name="qty" value="<?php echo number_format($items['d_jual_qty']); ?>">
+                                            
+                                        </td>
+                                        <td style="text-align:right;"><?php echo number_format($items['d_jual_total']); ?></td>
 
-                                    <td style="text-align:center;"><a href="<?= base_url('history_penjualan_cabang/removeItems/' . $items['d_jual_nofak'] . "/" . $items['d_jual_id'] . "/" . $items['d_jual_barang_id'] . "/" . $items['d_jual_qty']) ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a></td>
+                                        <td style="text-align:center;">
+                                            <button type="submit" class="btn btn-primary btn-xs">Save</button>
+                                            <a href="<?= base_url('history_penjualan_cabang/removeItems/' . $items['d_jual_nofak'] . "/" . $items['d_jual_id'] . "/" . $items['d_jual_barang_id'] . "/" . $items['d_jual_qty']) ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Hapus</a>
+                                        </td>
+                                    </form>
                                 </tr>
 
 
@@ -493,7 +495,7 @@
                     "search": search
                 },
                 success: function(res) {
-
+                    console.log(res)
                     $('.ajax_list_barang').show()
                     $("#list_container").html(res)
                     $('.item_barang').click(function() {
@@ -502,19 +504,15 @@
                         $('#nabar').val(label)
                         if (value != "tambah_barang") {
                             var res = value.split("#");
-                            console.log(res)
-                            <?php if ($this->session->userdata('level') == 'penjualan') { ?>
-                                $('#harga_ket_cabang').val(formatUang(res[4]))
-                            <?php } else { ?>
-                                $('#harga_ket').val(formatUang(res[0]))
-                            <?php } ?>
+                      
+                            $('#harga_ket_cabang').val(formatUang(res[4]))
                             $('#kode_brg_ket').val(res[1])
                             $('#jumlah_ket').val(1)
                             $('#satuan_ket').val(res[2])
                             $('#stok_ket').val(res[3])
                         } else {
-                            $('#add_barang').modal('show')
-                            $('#nabar').val('')
+                            //$('#add_barang').modal('show')
+                            //$('#nabar').val('')
                         }
                         $('.ajax_list_barang').hide()
                     })

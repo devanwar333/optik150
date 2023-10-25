@@ -12,7 +12,7 @@ class History_penjualan extends CI_Controller
         $this->load->model('M_Cara_Bayar');
         if ($this->session->userdata('level') != TRUE) {
             redirect(base_url());
-        } 
+        }
     }
 
     function index()
@@ -152,7 +152,7 @@ class History_penjualan extends CI_Controller
 
 
         foreach ($data1 as $dt) {
-            $jmlh = $this->db->query("select count(d_jual_nofak) as jum from tbl_detail_jual where d_jual_nofak='$dt[jual_nofak]'")->row();
+            $jmlh = $this->db->query("select sum(d_jual_qty) as jum from tbl_detail_jual where d_jual_nofak='$dt[jual_nofak]'")->row();
             $dt["jumlah_item"] = $jmlh->jum;
             array_push($data_array, $dt);
         }
@@ -228,7 +228,7 @@ class History_penjualan extends CI_Controller
 
 
 
-        $data1 = $this->db->query("select * from tbl_jual where jual_nofak LIKE '%$search%' OR cabang LIKE '%$search%' order by jual_tanggal desc")->result_array();
+        $data1 = $this->db->query("select * from tbl_jual where  cabang !='' and jual_nofak LIKE '%$search%' OR cabang LIKE '%$search%' order by jual_tanggal desc")->result_array();
 
 
 
@@ -306,21 +306,38 @@ class History_penjualan extends CI_Controller
         $this->db->delete('tbl_jual');
         redirect('history_penjualan');
     }
-    function batal()
+    function batal($id)
     {
-        $id = $this->input->post('id');
+        
         $data = [
             'status' => "CANCEL",
         ];
-        $res =  $this->M_penjualan->update_status($id, $data);
-        $res = $this->M_penjualan->update_status_resume($id);
-        $data_array = array();
-        $data1 =  $this->M_penjualan->detail_penjualan($id);
-        foreach ($data1 as $dt) {
-            $qty = (int)$dt['d_jual_qty'];
-            array_push($data_array, $dt);
-            $this->db->query("update tbl_barang set barang_stok=barang_stok+'$qty' where barang_id='$dt[d_jual_barang_id]'");
+        try {
+            $history = $this->M_penjualan->get_history_penjualan_by_nofak($id);
+            if($history->status=="CANCEL") {
+                $this->session->set_flashdata('msg', 'Gagal Membatalkan Karena Transaksi No Faktur '.$id .' sudah dibatalkan');
+
+                redirect('history_penjualan');
+            }
+            $res =  $this->M_penjualan->update_status($id, $data);
+            $res2 = $this->M_penjualan->update_status_resume($id);
+            $data_array = array();
+            $data1 =  $this->M_penjualan->detail_penjualan($id);
+            foreach ($data1 as $dt) {
+                $qty = (int)$dt['d_jual_qty'];
+                array_push($data_array, $dt);
+                log_message('error', 'batal - '.$dt['d_jual_barang_id']." - ".$qty);
+
+                $this->db->query("update tbl_barang set barang_stok=barang_stok+'$qty' where barang_id='$dt[d_jual_barang_id]'");
+            }
+            $this->session->set_flashdata('msg', 'Berhasil Membatalkan Transaksi No Faktur '.$id );
+
+            redirect('history_penjualan');
         }
-        echo json_encode($res);
+        catch (Exception $e) {
+            $this->session->set_flashdata('msg', 'Gagal Membatalkan Transaksi No Faktur '.$id);
+
+            redirect('history_penjualan');
+        }
     }
 }

@@ -78,6 +78,39 @@ class M_customer extends CI_Model
         $res = $this->db->get()->result();
         return $res;
     }
+	public function listCustomerBySelect2($search, $page)
+    {
+        $this->db->select("id, CONCAT((nama),(' '),(no_hp)) as text");
+        $this->db->from('tbl_customer');
+        $this->db->like('nama', $search);
+        $query = $this->db;
+
+        $res = [];
+        if(!empty($page)) {
+            $start = ceil(($page-1) * $this->perPage);
+            $res = $query->limit($this->perPage, $start)->get()->result();
+
+        } else {
+            $res = $this->db->limit( $this->perPage, 0)->get()->result();
+
+        }
+        array_unshift($res , [
+            "id"=>"",
+            "text"=>"-"
+        ]);
+        $this->db->select('*');
+        $this->db->from('tbl_customer');
+        $this->db->like('nama', $search);
+        $rowcount = $this->db->get()->num_rows();
+        $data = [
+            "results"=> $res,
+            "pagination" => [
+                "more" => 
+                !($this->perPage * $page >=$rowcount)
+            ]
+        ];
+        return $data;
+    }
     public function listCustomer_dp($start, $end)
     {
         $this->db->select('*');

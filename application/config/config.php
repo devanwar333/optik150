@@ -24,7 +24,7 @@ date_default_timezone_set('Asia/Jakarta');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/kasir_optik150k';
+$config['base_url'] = 'http://192.168.1.150/kasir';
 
 /*
 |--------------------------------------------------------------------------
@@ -224,7 +224,7 @@ $config['allow_get_array'] = TRUE;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------

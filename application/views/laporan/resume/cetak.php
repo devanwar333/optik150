@@ -61,7 +61,13 @@ $totalPenjualan += $value['total'];
 
             </tbody>
             <tfoot>
-                             <tr>
+  		 <tr>
+                    <td colspan="2">Total Sisa DP</td>
+                                      <td style="text-align:right;">Rp.
+                        <?= number_format($getSisaDP->total * 1)?>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="2">Total Pengeluaran</td>
                                       <td style="text-align:right;">Rp.
                         <?= number_format($pengeluaran->pengeluaran)?>
@@ -77,7 +83,7 @@ $totalPenjualan += $value['total'];
                 </tr>
                 <tr>
 					<td colspan="2">Total Keseluruhan Penjualan </td>
-					<td align="right">Rp. <?= number_format($totalPenjualan) ?></td>
+					<td align="right">Rp. <?= number_format($totalPenjualan+ ($getSisaDP->total * 1) )?></td>
 				</tr>
             </tfoot>
         </table>
