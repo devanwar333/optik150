@@ -130,6 +130,7 @@
                     <option value="kasir">Kasir</option>
                     <option value="Pembelian">Pembelian</option>
                     <option value="Penjualan">Penjualan</option>
+                    <option value="Supervisor">Supervisor</option>
                   </select>
                 </div>
               </div>

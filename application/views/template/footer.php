@@ -87,6 +87,7 @@
 
       function KeyCheck(e) {
         var KeyID = (window.event) ? event.keyCode : e.keyCode;
+        
         if (KeyID == 113) {
           $('#modalLaporanPenjualanBarang').modal('show');
          	// $("#btn-penjualan").click()
@@ -113,6 +114,12 @@
             });
             $('#modalLaporanPenjualanResume').modal('show');
           }
+        }
+        if(KeyID == 54) {
+          $('#modalLaporanPengeluaran').modal('show');
+        }
+        if(KeyID == 56) {
+         	$("#btn-remaining-stock").click()
         }
         $('#triggerSaldo').submit(function(ev) {
           ev.preventDefault();

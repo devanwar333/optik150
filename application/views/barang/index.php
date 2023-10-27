@@ -370,7 +370,7 @@
                 $("input[name=barang_stok]").val(data.barang_stok);
                 $("input[name=barang_min_stok]").val(data.barang_min_stok);
                 $("input[name=serial_number]").val(data.serial_number);
-                $("input[name=barang_kategori_id]").val(data.barang_kategori_id);
+                $("select[name=barang_kategori_id]").val(data.barang_kategori_id).change();
 
               }
             })

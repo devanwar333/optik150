@@ -720,30 +720,69 @@ GROUP BY jual_keterangan";
 	{
 		$tanggal1 = $this->input->post('tgl1');
 		$tanggal2 = $this->input->post('tgl2');
-
-		$x['tanggal1'] = $this->input->post('tgl1');
-		$x['tanggal2'] = $this->input->post('tgl2');
+		if($tanggal2==null) {
+			$tanggal2 =$tanggal1 ;
+		}
+		$x['tanggal1'] =$tanggal1 ;
+		
+		$x['tanggal2'] = $tanggal2;
 
 		$x['data'] = $this->m_laporan->get_laporan_pengeluaran($tanggal1, $tanggal2);
 		$this->load->view('laporan/pengeluaran_toko/cetak', $x);
 	}
 	function lap_penjualan_summary_cetak()
 	{
+		
 		$tanggal = $this->input->post('tanggal');
-	
 		$date = date('Y-m-d');
 		if($tanggal !=null) {
 			$date = $tanggal;
 		}
 		
-		$data = $this->db->select('*,sum(d_jual_qty) as total_qty')->from('tbl_jual')->group_by('d_jual_barang_id')
-		->where('DATE(jual_tanggal)', $date)
-			
-		->where('jual_user_id', "!=",null)->where('cabang', "")->join('tbl_detail_jual', 'tbl_detail_jual.d_jual_nofak=tbl_jual.jual_nofak and tbl_jual.status in ("COMPLETE","KREDIT","DP")')->get()->result_array();
+		// $data = $this->db->select('*,sum(d_jual_qty) as total_qty')->from('tbl_jual')->group_by('d_jual_barang_id')
+		// ->where('DATE(jual_tanggal)', $date)	
+		// ->where('jual_user_id', "!=",null)->where('cabang', "")->join('tbl_detail_jual', 'tbl_detail_jual.d_jual_nofak=tbl_jual.jual_nofak and tbl_jual.status in ("COMPLETE","KREDIT","DP")')->get()->result_array();
+
+		$lgKategori = $this->m_kategori->getKategoriByName("LG");
+		$lgKategoriId = 0;
+		if($lgKategori != null) {
+			$lgKategoriId = $lgKategori->kategori_id;
+		}
+		$data = $this->db->select('tbl_detail_jual.d_jual_barang_nama ,d_jual_diskon as description, sum(d_jual_qty) as total_qty')->from('tbl_jual')->group_by('d_jual_barang_id')
+		->where('DATE(jual_tanggal)', $date)	
+		->where('jual_user_id', "!=",null)
+		->where('cabang', "")
+		->join('tbl_detail_jual', 'tbl_detail_jual.d_jual_nofak=tbl_jual.jual_nofak and tbl_jual.status in ("COMPLETE","KREDIT","DP")')
+		->where('tbl_detail_jual.d_jual_barang_kat_id != ', $lgKategoriId)
+		->get()->result_array();
 		
+		if($lgKategori != null) {
+			$dataLG = $this->db->distinct()->select('tbl_detail_jual.d_jual_barang_nama ,d_jual_diskon as description, sum(d_jual_qty) as total_qty')->from('tbl_jual')->group_by('d_jual_diskon, d_jual_barang_id')
+			->where('DATE(jual_tanggal)', $date)	
+			->where('jual_user_id', "!=",null)
+			->where('cabang', "")
+			->join('tbl_detail_jual', 'tbl_detail_jual.d_jual_nofak=tbl_jual.jual_nofak and tbl_jual.status in ("COMPLETE","KREDIT","DP")')
+			->where('tbl_detail_jual.d_jual_barang_kat_id', $lgKategoriId)
+			->get()->result_array();
+			foreach($dataLG as $item)
+			{
+				array_push($data,$item);
+			}
+			
+		}	
+		usort($data, function($a, $b) {
+			return strcasecmp($a['d_jual_barang_nama'], $b['d_jual_barang_nama']);
+		});
 		$x['tanggal'] = $date;
 		$x['data'] = $data;
 		$this->load->view('laporan/penjualan_summary_kasir/cetak', $x);
+	}
+
+	function lap_remaining_stock() {
+		$data = $this->m_barang->getRemainingAllStock();
+	
+		$x['data'] = $data;
+		$this->load->view('laporan/remaining_stock/cetak', $x);
 	}
 	
 }

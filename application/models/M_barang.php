@@ -443,4 +443,12 @@ class M_barang extends CI_Model
 		$this->db->distinct('barang_nama');
 		return $this->db->get('tbl_barang')->result();
 	}
+
+	public function getRemainingAllStock() {
+		$this->db->select('*');
+		$this->db->from('tbl_barang');
+		$this->db->order_by('barang_id', "DESC");
+		$this->db->where('barang_stok <= barang_min_stok');
+		return $this->db->get()->result();
+	}
 }

@@ -94,11 +94,20 @@
                                         <a class="btn btn-sm btn-success" href="#laporan_pembelian" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td style="text-align:center;vertical-align:middle">6</td>
                                     <td style="vertical-align:middle;">Laporan Penjualan Kwitansi</td>
                                     <td style="text-align:center;">
                                         <a class="btn btn-sm btn-success" href="#penjualan_kwitansi" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center;vertical-align:middle">7</td>
+                                    <td style="vertical-align:middle;">Laporan Stock Remaining</td>
+                                    <td style="text-align:center;">
+                                        <?php echo form_open('Laporan/lap_remaining_stock') ?>
+                                        <button class="btn btn-sm btn-success"  type="submit"><span class="fa fa-print"></span> Print</button>
                                     </td>
                                 </tr>
                                 <!-- <tr>
@@ -120,7 +129,7 @@
                                 </tr> -->
 
                                 <tr>
-                                    <td style="text-align:center;vertical-align:middle">7</td>
+                                    <td style="text-align:center;vertical-align:middle">8</td>
                                     <td style="vertical-align:middle;">Laporan Pengeluaran Toko</td>
                                     <td style="text-align:center;">
                                         <!-- <a class="btn btn-sm btn-success" href="#lap_pengeluaran_toko" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
@@ -128,7 +137,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align:center;vertical-align:middle">8</td>
+                                    <td style="text-align:center;vertical-align:middle">9</td>
                                     <td style="vertical-align:middle;">Resume Laporan Keuangan</td>
                                     <td style="text-align:center;">
                                         <!-- <a class="btn btn-sm btn-success" href="#lap_resume" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->

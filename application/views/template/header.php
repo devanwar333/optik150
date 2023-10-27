@@ -143,6 +143,36 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
 </head>
 
 <body id="page-top">
+<form  action="<?= base_url('Laporan/lap_remaining_stock') ?>" method="post" target="_blank">
+    <button id="btn-remaining-stock" type="submit" style="display:none"></button>
+  </form>
+<div class="modal fade bd-example-modal-sm" id="modalLaporanPengeluaran" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Penjualan Barang Pertanggal</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="form_pengeluaran_summary" action="<?= base_url('Laporan/lap_pengeluaran_toko_cetak') ?>" method="post" target="_blank">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-12">
+                <label> Tanggal </label>
+                <input type="date" class="form-control" name="tgl1" value="<?php echo date('Y-m-d'); ?>" placeholder="Tanggal" required>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button  type="submit" class="btn btn-primary">Proses</button>
+          </div>
+        </form>
+      </div>
+    </div>
+</div>
 <div class="modal fade bd-example-modal-sm" id="modalLaporanPenjualanBarang" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
       <div class="modal-content">
@@ -169,7 +199,7 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
         </form>
       </div>
     </div>
-  </div>
+</div>
   <form id="form_penjualan_summary" action="<?= base_url('Laporan/lap_penjualan_summary_cetak') ?>" method="post" target="_blank">
     <button id="btn-penjualan" type="submit" style="display:none"></button>
   </form>

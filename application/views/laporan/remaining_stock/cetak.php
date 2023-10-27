@@ -1,6 +1,6 @@
 <html lang="en" moznomarginboxes mozdisallowselectionprint>
 <head>
-	<title>Laporan Penjualan Pertanggal</title>
+	<title>Laporan Remaing Stock</title>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="<?php echo base_url('assets/admin/css/laporan.css')?>"/>
 </head>
@@ -10,12 +10,12 @@
 		<table  border="1"  class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="font-size:20px">
 			<thead class="thead-light">
 <tr>
-						<th colspan="3" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal)); ?> <br></th>
+						<th colspan="3" style="text-align:left;">Periode : <?= date('d M Y'); ?> <br></th>
 					</tr>
 				<tr>
 					<th >Nama Barang</th>
-					<th >Qty</th>
-					<th >Keterangan</th>
+					<th >Stock</th>				
+					<th >Min Stock</th>
 				</tr>
 			</thead>
 
@@ -23,16 +23,17 @@
 				<?php $i = 1;
 				$total = 0;
 				$kolom = 3;
+				
 				?>
 				<?php foreach ($data as $items) :
-
-					$total += ($items['total_qty']);
+					
+					$total += (int)($items->barang_stok);
 				?>
 					<tr>
 						
-						<td><?= ($items['d_jual_barang_nama']); ?></td>
-						<td><?= number_format($items['total_qty']); ?></td>
-						<td><?= $items['description'] ?></td>
+						<td><?= $items->barang_nama ?></td>
+						<td><?= $items->barang_stok ?></td>
+						<td><?= $items->barang_min_stok ?></td>
 					</tr>
 				<?php endforeach; ?>
 	
