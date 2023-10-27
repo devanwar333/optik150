@@ -748,7 +748,7 @@ GROUP BY jual_keterangan";
 		if($lgKategori != null) {
 			$lgKategoriId = $lgKategori->kategori_id;
 		}
-		$data = $this->db->select('tbl_detail_jual.d_jual_barang_nama ,d_jual_diskon as description, sum(d_jual_qty) as total_qty')->from('tbl_jual')->group_by('d_jual_barang_id')
+		$data = $this->db->select('tbl_detail_jual.d_jual_barang_nama ,"" as description, sum(d_jual_qty) as total_qty')->from('tbl_jual')->group_by('d_jual_barang_id')
 		->where('DATE(jual_tanggal)', $date)	
 		->where('jual_user_id', "!=",null)
 		->where('cabang', "")
