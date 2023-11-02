@@ -305,19 +305,16 @@ class M_barang extends CI_Model
 
 	function get_kobar()
 	{
-		$q = $this->db->query("SELECT barang_id FROM tbl_barang");
+		$q = $this->db->query("SELECT * FROM tbl_barang order by barang_id desc");
 		$kd = "";
-		$count = $q->num_rows();
-		// if ($q->num_rows() > 0) {
-		// 	foreach ($q->result() as $k) {
-		// 		$tmp = ((int)$k->kd_max) + 1;
-		// 		$kd = sprintf("%06s", $tmp);
-		// 	}
-		// } else {
-		// 	$kd = "000001";
-		// }
-		$count++;
-		$kd = sprintf("%06s", $count);
+		$firstItem = $q->row();
+		$num = 0;
+		if($firstItem != null) {
+			$num = (int) substr($firstItem->barang_id, 2);    
+		}
+	
+		$num++;
+		$kd = sprintf("%06s", $num);
 		return "BR" . $kd;
 	}
 
