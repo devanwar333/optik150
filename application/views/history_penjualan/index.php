@@ -13,6 +13,11 @@
             if ($dat != "") { ?>
                 <div id="notifikasi" class="alert alert-success"><?= $dat; ?></div>
             <?php } ?>
+            <?php
+            $dat1 = $this->session->flashdata('error');
+            if ($dat1 != "") { ?>
+                <div id="notifikasi" class="alert alert-danger"><strong>Gagal !</strong> <?= $dat1; ?></div>
+            <?php } ?>
             <h6 class="m-0 font-weight-bold text-primary">Daftar History Penjualan</h6>
         </div>
         <br>

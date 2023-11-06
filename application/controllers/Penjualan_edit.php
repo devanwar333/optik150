@@ -26,6 +26,12 @@ class Penjualan_edit extends CI_Controller
         $data['nofak'] = $nofak;
        
         $data['penjualan'] = $this->m_penjualan->get_all_detail_penjualan( $this->uri->segment(3));
+        $detail = $this->m_penjualan->get_history_penjualan_by_nofak($nofak);
+        if($detail->status=="CANCEL") {
+            $this->session->set_flashdata('error', 'Tidak dapat mengubah Karena Transaksi No Faktur '.$nofak .' sudah dibatalkan');
+            redirect('history_penjualan');
+        }
+        
         $data["paket"] = $this->m_barang->getBarangPaket();
         $data['carabarang'] = $this->m_cara_bayar->list();
         if (!$this->session->has_userdata($this->session_key.$nofak)) {
@@ -241,13 +247,15 @@ class Penjualan_edit extends CI_Controller
     function simpan_ulang()
     {
         $data =  $this->input->post();
-        var_dump($data);
+
         $nomor_faktur = $data['jual_nofak'];
         $currentData = $this->session->userdata($this->session_key.$nomor_faktur);
-        if(count($currentData)<=0) {
-            $this->session->set_flashdata('error', "Gagal Edit Penjualan, Barang Penjualan Wajib 1 Barang");
-            redirect('penjualan_edit/index/' . $nomor_faktur);
+        if($this->session->has_userdata($this->session_key.$nomor_faktur)){
+            if(count($currentData)<=0) {
+                $this->session->set_flashdata('error', "Gagal Edit Penjualan, Barang Penjualan Wajib 1 Barang");
+                redirect('penjualan_edit/index/' . $nomor_faktur);
 
+            }
         }
         $totalJumlahUang = (int) $data['jual_jml_uang'] + (int) $data['jual_jml_uang2'];
         if($totalJumlahUang> (int)$data['jual_total']) {
@@ -266,25 +274,26 @@ class Penjualan_edit extends CI_Controller
             $this->db->where('jual_nofak', $nomor_faktur);
             $this->db->update('tbl_jual', $data);
 
+            if($this->session->has_userdata($this->session_key.$nomor_faktur)){
+                $olditem = $this->m_penjualan->get_all_detail_penjualan( $nomor_faktur);
+                foreach ($olditem as $key => $value) 
+                {
+                    $barang_id =  $value['d_jual_barang_id'];
+                    $qtyOld = $value['d_jual_qty'];
+                    $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok + '$qtyOld' WHERE barang_id='$barang_id'");
+                    $this->db->where('d_jual_id', $value['d_jual_id']);
+                    $this->db->delete('tbl_detail_jual');
+                    
+                }
 
-            $olditem = $this->m_penjualan->get_all_detail_penjualan( $nomor_faktur);
-            foreach ($olditem as $key => $value) 
-            {
-                $barang_id =  $value['d_jual_barang_id'];
-                $qtyOld = $value['d_jual_qty'];
-                $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok + '$qtyOld' WHERE barang_id='$barang_id'");
-                $this->db->where('d_jual_id', $value['d_jual_id']);
-                $this->db->delete('tbl_detail_jual');
-                
+                foreach ($currentData as $key => $value) {
+                    $barang_id =  $value['d_jual_barang_id'];
+                    $qtyOld = $value['d_jual_qty'];
+                    $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok - '$qtyOld' WHERE barang_id='$barang_id'");
+                    $this->db->insert('tbl_detail_jual', $value); 
+                }
             }
-
-            foreach ($currentData as $key => $value) {
-                $barang_id =  $value['d_jual_barang_id'];
-                $qtyOld = $value['d_jual_qty'];
-                $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok - '$qtyOld' WHERE barang_id='$barang_id'");
-                $this->db->insert('tbl_detail_jual', $value); 
-            }
-           
+            
             
             $biaya1 = $data['jual_jml_uang'] ;
             $biaya2 = $data['jual_jml_uang2'] ;
