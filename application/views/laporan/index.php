@@ -107,7 +107,8 @@
                                     <td style="vertical-align:middle;">Laporan Stock Remaining</td>
                                     <td style="text-align:center;">
                                         <?php echo form_open('Laporan/lap_remaining_stock') ?>
-                                        <button class="btn btn-sm btn-success"  type="submit"><span class="fa fa-print"></span> Print</button>
+                                            <button class="btn btn-sm btn-success"  type="submit"><span class="fa fa-print"></span> Print</button>
+                                        </form>
                                     </td>
                                 </tr>
                                 <!-- <tr>

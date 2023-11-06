@@ -43,9 +43,9 @@
                 <div id="notifikasi" class="alert alert-danger"><strong> </strong> <?= $dat; ?></div>
               <?php } ?>
               <!-- Button to Open the Modal -->
-              <!-- <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_barang">
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_barang">
                 (+) TAMBAH
-              </button> -->
+              </button> 
               <?php
               if ($this->session->userdata('level')=="admin") { ?>
                   <a href="<?php echo base_url("barang/export"); ?>" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i> Export to Excel</a>

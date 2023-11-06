@@ -112,7 +112,7 @@ Number.prototype.toRupiah = function() {
 
       function KeyCheck(e) {
         var KeyID = (window.event) ? event.keyCode : e.keyCode;
-        
+        console.log(KeyID);
         if (KeyID == 113) {
           $('#modalLaporanPenjualanBarang').modal('show');
          	// $("#btn-penjualan").click()
@@ -140,10 +140,10 @@ Number.prototype.toRupiah = function() {
             $('#modalLaporanPenjualanResume').modal('show');
           }
         }
-        if(KeyID == 54) {
+        if(KeyID == 119) {
           $('#modalLaporanPengeluaran').modal('show');
         }
-        if(KeyID == 56) {
+        if(KeyID == 120) {
          	$("#btn-remaining-stock").click()
         }
         $('#triggerSaldo').submit(function(ev) {
