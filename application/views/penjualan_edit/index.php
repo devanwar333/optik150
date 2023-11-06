@@ -42,7 +42,7 @@
         <div id="notifikasi" class="alert alert-danger"><strong>Gagal !</strong> <?= $dat1; ?></div>
       <?php } ?>
       <!-- Page Heading -->
-      <h1 class="h3 mb-2 text-gray-800">Penjualan</h1>
+      <h1 class="h3 mb-2 text-gray-800">Penjualan <?= $nomor_faktur?> <?= $updated ==true ?'<span class="badge badge-primary">Ada Perubahan</span>':''?></h1>
 
       <!-- DataTales Example -->
       <div class="card shadow mb-4">
@@ -72,11 +72,7 @@
             </div>
             <div class="form-group col-sm-2">
               <label>Harga(Rp) :</label>
-              <?php if ($this->session->userdata('level') == "penjualan") { ?>
-                <input type="text" readonly id="harga_ket_cabang" name="harga_ket" class="form-control" />
-              <?php } else { ?>
-                <input type="text" readonly id="harga_ket" name="harga_ket" class="form-control" />
-              <?php  } ?>
+              <input type="text" readonly id="harga_ket" name="harga_ket" class="form-control" />
             </div>
             <div class="form-group col-sm-4">
               <label>Keterangan :</label>
@@ -84,7 +80,7 @@
             </div>
             <div class="form-group col-sm-2">
               <label>Jumlah :</label>
-              <input type="number" readonly id="jumlah_ket" name="jumlah_ket" class="form-control" min="0" />
+              <input type="number" id="jumlah_ket" name="jumlah_ket" class="form-control" min="0" />
             </div>
             <div class="form-group col-sm-3">
               <label>&nbsp;</label><br />
@@ -113,7 +109,7 @@
                 <tbody>
                   <?php
 
-                  foreach ($penjualan as $v) {
+                  foreach ($items  as $v) {
 
                   ?>
                     <tr>
@@ -121,20 +117,28 @@
                       <td><?php echo $v["d_jual_barang_nama"]; ?></td>
                       <td><?php echo $v["d_jual_barang_satuan"]; ?></td>
                       <td><?php echo number_format($v["d_jual_barang_harjul"]); ?></td>
-                      <td>Keterangan</td>
-                      <form action="<?= base_url('penjualan_edit/update_qty_detail/' . $v['d_jual_id']) ?>" method="POST">
+                      <form action="<?= base_url('penjualan_edit/update_qty_detail/' . $v['d_jual_barang_id']) ?>" method="POST">
+                        <td>
+                          <input type="text" name="d_jual_diskon" value="<?= $v['d_jual_diskon'] ?>">
+                        </td>
+                     
                         <td>
                           <input type="hidden" name="nomorfaktur" value="<?= $this->uri->segment(3) ?>">
+                          <input type="hidden" name="d_jual_barang_id" value="<?= $v["d_jual_barang_id"] ?>">
                           <input type="text" name="d_jual_qty" value="<?= $v['d_jual_qty'] ?>">
                         </td>
-                      </form>
-                      <td><?php echo number_format($v["d_jual_barang_harjul"] * $v["d_jual_qty"]); ?></td>
-                      <?php
-                      $subtotal = $v["d_jual_barang_harjul"] * $v["d_jual_qty"];
-                      $total = $total + $subtotal;
+                      
+                        <td><?php echo number_format($v["d_jual_barang_harjul"] * $v["d_jual_qty"]); ?></td>
+                        <?php
+                        $subtotal = $v["d_jual_barang_harjul"] * $v["d_jual_qty"];
+                        $total = $total + $subtotal;
 
-                      ?>
-                      <td style="text-align:center;"><a href="<?= base_url('penjualan_edit/remove_from_edit/' . $v['d_jual_id']) ?>?kd=<?php echo $this->uri->segment(3); ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Delete</a></td>
+                        ?>
+                        <td style="text-align:center;">
+                          <button class="btn btn-success" type="submit">Simpan</button>
+                          <a href="<?= base_url('penjualan_edit/remove_from_edit/' . $v['d_jual_barang_id']) ?>?nofak=<?php echo $this->uri->segment(3); ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Delete</a>
+                        </td>
+                      </form>
                     </tr>
                   <?php } ?>
 
@@ -154,7 +158,7 @@
               </table>
               <br>
 
-              <!-- <?php echo form_open('Penjualan/simpan_penjualan') ?> -->
+              
               <a href="#no_hp" class="btn btn-info btn-sm"><i class='fas fa-sync'></i> Refresh</a>
               <form action="<?= base_url('penjualan_edit/simpan_ulang') ?>" method="POST">
 
@@ -184,7 +188,6 @@
                     <?php if ($this->uri->segment(3) == $penjualan[0]['jual_nofak']) { ?>
                       <th style="width:140px;">Total Belanja(Rp) :</th>
                       <th style="text-align:right;width:140px;"><input type="text" name="jual_total" value="<?= $total ?>" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly></th>
-                      <!-- <input type="hidden" id="total" name="total" value="<?php echo $this->cart->total(); ?>" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly> -->
                       <th>Cara Bayar 1 : </th>
                       <th style="text-align:right;">
                         <select name="jual_keterangan" id="cara_bayar1" class="form-control">
@@ -244,10 +247,10 @@
                 <table>
 
                   <tr>
-                    <td style="width:760px;" rowspan="2"><button type="submit" class="btn btn-success btn-lg"> SAVE</button></td>
+                    <td style="width:760px;" rowspan="2"><button type="submit" class="btn btn-success btn-lg"> SAVE</button> <a href="<?= base_url(); ?>penjualan_edit/hapus_perubahan/<?= $nofak; ?>" class="btn btn-danger btn-lg"> HAPUS PERUBAHAN</a></td>
                     <th>Total Yang Harus Dibayar (Rp) : </th>
-                    <th style="text-align:right;"><input type="text" id="totalbayar_edit" name="total_penjualan" value="<?= $total ?>" min="0" class="form-control input-sm" style="text-align:right;margin-bottom:5px;width:150px" readonly></th>
-                    <input type="hidden" name="nofak" value="<?= $this->uri->segment(3) ?>">
+                    <th style="text-align:right;"><input type="text" id="totalbayar_edit"  value="<?= $total ?>" min="0" class="form-control input-sm" style="text-align:right;margin-bottom:5px;width:150px" readonly></th>
+                    <input type="hidden" name="jual_nofak" value="<?= $this->uri->segment(3) ?>">
                     <input type="hidden" name="jual_tanggal" value="<?= $penjualan[0]['jual_tanggal'] ?>">
                   </tr>
 
@@ -366,7 +369,7 @@
             cache: false,
             type: 'POST',
             data: {
-              "nabars": kode_brg,
+              "kode_barang": kode_brg,
               "nomor_faktur": nomor_faktur
             },
             success: function(res) {
@@ -381,7 +384,7 @@
             cache: false,
             type: 'POST',
             data: {
-              "nabar": kode_brg,
+              "kode_barang": kode_brg,
               "nomor_faktur": nomor_faktur
             },
             success: function(res) {

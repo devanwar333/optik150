@@ -94,7 +94,7 @@ class Pembelian extends CI_Controller
 	}
 	public function get_barang_autocomplete()
 	{
-		$result = $this->m_barang->getBarangList();
+		$result = $this->m_barang->getBarangList($this->input->post("search"));
 		$html = "";
 		if (count($result) > 0) {
 

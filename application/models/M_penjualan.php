@@ -317,4 +317,18 @@ class M_penjualan extends CI_Model
 		$res = $this->db->get()->result_array();
 		return $res;
 	}
+	function get_barang_penjualan($nomor_faktur, $kode_barang)
+	{
+		$this->db->where('d_jual_nofak', $nomor_faktur);
+		$this->db->where('d_jual_barang_id', $kode_barang);
+		return $this->db->get('tbl_detail_jual')->result_array();
+	}
+
+	function get_all_detail_penjualan($nomor_faktur) {
+		$this->db->select('A.*,B.*');
+        $this->db->from('tbl_jual A');
+        $this->db->where('A.jual_nofak', $nomor_faktur);
+        $this->db->join('tbl_detail_jual B', 'B.d_jual_nofak = A.jual_nofak');
+		return $this->db->get()->result_array();
+	}
 }

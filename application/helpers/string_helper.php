@@ -20,3 +20,11 @@ if ( ! function_exists('endsWith'))
     return substr($string, -$len) === $endString;
   }
 }
+
+if ( ! function_exists('convertToInt'))
+{
+  function convertToInt($string)
+  {  
+    return (int) str_replace(",", "", $string);;
+  }
+}

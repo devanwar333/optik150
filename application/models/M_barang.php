@@ -243,6 +243,11 @@ class M_barang extends CI_Model
 		$this->db->where('barang_id', $kobar);
 		return $this->db->get('tbl_barang');
 	}
+	function get_barang_by_kode($kode_barang)
+	{
+		$this->db->where('barang_id', $kode_barang);
+		return $this->db->get('tbl_barang');
+	}
 	function get_barang2($nabar)
 	{
 		$this->db->where('barang_nama', $nabar);
@@ -369,11 +374,16 @@ class M_barang extends CI_Model
 		return $this->db->empty_table('tbl_barang');
 	}
 
-	public function getBarangList()
+	public function getBarangList($nama, $showfree = true)
 	{
 		$this->db->select('barang_nama as label, CONCAT(barang_harjul, "#", barang_id, "#", barang_satuan, "#", barang_stok, "#" , barang_harga_cabang) as value');
 		$this->db->from('tbl_barang');
-		$this->db->like('barang_nama', $this->input->post("search"));
+		$this->db->like('barang_nama', $nama);
+		if(!$showfree) {
+			$this->db->not_like('barang_nama','FREE');
+
+		}
+
 		$dt = $this->db->get()->result_array();
 		// $html = "";
 		//   foreach($dt as $v ){
