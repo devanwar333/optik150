@@ -74,6 +74,31 @@
 <script src="<?= base_url('assets/'); ?>plugins/sweetalert/sweetalert2.all.min.js"></script>
 <script src="<?= base_url('assets/'); ?>plugins/select2/select2.min.js"></script>
 <script>
+
+String.prototype.toRupiahInt = function() {
+    // Remove dots and convert the Rupiah string to an integer
+    return parseInt(this.replace(/\,/g, ''), 10);
+};
+
+Number.prototype.toRupiah = function() {
+    // Convert the number to a string
+    var strValue = this.toString();
+    
+    // Reverse the string
+    var reversed = strValue.split('').reverse().join('');
+    
+    // Add comma as thousands separators
+    var formatted = reversed.replace(/\d{3}(?=\d)/g, '$&,');
+  
+  
+    // Reverse it back and add 'Rp ' in front
+    return formatted.split('').reverse().join('');
+};
+
+
+</script>
+
+<script>
   $(document).ready(function() {
     $('#dataTable').DataTable();
   });
@@ -207,10 +232,6 @@
 
   });
 </script>
-
-
-
-
 
 <script type="text/javascript">
   $(document).ready(function() {
