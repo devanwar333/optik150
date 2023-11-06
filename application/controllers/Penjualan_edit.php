@@ -266,12 +266,25 @@ class Penjualan_edit extends CI_Controller
             $this->db->where('jual_nofak', $nomor_faktur);
             $this->db->update('tbl_jual', $data);
 
-            $this->db->where('d_jual_nofak', $nomor_faktur);
-            $this->db->delete('tbl_detail_jual');
 
+            $olditem = $this->m_penjualan->get_all_detail_penjualan( $nomor_faktur);
+            foreach ($olditem as $key => $value) 
+            {
+                $barang_id =  $value['d_jual_barang_id'];
+                $qtyOld = $value['d_jual_qty'];
+                $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok + '$qtyOld' WHERE barang_id='$barang_id'");
+                $this->db->where('d_jual_id', $value['d_jual_id']);
+                $this->db->delete('tbl_detail_jual');
+                
+            }
 
-            $this->db->insert_batch('tbl_detail_jual', $currentData); 
-
+            foreach ($currentData as $key => $value) {
+                $barang_id =  $value['d_jual_barang_id'];
+                $qtyOld = $value['d_jual_qty'];
+                $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok - '$qtyOld' WHERE barang_id='$barang_id'");
+                $this->db->insert('tbl_detail_jual', $value); 
+            }
+           
             
             $biaya1 = $data['jual_jml_uang'] ;
             $biaya2 = $data['jual_jml_uang2'] ;
@@ -401,7 +414,13 @@ class Penjualan_edit extends CI_Controller
     }
 
     function hapus_perubahan($nofaktur) {
-        $this->session->unset_userdata($this->session_key.$nofaktur);
+        if (!$this->session->has_userdata($this->session_key.$nofaktur)) {
+            $this->session->set_flashdata('error', "Tidak ada perubahan pada transaksi penjualan ini.");
+
+        }else {
+            $this->session->unset_userdata($this->session_key.$nofaktur);
+
+        }
         redirect('penjualan_edit/index/' . $nofaktur);
 
     }
