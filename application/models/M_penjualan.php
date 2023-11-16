@@ -94,7 +94,7 @@ class M_penjualan extends CI_Model
 		$jual_total = $select->jual_total;
 		if ($count == 0) {
 
-			$total = $qty * $produk["barang_harjul"];
+			$total = $qty * $produk["barang_harga_cabang"];
 			$data = array(
 				'd_jual_nofak' 			=>	$nofak,
 				'd_jual_barang_id'		=>	$produk['barang_id'],
@@ -102,7 +102,7 @@ class M_penjualan extends CI_Model
 				'd_jual_barang_nama'	=>	$produk['barang_nama'],
 				'd_jual_barang_satuan'	=>	$produk['barang_satuan'],
 				'd_jual_barang_harpok'	=>	$produk['barang_harpok'],
-				'd_jual_barang_harjul'	=>	$produk['barang_harjul'],
+				'd_jual_barang_harjul'	=>	$produk['barang_harga_cabang'],
 				'd_jual_qty'			=>	$qty,
 				'd_jual_total'			=>	$total
 			);
