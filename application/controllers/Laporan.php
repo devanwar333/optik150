@@ -779,7 +779,9 @@ GROUP BY jual_keterangan";
 	}
 
 	function lap_remaining_stock() {
-		$data = $this->m_barang->getRemainingAllStock();
+		$nama_barang = $this->input->post('nama_barang');
+		$nama_barang = str_replace("*","%",$nama_barang);
+		$data = $this->m_barang->getRemainingStockLikeNamaBarang($nama_barang);
 	
 		$x['data'] = $data;
 		$this->load->view('laporan/remaining_stock/cetak', $x);

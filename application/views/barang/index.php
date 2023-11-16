@@ -137,7 +137,10 @@
                   <label for="hargajual">Harga Jual : </label>
                   <input type="text" id="harjul" name="harjul" class="form-control" placeholder="Harga Jual" required >
                 </div>
-
+                <div class="form-group">
+                    <label for="hargajual">Harga Cabang : </label>
+                    <input type="text" name="barang_harga_cabang" value="" class="form-control" placeholder="Harga Jual" required  <?php echo $this->session->userdata('level')=="admin" ? "":"disabled" ?>>
+                  </div>
                 <div class="form-group">
                   <label for="stok">Stok : </label>
                   <input type="text" id="stok" name="stok" class="form-control" placeholder="Stok" required >

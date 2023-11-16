@@ -201,6 +201,7 @@ class M_barang extends CI_Model
 				"barang_satuan" => $this->input->post('satuan'),
 				"barang_harpok" => str_replace(',', '', $this->input->post('harpok')),
 				"barang_harjul" => str_replace(',', '', $this->input->post('harjul')),
+				"barang_harga_cabang" => $this->input->post('barang_harga_cabang'),
 				"barang_stok" => $this->input->post('stok'),
 				"barang_min_stok" => $this->input->post('min_stok'),
 				"barang_kategori_id"  => $this->input->post('kategori'),
@@ -214,6 +215,7 @@ class M_barang extends CI_Model
 				"barang_satuan" => $this->input->post('satuan'),
 				"barang_harpok" => str_replace(',', '', $this->input->post('harpok')),
 				"barang_harjul" => str_replace(',', '', $this->input->post('harjul')),
+				"barang_harga_cabang" => $this->input->post('barang_harga_cabang'),
 				"barang_stok" => $this->input->post('stok'),
 				"barang_min_stok" => $this->input->post('min_stok'),
 				"barang_kategori_id"  => $this->input->post('kategori'),
@@ -455,7 +457,16 @@ class M_barang extends CI_Model
 		$this->db->select('*');
 		$this->db->from('tbl_barang');
 		$this->db->order_by('barang_id', "DESC");
-		$this->db->where('barang_stok <= barang_min_stok');
+		$this->db->where('barang_stok < barang_min_stok');
+		return $this->db->get()->result();
+	}
+
+	public function getRemainingStockLikeNamaBarang($nama_barang) {
+		$this->db->select('*');
+		$this->db->from('tbl_barang');
+		$this->db->order_by('barang_id', "DESC");
+		$this->db->where('barang_stok < barang_min_stok');
+		$this->db->where('barang_nama like ',$nama_barang);
 		return $this->db->get()->result();
 	}
 }
