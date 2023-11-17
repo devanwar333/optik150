@@ -144,7 +144,8 @@ Number.prototype.toRupiah = function() {
           $('#modalLaporanPengeluaran').modal('show');
         }
         if(KeyID == 120) {
-         	$("#btn-remaining-stock").click()
+          
+         	$("#lap_remaining_stock").modal("show");
         }
         $('#triggerSaldo').submit(function(ev) {
           ev.preventDefault();

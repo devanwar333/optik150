@@ -143,9 +143,7 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
 </head>
 
 <body id="page-top">
-<form  action="<?= base_url('Laporan/lap_remaining_stock') ?>" method="post" target="_blank">
-    <button id="btn-remaining-stock" type="submit" style="display:none"></button>
-  </form>
+
 <div class="modal fade bd-example-modal-sm" id="modalLaporanPengeluaran" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
       <div class="modal-content">
@@ -224,6 +222,36 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
       </div>
     </div>
   </div>
+      <!-- Laporan Remaining Stock -->
+      <div class="modal fade" id="lap_remaining_stock">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Filter Remaining Stock</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <?php echo form_open('Laporan/lap_remaining_stock') ?>
+                    <div class="modal-body">
+                        <div class="form-group ">
+                            <label class="control-label col-xs-3">Nama Barang</label>
+                            <div class="col-xs-9">
+                                <input type="text" class="form-control" name="nama_barang" placeholder="Search * Applicable" require>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button class="btn btn-success"><span class="fa fa-print"></span> Print</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
   <div class="modal fade modal-fullscreen" id="modalLaporanPenjualan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
       <div class="modal-content">
