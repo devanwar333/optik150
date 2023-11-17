@@ -206,7 +206,9 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Tanggal : <?= date('d-m-Y'); ?> <br>Saldo Di Kasir : <span id="label_saldo_lap"><?= number_format($this->session->userdata('saldo')) ?></span></h5>
+          <h5 class="modal-title">
+            Nama Toko : <?= $this->session->userdata('toko'); ?> <br>
+            Tanggal : <?= date('d-m-Y'); ?> <br>Saldo Di Kasir : <span id="label_saldo_lap"><?= number_format($this->session->userdata('saldo')) ?></span></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
