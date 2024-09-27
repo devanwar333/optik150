@@ -138,7 +138,8 @@ class History_penjualan_cabang extends CI_Controller
   {
     $this->session->set_userdata('nofak', $nofak);
     $x['data'] = $this->m_penjualan->cetak_faktur_cabang();
-    $this->load->view('laporan/v_surat_jalan', $x);
+
+    $this->load->view('laporan/v_cetak_surat_jalan_new', $x);
   }
 
   function update_cabang()

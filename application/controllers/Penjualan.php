@@ -559,7 +559,8 @@ class Penjualan extends CI_Controller
     function cetak_surat_jalan()
     {
         $x['data'] = $this->m_penjualan->cetak_faktur_cabang();
-        $this->load->view('laporan/v_surat_jalan', $x);
+        
+        $this->load->view('laporan/v_cetak_surat_jalan_new', $x);
     }
 
     function cetak_faktur()
