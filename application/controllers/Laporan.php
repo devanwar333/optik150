@@ -16,6 +16,7 @@ class Laporan extends CI_Controller
 		$this->load->model('m_customer');
 		$this->load->model('m_cabang');
 		$this->load->model('m_cara_bayar');
+		$this->load->model('m_setting');
 	}
 
 	function index()
@@ -706,7 +707,6 @@ GROUP BY jual_keterangan";
 
 		$x['tanggal1'] = $this->input->post('tgl1');
 		$x['tanggal2'] = $this->input->post('tgl2');
-
 		$x['data'] = $this->m_laporan->get_laporan_pengeluaran($tanggal1, $tanggal2);
 		$data['title'] = 'Laporan';
 		$this->load->view('template/header', $data);
@@ -726,6 +726,8 @@ GROUP BY jual_keterangan";
 		$x['tanggal1'] =$tanggal1 ;
 		
 		$x['tanggal2'] = $tanggal2;
+		$setting = $this->m_setting->get_setting_by_name("Nama Toko");
+		$x['nama_toko'] = $setting==null ? "" : $setting->fitur;
 
 		$x['data'] = $this->m_laporan->get_laporan_pengeluaran($tanggal1, $tanggal2);
 		$this->load->view('laporan/pengeluaran_toko/cetak', $x);
@@ -775,6 +777,8 @@ GROUP BY jual_keterangan";
 		});
 		$x['tanggal'] = $date;
 		$x['data'] = $data;
+		$setting = $this->m_setting->get_setting_by_name("Nama Toko");
+		$x['nama_toko'] = $setting==null ? "" : $setting->fitur;
 		$this->load->view('laporan/penjualan_summary_kasir/cetak', $x);
 	}
 

@@ -27,6 +27,9 @@
 	<table border="1" align="center" style="width:900px;margin-bottom:20px;">
 		<thead>
 		<tr>
+			<th colspan="3" style="text-align:left;">Nama Toko : <?= $nama_toko ?> <br></th>
+		</tr>
+		<tr>
 			<th colspan="11" style="text-align:left;">Periode : <?= $tanggal1; ?> - <?= $tanggal2; ?></th>
 		</tr>
 		<tr>

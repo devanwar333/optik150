@@ -6,10 +6,14 @@
 </head>
 <body>
 <div id="laporan">
-	
+		
 		<table  border="1"  class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="font-size:20px">
 			<thead class="thead-light">
-<tr>
+				<tr>
+				<th colspan="3" style="text-align:left;">Nama Toko : <?= $nama_toko ?> <br></th>
+
+				</tr>
+					<tr>
 						<th colspan="3" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal)); ?> <br></th>
 					</tr>
 				<tr>

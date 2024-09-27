@@ -8,6 +8,7 @@ class Auth extends CI_Controller
     {
         parent::__construct();
         $this->load->library('form_validation');
+		$this->load->model('m_setting');
     }
 
     public function index()
@@ -31,7 +32,8 @@ class Auth extends CI_Controller
         $password = $this->input->post('password');
 
         $user = $this->db->get_where('user', ['username' => $username])->row_array();
-
+        $setting = $this->m_setting->get_setting_by_name("Nama Toko");
+        $nama_toko = $setting==null ? "" : $setting->fitur;
         // jika usernya ada
         if ($user) {
             //jika usernya aktif
@@ -42,7 +44,8 @@ class Auth extends CI_Controller
                         'id' => $user['id'],
                         'username' => $user['username'],
                         'level' => $user['level'],
-                        'saldo' => 0
+                        'saldo' => 0,
+                        'toko' => $nama_toko
                     ];
                     $this->session->set_userdata($data);
                     if ($user['level'] == 'admin') {
