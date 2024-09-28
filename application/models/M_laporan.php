@@ -524,9 +524,13 @@ class M_laporan extends CI_Model
 	public function laporan_jumlah_penjualan_kasir($start, $end) 
 	{
 		$cara_bayar = $this->db->query("
-		select DISTINCT cara_bayar from (SELECT DISTINCT tbl_jual.jual_keterangan as cara_bayar FROM tbl_jual GROUP BY tbl_jual.jual_keterangan 
+		select DISTINCT cara_bayar from (SELECT DISTINCT tbl_jual.jual_keterangan as cara_bayar FROM tbl_jual
+		WHERE Date(tbl_jual.jual_tanggal) between '".$start."' and '".$end."' 
+		GROUP BY tbl_jual.jual_keterangan 
 		union 
-		select DISTINCT tbl_jual.jual_keterangan2 as cara_bayar from tbl_jual group by tbl_jual.jual_keterangan2)
+		select DISTINCT tbl_jual.jual_keterangan2 as cara_bayar from tbl_jual 
+		WHERE Date(tbl_jual.jual_tanggal) between '".$start."' and '".$end."' 
+		 group by tbl_jual.jual_keterangan2)
          as data         
 		ORDER BY 
 			CASE 
