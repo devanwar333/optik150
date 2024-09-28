@@ -40,7 +40,7 @@
                         </tr>
 
                         <tr>
-                            <td style="text-align:center;vertical-align:middle">1</td>
+                            <td style="text-align:center;vertical-align:middle">2</td>
                             <td style="vertical-align:middle;">Laporan Penjualan Per Barang</td>
                             <td style="text-align:center;">
                                 <a class="btn btn-sm btn-primary" href="#lap_penjualan_barang" data-toggle="modal"><span class="fa fa-print"></span> Cetak</a>
