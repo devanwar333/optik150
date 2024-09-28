@@ -525,11 +525,11 @@ class M_laporan extends CI_Model
 	{
 		$cara_bayar = $this->db->query("
 		select DISTINCT cara_bayar from (SELECT DISTINCT tbl_jual.jual_keterangan as cara_bayar FROM tbl_jual
-		WHERE Date(tbl_jual.jual_tanggal) between '".$start."' and '".$end."' 
+		WHERE Date(tbl_jual.jual_tanggal) between '".$start."' and '".$end."'  and tbl_jual.cabang=''
 		GROUP BY tbl_jual.jual_keterangan 
 		union 
 		select DISTINCT tbl_jual.jual_keterangan2 as cara_bayar from tbl_jual 
-		WHERE Date(tbl_jual.jual_tanggal) between '".$start."' and '".$end."' 
+		WHERE Date(tbl_jual.jual_tanggal) between '".$start."' and '".$end."'  and tbl_jual.cabang=''
 		 group by tbl_jual.jual_keterangan2)
          as data         
 		ORDER BY 
@@ -550,12 +550,12 @@ class M_laporan extends CI_Model
 			
 			$name = strtolower(str_replace(' ', '_', $value['cara_bayar']))."_count";
 			$header[] = $name;
-			$type .= ",((SELECT COALESCE(SUM(t1.jual_jml_uang),0) FROM tbl_jual t1 WHERE t1.jual_keterangan = '".$value['cara_bayar']."' AND Date(t1.jual_tanggal) = Date(jual.jual_tanggal)) + 
-			(SELECT COALESCE(SUM(t1.jual_jml_uang2),0) FROM tbl_jual t1 WHERE t1.jual_keterangan2 = '".$value['cara_bayar']."' AND Date(t1.jual_tanggal) = Date(jual.jual_tanggal)) ) AS ".$name;
+			$type .= ",((SELECT COALESCE(SUM(t1.jual_jml_uang),0) FROM tbl_jual t1 WHERE t1.jual_keterangan = '".$value['cara_bayar']."'AND t1.cabang='' AND Date(t1.jual_tanggal) = Date(jual.jual_tanggal)) + 
+			(SELECT COALESCE(SUM(t1.jual_jml_uang2),0) FROM tbl_jual t1 WHERE t1.jual_keterangan2 = '".$value['cara_bayar']."'AND t1.cabang='' AND Date(t1.jual_tanggal) = Date(jual.jual_tanggal)) ) AS ".$name;
 		}
 		
-		$type .= ",((SELECT COALESCE(SUM(t1.jual_jml_uang),0) FROM tbl_jual t1 WHERE t1.status = 'DP' AND Date(t1.jual_tanggal) = Date(jual.jual_tanggal)) + 
-		(SELECT COALESCE(SUM(t1.jual_jml_uang2),0) FROM tbl_jual t1 WHERE t1.status = 'DP' AND Date(t1.jual_tanggal) = Date(jual.jual_tanggal)) ) AS DP_count";
+		$type .= ",((SELECT COALESCE(SUM(t1.jual_jml_uang),0) FROM tbl_jual t1 WHERE t1.status = 'DP' AND t1.cabang='' AND Date(t1.jual_tanggal) = Date(jual.jual_tanggal)) + 
+		(SELECT COALESCE(SUM(t1.jual_jml_uang2),0) FROM tbl_jual t1 WHERE t1.status = 'DP' AND t1.cabang='' AND Date(t1.jual_tanggal) = Date(jual.jual_tanggal)) ) AS DP_count";
 
 		$res = $this->db->query(
 			"SELECT Date(jual.jual_tanggal) as tanggal ".$type."
@@ -564,6 +564,7 @@ class M_laporan extends CI_Model
 			
 			WHERE 
 			Date(jual.jual_tanggal) between '".$start."' and '".$end."' 
+			AND jual.cabang=''
 			GROUP BY 
 			Date(jual.jual_tanggal) 
 			ORDER BY Date(jual.jual_tanggal)"
@@ -585,7 +586,7 @@ class M_laporan extends CI_Model
 		$type = "";
 		foreach ($dateRange as $key => $value) {
 		
-			$type .= ",(SELECT count(*) FROM tbl_jual as t1 inner join tbl_detail_jual as t2 on t1.jual_nofak=t2.d_jual_nofak WHERE Date(t1.jual_tanggal) = '".$value."' AND t2.d_jual_barang_id = d_jual.d_jual_barang_id ) as  '".$value."'";
+			$type .= ",(SELECT count(*) FROM tbl_jual as t1 inner join tbl_detail_jual as t2 on t1.jual_nofak=t2.d_jual_nofak WHERE Date(t1.jual_tanggal) = '".$value."'AND t1.cabang=''  AND t2.d_jual_barang_id = d_jual.d_jual_barang_id ) as  '".$value."'";
 		}
 		
 		$res = $this->db->query(
@@ -595,6 +596,8 @@ class M_laporan extends CI_Model
 			inner join tbl_jual as jual
 			on jual.jual_nofak = d_jual.d_jual_nofak
 			WHERE
+			jual.cabang=''
+			and
 			Date(jual.jual_tanggal) between '".$start."' and '".$end."' 
 			and 
 			d_jual.d_jual_barang_nama like '".$nama_barang."'		
