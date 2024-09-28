@@ -559,7 +559,7 @@ class M_laporan extends CI_Model
 			FROM tbl_jual as jual 
 			inner join tbl_detail_jual d_jual on jual.jual_nofak = d_jual.d_jual_nofak 
 			WHERE 
-			Date(jual.jual_tanggal) between ".$start." and ".$end." 
+			Date(jual.jual_tanggal) between '".$start."' and '".$end."' 
 			GROUP BY 
 			Date(jual.jual_tanggal) 
 			ORDER BY Date(jual.jual_tanggal)"
