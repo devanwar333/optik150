@@ -132,10 +132,7 @@ class History_penjualan extends CI_Controller
             $this->load->view('laporan/v_cetak_faktur_sj', $x);
         }
         if ($jenis == 'sj') {
-
-            $this->load->view('laporan/v_surat_jalan', $x);
-            //untuk
-            // $this->load->view('laporan/v_cetak_surat_jalan_new', $x);
+            $this->load->view('laporan/v_cetak_surat_jalan_new', $x);
             
         }
         //$this->session->unset_userdata('nofak');
