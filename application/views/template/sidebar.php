@@ -182,10 +182,28 @@
 
                 <a class="collapse-item" href="<?php echo site_url('Kwitansi'); ?>">Kwitansi</a>
               </div>
-            </div>
+            </div >
           </li>
         <?php } ?>
         <!-- AKHIR DATA Kwitansi -->
+        <?php if ($this->session->userdata('level') == 'kasir') { ?>
+          <!-- DATA Kwitansi -->
+          <!-- Divider -->
+          <hr class="sidebar-divider">
+
+          <!-- Heading -->
+          <div class="sidebar-heading">
+            Laporan
+          </div>
+
+          <!-- Nav Item - Pages Collapse Menu -->
+          <li class="nav-item">
+            <a class="nav-link" href="<?php echo site_url('laporan_kasir'); ?>">
+              <i class="fas fa-print"></i>
+              <span>Laporan</span></a>
+          </li>
+
+        <?php } ?>
       <?php } ?>
       <!-- DATA PEMBELIAN -->
       <?php if ($this->session->userdata('level') == 'admin' || $this->session->userdata('level') == 'pembelian') { ?>

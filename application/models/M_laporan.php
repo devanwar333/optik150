@@ -520,4 +520,101 @@ class M_laporan extends CI_Model
 		$res = $this->db->get()->row();
 		return $res;
 	}
+
+	public function laporan_jumlah_penjualan_kasir($start, $end) 
+	{
+		$cara_bayar = $this->db->query("
+		select DISTINCT cara_bayar from (SELECT DISTINCT tbl_jual.jual_keterangan as cara_bayar FROM tbl_jual GROUP BY tbl_jual.jual_keterangan 
+		union 
+		select DISTINCT tbl_jual.jual_keterangan2 as cara_bayar from tbl_jual group by tbl_jual.jual_keterangan2)
+         as data         
+		ORDER BY 
+			CASE 
+				WHEN cara_bayar = 'CASH' THEN 1
+				WHEN cara_bayar = 'BANK BCA' THEN 2
+				ELSE 3 
+			END;")
+		->result_array();
+		
+		$header = ['tanggal'];
+		$type = "";
+		foreach ($cara_bayar as $key => $value) {
+			if($value['cara_bayar'] == "") {
+				continue;
+			}
+
+			
+			$name = strtolower(str_replace(' ', '_', $value['cara_bayar']))."_count";
+			$header[] = $name;
+			$type .= ",((SELECT COALESCE(SUM(t1.jual_jml_uang),0) FROM tbl_jual t1 WHERE t1.jual_keterangan = '".$value['cara_bayar']."' AND Date(t1.jual_tanggal) = Date(jual.jual_tanggal)) + 
+			(SELECT COALESCE(SUM(t1.jual_jml_uang2),0) FROM tbl_jual t1 WHERE t1.jual_keterangan2 = '".$value['cara_bayar']."' AND Date(t1.jual_tanggal) = Date(jual.jual_tanggal)) ) AS ".$name;
+		}
+		
+		$type .= ",((SELECT COALESCE(SUM(t1.jual_jml_uang),0) FROM tbl_jual t1 WHERE t1.status = 'DP' AND Date(t1.jual_tanggal) = Date(jual.jual_tanggal)) + 
+		(SELECT COALESCE(SUM(t1.jual_jml_uang2),0) FROM tbl_jual t1 WHERE t1.status = 'DP' AND Date(t1.jual_tanggal) = Date(jual.jual_tanggal)) ) AS DP_count";
+
+		$res = $this->db->query(
+			"SELECT Date(jual.jual_tanggal) as tanggal ".$type."
+				
+			FROM tbl_jual as jual 
+			inner join tbl_detail_jual d_jual on jual.jual_nofak = d_jual.d_jual_nofak 
+			WHERE 
+			Date(jual.jual_tanggal) between ".$start." and ".$end." 
+			GROUP BY 
+			Date(jual.jual_tanggal) 
+			ORDER BY Date(jual.jual_tanggal)"
+		)->result_array();
+	
+		 $result =[
+			'keys' => $header,
+			'data' => $res
+		 ];
+		return $result;
+	}
+
+	public function laporan_jumlah_penjualan_barang_kasir($start, $end, $nama_barang) 
+	{
+		
+		$dateRange = $this->generateDateRange($start, $end);
+		 
+		
+		$type = "";
+		foreach ($dateRange as $key => $value) {
+		
+			$type .= ",(SELECT count(*) FROM tbl_jual as t1 inner join tbl_detail_jual as t2 on t1.jual_nofak=t2.d_jual_nofak WHERE Date(t1.jual_tanggal) = '".$value."' AND t2.d_jual_barang_id = d_jual.d_jual_barang_id ) as  '".$value."'";
+		}
+		
+		$res = $this->db->query(
+			"SELECT d_jual.d_jual_barang_id,
+			d_jual.d_jual_barang_nama as nama_barang ".$type."
+			FROM  tbl_detail_jual d_jual  
+			WHERE
+			d_jual.d_jual_barang_nama like '%".$nama_barang."%'
+			GROUP BY 
+			d_jual.d_jual_barang_id
+			ORDER BY d_jual.d_jual_barang_id; 
+			"
+		)->result_array();
+		
+		
+		 $result =[
+			'keys' => $dateRange,
+			'data' => $res
+		 ];
+		return $result;
+	}
+
+	function generateDateRange($startDate, $endDate) {
+		$start = new DateTime($startDate);
+		$end = new DateTime($endDate);
+		$end = $end->modify('+1 day'); // Include the end date in the range
+	
+		$dateRange = [];
+		while ($start < $end) {
+			$dateRange[] = $start->format('Y-m-d'); // Format the date as needed
+			$start->modify('+1 day'); // Move to the next day
+		}
+	
+		return $dateRange;
+	}
 }

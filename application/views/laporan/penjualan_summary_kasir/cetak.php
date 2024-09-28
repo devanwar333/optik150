@@ -27,10 +27,12 @@
 				<?php $i = 1;
 				$total = 0;
 				$kolom = 3;
+				$totalBayar = 0;
 				?>
 				<?php foreach ($data as $items) :
 
 					$total += ($items['total_qty']);
+					$totalBayar += $items['total_bayar'];
 				?>
 					<tr>
 						
@@ -44,6 +46,11 @@
 				<tr>
 					<td >Total :</td>
 					<td><?= number_format($total) ?></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td >Total Bayar :</td>
+					<td><?= number_format($totalBayar) ?></td>
 					<td></td>
 				</tr>
 			</tfoot>
