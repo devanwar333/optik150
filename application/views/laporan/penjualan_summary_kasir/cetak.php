@@ -49,7 +49,7 @@
 					<td></td>
 				</tr>
 				<tr>
-					<td >Total Bayar :</td>
+					<td >Total Penjualan :</td>
 					<td><?= number_format($totalBayar) ?></td>
 					<td></td>
 				</tr>
