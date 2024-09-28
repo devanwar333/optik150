@@ -557,7 +557,7 @@ class M_laporan extends CI_Model
 			"SELECT Date(jual.jual_tanggal) as tanggal ".$type."
 				
 			FROM tbl_jual as jual 
-			inner join tbl_detail_jual d_jual on jual.jual_nofak = d_jual.d_jual_nofak 
+			
 			WHERE 
 			Date(jual.jual_tanggal) between '".$start."' and '".$end."' 
 			GROUP BY 
