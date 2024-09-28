@@ -593,7 +593,7 @@ class M_laporan extends CI_Model
 			d_jual.d_jual_barang_nama as nama_barang ".$type."
 			FROM  tbl_detail_jual d_jual  
 			WHERE
-			d_jual.d_jual_barang_nama like '%".$nama_barang."%'
+			d_jual.d_jual_barang_nama like '".$nama_barang."'
 			GROUP BY 
 			d_jual.d_jual_barang_id
 			ORDER BY d_jual.d_jual_barang_id; 
