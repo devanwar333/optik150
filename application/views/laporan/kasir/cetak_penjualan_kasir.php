@@ -61,7 +61,7 @@
 							<th style="width: 100px;"><?php echo $output; ?></th>
 						<?php }?>
                         <th style="width: 100px;">Total</th>
-						<th style="width: 100px;">DP</th>
+						<!-- <th style="width: 100px;">DP</th> -->
 						
 					</tr>
 				</thead>
@@ -101,7 +101,7 @@
 								$alltotal['total']+=$total;
 							?>
 							<td style="text-align:center;"><?php echo number_format((int) $total);?></td>
-							<th style="width: 100px;"><?php echo number_format($row['DP_count']);?></th>
+							<!-- <th style="width: 100px;"><?php echo number_format($row['DP_count']);?></th> -->
 						</tr>
 					<?php }?>
 					
@@ -120,7 +120,7 @@
 								<td style="text-align:center;"><b><?php echo $count;?></b></td>
 						<?php }?>
 						<td style="text-align:center;"><b><?php echo number_format((int)$alltotal['total']);?></b></td>
-						<td style="text-align:center;"><b><?php echo number_format((int)$alltotal['DP_count']);?></b></td>
+						<!-- <td style="text-align:center;"><b><?php echo number_format((int)$alltotal['DP_count']);?></b></td> -->
 					</tr>
 				</tbody>
 				
