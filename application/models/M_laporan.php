@@ -592,8 +592,12 @@ class M_laporan extends CI_Model
 			"SELECT d_jual.d_jual_barang_id,
 			d_jual.d_jual_barang_nama as nama_barang ".$type."
 			FROM  tbl_detail_jual d_jual  
+			inner join tbl_jual as jual
+			on jual.jual_nofak = d_jual.d_jual_nofak
 			WHERE
-			d_jual.d_jual_barang_nama like '".$nama_barang."'
+			Date(jual.jual_tanggal) between '".$start."' and '".$end."' 
+			and 
+			d_jual.d_jual_barang_nama like '".$nama_barang."'		
 			GROUP BY 
 			d_jual.d_jual_barang_id
 			ORDER BY d_jual.d_jual_barang_id; 
