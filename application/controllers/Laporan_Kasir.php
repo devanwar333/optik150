@@ -6,6 +6,7 @@ class Laporan_Kasir extends CI_Controller
     {
         parent::__construct();
         $this->load->model('m_laporan');
+        $this->load->model('m_setting');
     }
 
     function index(){
@@ -31,8 +32,9 @@ class Laporan_Kasir extends CI_Controller
         $data['end'] = $end;
         
         $result = $this->m_laporan->laporan_jumlah_penjualan_kasir($start, $end);
+        $setting = $this->m_setting->get_setting_by_name("Nama Toko");
         
-        
+        $data['nama_toko'] = $setting==null ? "" : $setting->fitur;
         $data['data'] = $result;
         
         $this->load->view('laporan/kasir/cetak_penjualan_kasir', $data);
@@ -57,8 +59,9 @@ class Laporan_Kasir extends CI_Controller
         $data['end'] = $end;
         
         $result = $this->m_laporan->laporan_jumlah_penjualan_barang_kasir($start, $end, $namabarang);
+        $setting = $this->m_setting->get_setting_by_name("Nama Toko");
         
-        
+        $data['nama_toko'] = $setting==null ? "" : $setting->fitur;
         $data['data'] = $result;
        
         $this->load->view('laporan/kasir/cetak_penjualan_barang_kasir', $data);

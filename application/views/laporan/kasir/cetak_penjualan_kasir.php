@@ -46,6 +46,11 @@
 					?>
 					<tr>
 						<th colspan="<?php echo $count; ?>" style="text-align:left;">
+							Nama Toko: <?=	$nama_toko  ?><br>
+						</th>
+					</tr>
+					<tr>
+						<th colspan="<?php echo $count; ?>" style="text-align:left;">
 							Periode: <?= date('d M Y', strtotime($start)); ?> - <?= date('d M Y', strtotime($end)); ?><br>
 						</th>
 					</tr>
