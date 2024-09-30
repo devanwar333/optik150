@@ -7,6 +7,7 @@ class Laporan_Kasir extends CI_Controller
         parent::__construct();
         $this->load->model('m_laporan');
         $this->load->model('m_setting');
+        $this->load->model('m_kategori');
     }
 
     function index(){
@@ -58,7 +59,13 @@ class Laporan_Kasir extends CI_Controller
         $data['start'] = $start;
         $data['end'] = $end;
         
-        $result = $this->m_laporan->laporan_jumlah_penjualan_barang_kasir($start, $end, $namabarang);
+        $lgKategori = $this->m_kategori->getKategoriByName("LG");
+		$lgKategoriId = 0;
+		if($lgKategori != null) {
+			$lgKategoriId = $lgKategori->kategori_id;
+		}
+
+        $result = $this->m_laporan->laporan_jumlah_penjualan_barang_kasir($start, $end, $namabarang, $lgKategoriId);
         $setting = $this->m_setting->get_setting_by_name("Nama Toko");
         
         $data['nama_toko'] = $setting==null ? "" : $setting->fitur;
