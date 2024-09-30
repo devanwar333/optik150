@@ -592,7 +592,7 @@ class M_laporan extends CI_Model
 		$res = $this->db->query(
 			"SELECT d_jual.d_jual_barang_id,
 			d_jual.d_jual_barang_nama as nama_barang ,
-			(select GROUP_CONCAT( DISTINCT detail_jual.d_jual_diskon SEPARATOR ', ') from tbl_detail_jual detail_jual where detail_jual.d_jual_barang_id = d_jual.d_jual_barang_id  and detail_jual.d_jual_barang_kat_id = '".$lgKategoriId."' )  as keterangan ".$type."
+			(select GROUP_CONCAT( DISTINCT detail_jual.d_jual_diskon SEPARATOR ', ') from tbl_detail_jual detail_jual where detail_jual.d_jual_barang_id = d_jual.d_jual_barang_id and detail_jual.d_jual_nofak = d_jual.d_jual_nofak and detail_jual.d_jual_barang_kat_id = '".$lgKategoriId."' )  as keterangan ".$type."
 			FROM  tbl_detail_jual d_jual  
 			inner join tbl_jual as jual
 			on jual.jual_nofak = d_jual.d_jual_nofak
