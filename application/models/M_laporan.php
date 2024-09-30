@@ -586,13 +586,15 @@ class M_laporan extends CI_Model
 		$type = "";
 		foreach ($dateRange as $key => $value) {
 		
-			$type .= ",(SELECT count(*) FROM tbl_jual as t1 inner join tbl_detail_jual as t2 on t1.jual_nofak=t2.d_jual_nofak WHERE Date(t1.jual_tanggal) = '".$value."'AND t1.cabang=''  AND t2.d_jual_barang_id = d_jual.d_jual_barang_id ) as  '".$value."'";
+			$type .= ",(SELECT count(*) FROM tbl_jual as t1 inner join tbl_detail_jual as t2 on t1.jual_nofak=t2.d_jual_nofak WHERE Date(t1.jual_tanggal) = '".$value."'AND t1.cabang=''  AND t2.d_jual_barang_id = d_jual.d_jual_barang_id
+				and  if(d_jual.d_jual_barang_kat_id = '".$lgKategoriId."', t2.d_jual_diskon = d_jual.d_jual_diskon, true)
+			) as  '".$value."'";
 		}
 		
 		$res = $this->db->query(
-			"SELECT d_jual.d_jual_barang_id,
+			"SELECT DISTINCT d_jual.d_jual_barang_id,
 			d_jual.d_jual_barang_nama as nama_barang ,
-			(select GROUP_CONCAT( DISTINCT detail_jual.d_jual_diskon SEPARATOR ', ') from tbl_detail_jual detail_jual where detail_jual.d_jual_barang_id = d_jual.d_jual_barang_id and detail_jual.d_jual_nofak = d_jual.d_jual_nofak and detail_jual.d_jual_barang_kat_id = '".$lgKategoriId."' )  as keterangan ".$type."
+			if(d_jual.d_jual_barang_kat_id = '".$lgKategoriId."', d_jual.d_jual_diskon, '') as keterangan ".$type."
 			FROM  tbl_detail_jual d_jual  
 			inner join tbl_jual as jual
 			on jual.jual_nofak = d_jual.d_jual_nofak
@@ -603,12 +605,11 @@ class M_laporan extends CI_Model
 			and 
 			d_jual.d_jual_barang_nama like '".$nama_barang."'		
 			GROUP BY 
-			d_jual.d_jual_barang_id
-			ORDER BY d_jual.d_jual_barang_id; 
-			"
+			d_jual.d_jual_barang_id,
+			if(d_jual.d_jual_barang_kat_id = '2', d_jual.d_jual_diskon, '')
+			ORDER BY d_jual.d_jual_barang_id"
 		)->result_array();
-		
-		
+
 		 $result =[
 			'keys' => $dateRange,
 			'data' => $res
