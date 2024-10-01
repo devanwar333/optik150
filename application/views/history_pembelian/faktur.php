@@ -43,7 +43,7 @@
             <br>
             
             <tr>
-                <th style="text-align:left;font-size:15pt">No Faktur</th>
+                <th style="text-align:left;font-size:15pt">No Faktur Beli</th>
                 <th style="text-align:left;font-size:15pt">: <?php echo $header['d_beli_nofak']; ?></th>
 
             </tr>

@@ -644,7 +644,7 @@ class M_laporan extends CI_Model
 
 			$name = strtolower(str_replace( ' ', '_', $item))."_count";
 
-			$type .= ",(select count(*) from tbl_detail_jual as t1 inner join tbl_jual as t2
+			$type .= ",(select sum(t1.d_jual_qty) from tbl_detail_jual as t1 inner join tbl_jual as t2
  on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang='".$item."'  ) as ".$name;
 		}
 
@@ -652,9 +652,9 @@ class M_laporan extends CI_Model
 			select 
 			d_jual.d_jual_barang_id,
 			d_jual.d_jual_barang_nama as nama_barang
-			,(select count(*) from tbl_detail_jual as t1 inner join tbl_jual as t2
+			,(select sum(t1.d_jual_qty) from tbl_detail_jual as t1 inner join tbl_jual as t2
  on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang not in ('MANSYUR','HALAT','JOHOR','MARELAN','PANCING','RING ROAD', '') and t1.d_jual_barang_kat_id ='".$kategori."'  ) as return_count
-			,(select count(*) from tbl_detail_jual as t1 inner join tbl_jual as t2
+			,(select sum(t1.d_jual_qty) from tbl_detail_jual as t1 inner join tbl_jual as t2
  on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang='' and t2.status='COMPLETE' and t1.d_jual_barang_kat_id ='".$kategori."'  ) as kasir_count ".$type."
 
 			from tbl_jual as jual inner join tbl_detail_jual as d_jual

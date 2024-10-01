@@ -28,7 +28,7 @@
 			<tr>
 				<td colspan="2" style="width:1000px;padding-left:20px;">
 					<center>
-						<h4>REKAP PENJUALAN</h4>
+						<h4>REKAP PEMBELIAN</h4>
 					</center><br />
 				</td>
 			</tr>

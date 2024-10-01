@@ -42,7 +42,7 @@
 			<table border="1" align="center" style="width:1000px;margin-bottom:20px;">
 				<thead>
 					<?php 
-						$count = count($data['keys'])+3;
+						$count = count($data['keys'])+4;
 					?>
 					
 					<tr>
@@ -53,6 +53,7 @@
 
 					<tr>
                         <th style="width: 100px;">NAMA BARANG</th>
+						<th style="width: 100px;">KASIR</th>
 						<?php
 							foreach($data['keys'] as $column) {
 								
@@ -77,27 +78,34 @@
                     ?>
                         <tr>
                             <td style="width: 100px;"><?php echo $item['nama_barang']; ?></td>
+							<?php
+                                $total+= $item['kasir_count'] ?? 0;
+                                $allTotal['kasir_count'] += $item['kasir_count'] ?? 0;
+                            ?>
+							<td style="width: 100px;"><?php echo $item['kasir_count'] ?? 0; ?></td>
                             <?php
                                 foreach($data['keys'] as $column) {
                                     
                                     
                                     $output = str_replace(" ", '_', strtolower($column))."_count";
-                                    $total+= $item[$output];
+									$value = $item[$output] ?? 0;
+                                    $total+= $value;
                                     $allTotal[$output] += $item[$output];
                             ?>
-                                <td style="width: 100px;text-align:center"><?php echo $item[$output]; ?></td>
+                                <td style="width: 100px;text-align:center"><?php echo $item[$output] ?? 0; ?></td>
                             <?php }?>
                             <?php
-                                $total+= $item['return_count'];
-                                $allTotal['return_count'] += $item['return_count'];
+                                $total+= $item['return_count'] ?? 0;
+                                $allTotal['return_count'] += $item['return_count'] ?? 0;
                             ?>
-                            <td style="width: 100px; text-align:center"><?php echo $item['return_count']; ?></td>
+                            <td style="width: 100px; text-align:center"><?php echo $item['return_count'] ?? 0; ?></td>
                             <td style="width: 100px; text-align:center"><?php echo $total; ?></td>
                         </tr>
                     <?php }?>
 
                     <tr>
                         <td style="width: 100px;">Total</td>
+						<td style="width: 100px;  text-align:center"><?php echo $allTotal['kasir_count']; ?></td>
                         <?php
                                 $total = 0;
                                 foreach($data['keys'] as $column) {
