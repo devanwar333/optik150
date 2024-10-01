@@ -680,7 +680,7 @@ class M_laporan extends CI_Model
 		$supplier = $this->db->query("
 		select DISTINCT beli.beli_suplier_id as id, supplier.suplier_nama as name from tbl_beli as beli inner join tbl_suplier as supplier 
 		ON beli.beli_suplier_id= supplier.suplier_id
-		where Date(beli.beli_tanggal) between '2023-10-01' and '2023-10-10' and beli.status ='COMPLETE' and supplier.suplier_nama not like 'BELI%'
+		where Date(beli.beli_tanggal) between '".$start."' and '".$end."' and beli.status ='COMPLETE' and supplier.suplier_nama not like 'BELI%'
 		order by beli.beli_suplier_id")
 		->result_array();
 		
@@ -708,6 +708,7 @@ class M_laporan extends CI_Model
 			where beli.status ='COMPLETE'
 			and beli.beli_tanggal BETWEEN '".$start."' and '".$end."'
 			and barang.barang_nama not like 'LG%'
+			and barang.barang_nama like '".$namaBarang."'
 			group by 
 			d_beli.d_beli_barang_id;
 		")->result_array();
