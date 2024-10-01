@@ -676,11 +676,18 @@ class M_laporan extends CI_Model
 		return $result;
 	}
 
-	function laporan_rekap_pembelian($start, $end, $namaBarang) {
+	function laporan_rekap_pembelian($start, $end, $namaBarang, $kategori) {
 		$supplier = $this->db->query("
-		select DISTINCT beli.beli_suplier_id as id, supplier.suplier_nama as name from tbl_beli as beli inner join tbl_suplier as supplier 
+		select DISTINCT beli.beli_suplier_id as id, supplier.suplier_nama as name from tbl_beli as beli 
+		inner join tbl_suplier as supplier 
 		ON beli.beli_suplier_id= supplier.suplier_id
+		inner join tbl_detail_beli as d_beli
+		on d_beli.d_beli_nofak = beli.beli_nofak
+		inner join tbl_barang as barang
+		on d_beli.d_beli_barang_id = barang.barang_id
 		where Date(beli.beli_tanggal) between '".$start."' and '".$end."' and beli.status ='COMPLETE' and supplier.suplier_nama not like 'BELI%'
+		and
+		barang.barang_kategori_id = ".$kategori."
 		order by beli.beli_suplier_id")
 		->result_array();
 		
@@ -707,7 +714,7 @@ class M_laporan extends CI_Model
 			on barang.barang_id = d_beli.d_beli_barang_id
 			where beli.status ='COMPLETE'
 			and beli.beli_tanggal BETWEEN '".$start."' and '".$end."'
-			and barang.barang_nama not like 'LG%'
+			and barang.barang_kategori_id = ".$kategori."
 			and barang.barang_nama like '".$namaBarang."'
 			group by 
 			d_beli.d_beli_barang_id;
