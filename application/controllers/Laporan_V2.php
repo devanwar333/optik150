@@ -27,6 +27,7 @@ class Laporan_V2 extends CI_Controller
         $start = $this->input->post('tgl1');
         $end = $this->input->post('tgl2');
         $namabarang = $this->input->post('nama') ?? '';
+        $kategori_param = $this->input->post('kategori') ?? 'UMUM';
 
         if($namabarang == "") {
             $namabarang == "%%";
@@ -38,7 +39,7 @@ class Laporan_V2 extends CI_Controller
         $data['start'] = $start;
         $data['end'] = $end;
         
-        $mkategori = $this->m_kategori->getKategoriByName("UMUM");
+        $mkategori = $this->m_kategori->getKategoriByName($kategori_param);
 		$kategori = 0;
 		if($mkategori != null) {
 			$kategori = $mkategori->kategori_id;
@@ -54,6 +55,7 @@ class Laporan_V2 extends CI_Controller
         $start = $this->input->post('tgl1');
         $end = $this->input->post('tgl2');
         $namabarang = $this->input->post('nama') ?? '';
+        $kategori_param = $this->input->post('kategori') ?? 'UMUM';
 
         if($namabarang == "") {
             $namabarang == "%%";
@@ -65,7 +67,7 @@ class Laporan_V2 extends CI_Controller
         $data['start'] = $start;
         $data['end'] = $end;
         
-        $mkategori = $this->m_kategori->getKategoriByName("UMUM");
+        $mkategori = $this->m_kategori->getKategoriByName($kategori_param);
 		$kategori = 0;
 		if($mkategori != null) {
 			$kategori = $mkategori->kategori_id;

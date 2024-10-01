@@ -47,7 +47,7 @@
                                         <td>
                                             <?php if ($this->session->userdata('level') == 'penjualan') { ?>
                                                 <a class="badge badge-success text-white editCabang" data-data='<?= json_encode($a) ?>'><span class="fas fa-fw fa-edit"></span> Edit</a>
-                                                <a class="badge badge-danger text-white" style="cursor:pointer;" onclick="deleteCabang('<?php echo $a->id_cabang ?>')"><span class="fas fa-fw fa-trash"></span> Hapus</a>
+                                                <!-- <a class="badge badge-danger text-white" style="cursor:pointer;" onclick="deleteCabang('<?php echo $a->id_cabang ?>')"><span class="fas fa-fw fa-trash"></span> Hapus</a> -->
                                             <?php } ?>
                                         </td>
                                     </tr>

@@ -59,7 +59,7 @@
                         <td><?php echo $tlp;?></td>
                         <td>
                             <a class="badge badge-success" href="#modal-edit<?php echo $id?>" data-toggle="modal" title="Edit"><span class="fas fa-fw fa-edit"></span> Edit</a>
-                            <a class="badge badge-danger" href="#modal-hapus<?php echo $id?>" data-toggle="modal" title="Hapus"><span class="fas fa-fw fa-trash"></span> Hapus</a>
+                            <!-- <a class="badge badge-danger" href="#modal-hapus<?php echo $id?>" data-toggle="modal" title="Hapus"><span class="fas fa-fw fa-trash"></span> Hapus</a> -->
                         </td>
                     </tr>
                     <?php $no++; ?>

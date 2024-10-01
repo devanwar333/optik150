@@ -42,7 +42,7 @@
 			<table border="1" align="center" style="width:1000px;margin-bottom:20px;">
 				<thead>
 					<?php 
-						$count = count($data['keys'])+2;
+						$count = count($data['keys'])+3;
 					?>
 					
 					<tr>
@@ -53,6 +53,7 @@
 
 					<tr>
                         <th style="width: 100px;">NAMA BARANG</th>
+						<th style="width: 100px;">KETERANGAN</th>
 						<?php
 							foreach($data['keys'] as $column) {
 								
@@ -77,6 +78,7 @@
                     ?>
                         <tr>
                             <td style="width: 100px;"><?php echo $item['nama_barang']; ?></td>
+							<td style="width: 100px;"><?php echo $item['keterangan']; ?></td>
                             <?php
                                 foreach($data['keys'] as $column) {
                                      
@@ -93,7 +95,7 @@
                         </tr>
                     <?php }?>
 					<tr>
-                        <td style="width: 100px;">Total</td>
+                        <td style="width: 100px;" colspan="2">Total</td>
                         <?php
                                 $total = 0;
                                 foreach($data['keys'] as $column) {

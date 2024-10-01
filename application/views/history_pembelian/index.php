@@ -56,7 +56,7 @@
             <td><?= $a['status']; ?></td>
             <td class="text-center">
               <a class="badge badge-success" href="<?= base_url(); ?>history_pembelian/in_detail/<?= $a['beli_nofak']; ?>">View</a>
-              <a class="badge badge-primary" href="<?= base_url(); ?>history_pembelian/edit/<?= $a['beli_nofak']; ?>">Edit</a>
+              <!-- <a class="badge badge-primary" href="<?= base_url(); ?>history_pembelian/edit/<?= $a['beli_nofak']; ?>">Edit</a> -->
               <a class="badge badge-danger" href="<?= base_url(); ?>history_pembelian/batal/<?= $a['beli_nofak']; ?>">batal</a>
            </td>
           </tr>

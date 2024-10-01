@@ -94,6 +94,15 @@
                         <input type="text" class="form-control" name="nama" placeholder="Search * Applicable" require>
                     </div>
                 </div>
+                <div class="form-group ">
+                    <label class="control-label col-xs-3">Kategori Barang</label>
+                    <div class="col-xs-9">
+                        <select class="form-control" name="kategori">
+                            <option value="UMUM" selected>UMUM</option>
+                            <option value="LG" >LG</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <!-- Modal footer -->
@@ -111,7 +120,7 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Penjualan</h4>
+                <h4 class="modal-title">Pembelian</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
@@ -131,10 +140,20 @@
                         <input type="date" class="form-control" name="tgl2" id="tgl2" value="" onchange="listCustomer()" placeholder="Tanggal" required>
                     </div>
                 </div>  
+                
                 <div class="form-group ">
                     <label class="control-label col-xs-3">Nama Barang</label>
                     <div class="col-xs-9">
                         <input type="text" class="form-control" name="nama" placeholder="Search * Applicable" require>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="control-label col-xs-3">Kategori Barang</label>
+                    <div class="col-xs-9">
+                        <select class="form-control" name="kategori">
+                            <option value="UMUM" selected>UMUM</option>
+                            <option value="LG" >LG</option>
+                        </select>
                     </div>
                 </div>
             </div>

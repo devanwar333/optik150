@@ -635,6 +635,14 @@ class M_laporan extends CI_Model
 	}
 
 	function laporan_rekap_penjualan($start, $end, $namaBarang, $kategori) {
+		
+		$lg = $this->db->query("select * from tbl_kategori where kategori_nama = 'LG'")->row();
+		
+		$lgid = 0;
+		if($lg != null) {
+			$lgid = $lg->kategori_id;
+		}
+
 		$cabang = [
 			'MANSYUR','HALAT','JOHOR','MARELAN','PANCING','RING ROAD' 
 		];
@@ -645,17 +653,21 @@ class M_laporan extends CI_Model
 			$name = strtolower(str_replace( ' ', '_', $item))."_count";
 
 			$type .= ",(select sum(t1.d_jual_qty) from tbl_detail_jual as t1 inner join tbl_jual as t2
- on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang='".$item."'  ) as ".$name;
+ on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang='".$item."' 
+ and if(d_jual.d_jual_barang_kat_id = '".$lgid."', t1.d_jual_diskon = d_jual.d_jual_diskon, true) ) as ".$name;
 		}
 
 		$res = $this->db->query("
 			select 
 			d_jual.d_jual_barang_id,
-			d_jual.d_jual_barang_nama as nama_barang
+			d_jual.d_jual_barang_nama as nama_barang,
+			if(d_jual.d_jual_barang_kat_id = '".$lgid."', d_jual.d_jual_diskon, '') as keterangan 
 			,(select sum(t1.d_jual_qty) from tbl_detail_jual as t1 inner join tbl_jual as t2
- on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang not in ('MANSYUR','HALAT','JOHOR','MARELAN','PANCING','RING ROAD', '') and t1.d_jual_barang_kat_id ='".$kategori."'  ) as return_count
+ on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang not in ('MANSYUR','HALAT','JOHOR','MARELAN','PANCING','RING ROAD', '') and t1.d_jual_barang_kat_id ='".$kategori."' 
+ and if(d_jual.d_jual_barang_kat_id = '".$lgid."', t1.d_jual_diskon = d_jual.d_jual_diskon, true) ) as return_count
 			,(select sum(t1.d_jual_qty) from tbl_detail_jual as t1 inner join tbl_jual as t2
- on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang='' and t2.status='COMPLETE' and t1.d_jual_barang_kat_id ='".$kategori."'  ) as kasir_count ".$type."
+ on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang='' and t2.status='COMPLETE' and t1.d_jual_barang_kat_id ='".$kategori."' 
+ and if(d_jual.d_jual_barang_kat_id = '".$lgid."', t1.d_jual_diskon = d_jual.d_jual_diskon, true) ) as kasir_count ".$type."
 
 			from tbl_jual as jual inner join tbl_detail_jual as d_jual
 			on jual.jual_nofak=d_jual.d_jual_nofak
@@ -666,7 +678,8 @@ class M_laporan extends CI_Model
 			and 
 			d_jual.d_jual_barang_kat_id ='".$kategori."'
 			group by 
-			d_jual.d_jual_barang_id;
+			d_jual.d_jual_barang_id,
+			if(d_jual.d_jual_barang_kat_id = '".$lgid."', d_jual.d_jual_diskon, '');
 		")->result_array();
 		
 		$result =[
@@ -677,6 +690,13 @@ class M_laporan extends CI_Model
 	}
 
 	function laporan_rekap_pembelian($start, $end, $namaBarang, $kategori) {
+		$lg = $this->db->query("select * from tbl_kategori where kategori_nama = 'LG'")->row();
+		
+		$lgid = 0;
+		if($lg != null) {
+			$lgid = $lg->kategori_id;
+		}
+		
 		$supplier = $this->db->query("
 		select DISTINCT beli.beli_suplier_id as id, supplier.suplier_nama as name from tbl_beli as beli 
 		inner join tbl_suplier as supplier 
@@ -699,13 +719,17 @@ class M_laporan extends CI_Model
 			$name = strtolower(str_replace( ' ', '_', $trimmed))."_count";
 			$keys[] = $name;
 			$type .= ",(SELECT sum(t2.d_beli_jumlah) FROM `tbl_beli` as t1 inner join tbl_detail_beli as t2 on t1.beli_nofak = t2.d_beli_nofak 
-			where t2.d_beli_barang_id = d_beli.d_beli_barang_id and t1.beli_suplier_id = ".$item['id']." and t1.beli_tanggal BETWEEN '".$start."' and '".$end."' and t1.status = 'COMPLETE') as ".$name;
+			inner join tbl_barang as t3 on t2.d_beli_barang_id = t3.barang_id
+			where t2.d_beli_barang_id = d_beli.d_beli_barang_id and t1.beli_suplier_id = ".$item['id']." and t1.beli_tanggal BETWEEN '".$start."' and '".$end."' and t1.status = 'COMPLETE' 
+			and  if(t3.barang_kategori_id = '".$lgid."', t2.keterangan = d_beli.keterangan, true)
+			) as ".$name;
 		} 
 		
 		$res = $this->db->query("
 			SELECT
 			d_beli.d_beli_barang_id as barang_id,
-			barang.barang_nama as nama_barang ".$type."
+			barang.barang_nama as nama_barang,
+			if(barang.barang_kategori_id = '".$lgid."', d_beli.keterangan, '') as keterangan ".$type."
 			
 			FROM `tbl_beli` as beli
 			inner join tbl_detail_beli as d_beli
@@ -717,7 +741,8 @@ class M_laporan extends CI_Model
 			and barang.barang_kategori_id = ".$kategori."
 			and barang.barang_nama like '".$namaBarang."'
 			group by 
-			d_beli.d_beli_barang_id;
+			d_beli.d_beli_barang_id,
+			if(barang.barang_kategori_id = '".$lgid."', d_beli.keterangan, '');
 		")->result_array();
 		
 		

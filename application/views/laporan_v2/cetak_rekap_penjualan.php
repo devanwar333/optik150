@@ -42,7 +42,7 @@
 			<table border="1" align="center" style="width:1000px;margin-bottom:20px;">
 				<thead>
 					<?php 
-						$count = count($data['keys'])+4;
+						$count = count($data['keys'])+5;
 					?>
 					
 					<tr>
@@ -53,6 +53,7 @@
 
 					<tr>
                         <th style="width: 100px;">NAMA BARANG</th>
+						<th style="width: 100px;">KETERANGAN</th>
 						<th style="width: 100px;">KASIR</th>
 						<?php
 							foreach($data['keys'] as $column) {
@@ -78,11 +79,12 @@
                     ?>
                         <tr>
                             <td style="width: 100px;"><?php echo $item['nama_barang']; ?></td>
+							<td style="width: 100px;"><?php echo $item['keterangan']; ?></td>
 							<?php
                                 $total+= $item['kasir_count'] ?? 0;
                                 $allTotal['kasir_count'] += $item['kasir_count'] ?? 0;
                             ?>
-							<td style="width: 100px;"><?php echo $item['kasir_count'] ?? 0; ?></td>
+							<td style="width: 100px;text-align:center"><?php echo $item['kasir_count'] ?? 0; ?></td>
                             <?php
                                 foreach($data['keys'] as $column) {
                                     
@@ -104,21 +106,25 @@
                     <?php }?>
 
                     <tr>
-                        <td style="width: 100px;">Total</td>
+                        <td style="width: 100px;" colspan="2">Total</td>
+						<?php
+							$endTotal = 0;
+                            $endTotal += $allTotal['kasir_count'];
+                        ?>
 						<td style="width: 100px;  text-align:center"><?php echo $allTotal['kasir_count']; ?></td>
                         <?php
                                 $total = 0;
                                 foreach($data['keys'] as $column) {
                                     $output = str_replace(" ", '_', strtolower($column))."_count";
-                                    $total += $allTotal[$output];
+                                    $endTotal += $allTotal[$output];
                             ?>
                                 <td style="width: 100px;  text-align:center"><?php echo $allTotal[$output]; ?></td>
                         <?php }?>
                         <?php
-                            $total += $allTotal['return_count'];
+                            $endTotal += $allTotal['return_count'];
                         ?>
                         <td style="width: 100px;  text-align:center"><?php echo $allTotal['return_count']; ?></td>
-                        <td style="width: 100px;  text-align:center"><?php echo $total; ?></td>
+                        <td style="width: 100px;  text-align:center"><?php echo $endTotal; ?></td>
                     </tr>
 				</tbody>
 				
