@@ -50,6 +50,8 @@ class M_pembelian extends CI_Model
 		$data = $this->db->select('*')
 		->from('tbl_detail_beli')
 		->where('d_beli_nofak', $id)
+		->join('tbl_beli', 'tbl_beli.beli_nofak=tbl_detail_beli.d_beli_nofak')
+		->join('tbl_suplier', 'tbl_suplier.suplier_id = tbl_beli.beli_suplier_id')
 		->join('tbl_barang', 'tbl_barang.barang_id=tbl_detail_beli.d_beli_barang_id')
 		->get()->result_array();
 		return $data;

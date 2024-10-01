@@ -276,6 +276,17 @@
             <span>Setting Display</span></a>
         </li>
       <?php } ?>
+      
+      <?php if ($this->session->userdata('level') == 'penjualan' ||$this->session->userdata('level') == 'pembelian' ) { ?>
+      <div class="sidebar-heading">
+          Laporan
+        </div>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo site_url('laporan_v2'); ?>">
+            <i class="fas fa-print"></i>
+            <span>Laporan</span></a>
+        </li>
+        <?php } ?>
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">

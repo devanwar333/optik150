@@ -328,4 +328,16 @@ class History_pembelian extends CI_Controller
         
         redirect('history_pembelian/edit/' . $nomor_faktur);
     }
+
+    public function cetak_faktur($nofak) 
+    {
+        $this->session->set_userdata('nofak', $nofak);
+        $result = $this->m_pembelian->get_detail_pembelian_by_nofak($nofak);
+        if(count($result) == 0 ) {
+            $this->session->set_flashdata('error', "Data pembelian tidak ditemukan.");
+        }
+        $data['header'] = $result[0];
+        $data['data'] = $result;
+        $this->load->view('history_pembelian/faktur', $data);
+    }
 }

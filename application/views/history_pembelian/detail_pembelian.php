@@ -8,6 +8,13 @@
   </div>
   <br>
   <div class="card-body">
+    <div class="row col-sm-6 mb-3">
+    <button class="btn btn-success" onclick='window.open("<?= base_url("history_pembelian/cetak_faktur/" . $this->uri->segment(3)) ?>")' >
+      <i class="fas fa-print fa-sm"></i>
+      Cetak Faktur Beli
+    </button>
+    </div>
+    
     <div class="table-responsive">  
     <?php
       $kd = $data['beli_nofak'];

@@ -633,4 +633,90 @@ class M_laporan extends CI_Model
 	
 		return $dateRange;
 	}
+
+	function laporan_rekap_penjualan($start, $end, $namaBarang, $kategori) {
+		$cabang = [
+			'MANSYUR','HALAT','JOHOR','MARELAN','PANCING','RING ROAD' 
+		];
+		
+		$type = "";
+		foreach($cabang as $item) {
+
+			$name = strtolower(str_replace( ' ', '_', $item))."_count";
+
+			$type .= ",(select count(*) from tbl_detail_jual as t1 inner join tbl_jual as t2
+ on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang='".$item."'  ) as ".$name;
+		}
+
+		$res = $this->db->query("
+			select 
+			d_jual.d_jual_barang_id,
+			d_jual.d_jual_barang_nama as nama_barang
+			,(select count(*) from tbl_detail_jual as t1 inner join tbl_jual as t2
+ on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang not in ('MANSYUR','HALAT','JOHOR','MARELAN','PANCING','RING ROAD', '') and t1.d_jual_barang_kat_id ='".$kategori."'  ) as return_count
+			,(select count(*) from tbl_detail_jual as t1 inner join tbl_jual as t2
+ on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang='' and t2.status='COMPLETE' and t1.d_jual_barang_kat_id ='".$kategori."'  ) as kasir_count ".$type."
+
+			from tbl_jual as jual inner join tbl_detail_jual as d_jual
+			on jual.jual_nofak=d_jual.d_jual_nofak
+			WHERE
+			Date(jual.jual_tanggal) BETWEEN '".$start."' and '".$end."'
+			and 
+			d_jual.d_jual_barang_nama like '".$namaBarang."'
+			and 
+			d_jual.d_jual_barang_kat_id ='".$kategori."'
+			group by 
+			d_jual.d_jual_barang_id;
+		")->result_array();
+		
+		$result =[
+			'keys' => $cabang,
+			'data' => $res
+		 ];
+		return $result;
+	}
+
+	function laporan_rekap_pembelian($start, $end, $namaBarang) {
+		$supplier = $this->db->query("
+		select DISTINCT beli.beli_suplier_id as id, supplier.suplier_nama as name from tbl_beli as beli inner join tbl_suplier as supplier 
+		ON beli.beli_suplier_id= supplier.suplier_id
+		where Date(beli.beli_tanggal) between '2023-10-01' and '2023-10-10' and beli.status ='COMPLETE' and supplier.suplier_nama not like 'BELI%'
+		order by beli.beli_suplier_id")
+		->result_array();
+		
+		$keys = []; 
+		$type = "";
+		foreach($supplier as $item) {
+			$cleaned = preg_replace('/[^a-zA-Z0-9\s]/', '', $item['name']);
+			$trimmed = trim($cleaned);
+			$name = strtolower(str_replace( ' ', '_', $trimmed))."_count";
+			$keys[] = $name;
+			$type .= ",(SELECT sum(t2.d_beli_jumlah) FROM `tbl_beli` as t1 inner join tbl_detail_beli as t2 on t1.beli_nofak = t2.d_beli_nofak 
+			where t2.d_beli_barang_id = d_beli.d_beli_barang_id and t1.beli_suplier_id = ".$item['id']." and t1.beli_tanggal BETWEEN '".$start."' and '".$end."' and t1.status = 'COMPLETE') as ".$name;
+		} 
+		
+		$res = $this->db->query("
+			SELECT
+			d_beli.d_beli_barang_id as barang_id,
+			barang.barang_nama as nama_barang ".$type."
+			
+			FROM `tbl_beli` as beli
+			inner join tbl_detail_beli as d_beli
+			on beli.beli_nofak = d_beli.d_beli_nofak
+			inner join tbl_barang as barang
+			on barang.barang_id = d_beli.d_beli_barang_id
+			where beli.status ='COMPLETE'
+			and beli.beli_tanggal BETWEEN '".$start."' and '".$end."'
+			and barang.barang_nama not like 'LG%'
+			group by 
+			d_beli.d_beli_barang_id;
+		")->result_array();
+		
+		
+		$result =[
+			'keys' => $keys,
+			'data' => $res
+		 ];
+		return $result;
+	}
 }
