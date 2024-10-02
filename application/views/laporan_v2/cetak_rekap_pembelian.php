@@ -43,6 +43,9 @@
 				<thead>
 					<?php 
 						$count = count($data['keys'])+3;
+						if($kategori == "LG") {
+							$count += 1;
+						}
 					?>
 					
 					<tr>
@@ -103,7 +106,13 @@
                         </tr>
                     <?php }?>
 					<tr>
-                        <td style="width: 100px;" colspan="2">Total</td>
+						<?php 
+							$coltotal = 1;
+							if($kategori == "LG") {
+								$coltotal += 1;
+							}
+						?>
+                        <td style="width: 100px;" colspan="<?php echo $coltotal; ?>">Total</td>
                         <?php
                                 $total = 0;
                                 foreach($data['keys'] as $column) {

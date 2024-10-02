@@ -120,7 +120,13 @@
                     <?php }?>
 
                     <tr>
-                        <td style="width: 100px;" colspan="2">Total</td>
+					<?php 
+							$coltotal = 1;
+							if($kategori == "LG") {
+								$coltotal += 1;
+							}
+						?>
+                        <td style="width: 100px;" colspan="<?php echo $coltotal; ?>">Total</td>
 						<?php
 							$endTotal = 0;
                             $endTotal += $allTotal['kasir_count'];
