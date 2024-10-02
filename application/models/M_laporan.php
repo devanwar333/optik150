@@ -657,6 +657,11 @@ class M_laporan extends CI_Model
  and if(d_jual.d_jual_barang_kat_id = '".$lgid."', t1.d_jual_diskon = d_jual.d_jual_diskon, true) ) as ".$name;
 		}
 
+		$kasirStart = date('Y-m-d', strtotime($start.' -1 day'));
+		$kasirEnd = date('Y-m-d', strtotime($end.' -1 day'));
+
+		
+
 		$res = $this->db->query("
 			select 
 			d_jual.d_jual_barang_id,
@@ -666,7 +671,7 @@ class M_laporan extends CI_Model
  on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang not in ('MANSYUR','HALAT','JOHOR','MARELAN','PANCING','RING ROAD', '') and t1.d_jual_barang_kat_id ='".$kategori."' 
  and if(d_jual.d_jual_barang_kat_id = '".$lgid."', t1.d_jual_diskon = d_jual.d_jual_diskon, true) ) as return_count
 			,(select sum(t1.d_jual_qty) from tbl_detail_jual as t1 inner join tbl_jual as t2
- on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$start."' and '".$end."' and t2.cabang='' and t2.status='COMPLETE' and t1.d_jual_barang_kat_id ='".$kategori."' 
+ on t1.d_jual_nofak = t2.jual_nofak where t1.d_jual_barang_id = d_jual.d_jual_barang_id  and Date(t2.jual_tanggal) BETWEEN '".$kasirStart."' and '".$kasirEnd."' and t2.cabang='' and t2.status='COMPLETE' and t1.d_jual_barang_kat_id ='".$kategori."' 
  and if(d_jual.d_jual_barang_kat_id = '".$lgid."', t1.d_jual_diskon = d_jual.d_jual_diskon, true) ) as kasir_count ".$type."
 
 			from tbl_jual as jual inner join tbl_detail_jual as d_jual

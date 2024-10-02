@@ -780,11 +780,7 @@ GROUP BY jual_keterangan";
 			
 		}
 		
-		$kpKategori = $this->m_kategori->getKategoriByName("KP");
-		$kpKategoriId = 0;
-		if($kpKategori != null) {
-			$kpKategoriId = $kpKategori->kategori_id;
-		}
+	
 
 		if($kpKategori != null) {
 			$dataLG = $this->db->distinct()->select('tbl_detail_jual.d_jual_barang_nama ,d_jual_diskon as description, sum(d_jual_qty) as total_qty, sum(d_jual_total) as total_bayar')->from('tbl_jual')->group_by('d_jual_diskon, d_jual_barang_id')
