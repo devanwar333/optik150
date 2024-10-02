@@ -126,6 +126,7 @@
                   <label for="Level">Hak Akses : </label>
                   <select required name="level" id="u_level" class="form-control">
                     <option value="">-- Pilih Hak Akses --</option>
+                    <option value="stockist">Stockist</option>
                     <option value="admin">Admin</option>
                     <option value="kasir">Kasir</option>
                     <option value="Pembelian">Pembelian</option>

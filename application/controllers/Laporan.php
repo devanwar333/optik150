@@ -771,7 +771,29 @@ GROUP BY jual_keterangan";
 				array_push($data,$item);
 			}
 			
-		}	
+		}
+		
+		$kpKategori = $this->m_kategori->getKategoriByName("KP");
+		$kpKategoriId = 0;
+		if($kpKategori != null) {
+			$kpKategoriId = $kpKategori->kategori_id;
+		}
+
+		if($kpKategori != null) {
+			$dataLG = $this->db->distinct()->select('tbl_detail_jual.d_jual_barang_nama ,d_jual_diskon as description, sum(d_jual_qty) as total_qty, sum(d_jual_total) as total_bayar')->from('tbl_jual')->group_by('d_jual_diskon, d_jual_barang_id')
+			->where('DATE(jual_tanggal)', $date)	
+			->where('jual_user_id', "!=",null)
+			->where('cabang', "")
+			->join('tbl_detail_jual', 'tbl_detail_jual.d_jual_nofak=tbl_jual.jual_nofak and tbl_jual.status in ("COMPLETE","KREDIT","DP")')
+			->where('tbl_detail_jual.d_jual_barang_kat_id', $kpKategoriId)
+			->get()->result_array();
+			foreach($dataLG as $item)
+			{
+				array_push($data,$item);
+			}
+
+		}
+
 		usort($data, function($a, $b) {
 			return strcasecmp($a['d_jual_barang_nama'], $b['d_jual_barang_nama']);
 		});

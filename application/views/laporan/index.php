@@ -35,7 +35,7 @@
                     </tr>
                   </tfoot> -->
                             <tbody>
-
+                                <?php if($this->session->userdata('level') == 'stockist' || $this->session->userdata('level') == 'admin'  ) { ?>
                                 <tr>
                                     <td style="text-align:center;vertical-align:middle">1</td>
                                     <td style="vertical-align:middle;">Stok Barang</td>
@@ -45,7 +45,8 @@
                                         <a class="btn btn-sm btn-success" href="<?php echo site_url('laporan/lap_data_barang_cetak') ?>" target="_blank"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
-
+                                <?php }?>
+                                <?php if($this->session->userdata('level') == 'admin' ) { ?>
                                 <!-- <tr>
                                     <td style="text-align:center;vertical-align:middle">2</td>
                                     <td style="vertical-align:middle;">Laporan Stok Barang</td>
@@ -143,6 +144,7 @@
                                         <a class="btn btn-sm btn-success" href="#lap_resume_cetak" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
+                                <?php }?>
                             </tbody>
                         </table>
                     </div>
