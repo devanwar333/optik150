@@ -105,7 +105,7 @@
 
       <!-- DATA PENJUALAN -->
       <!-- Divider -->
-      <?php if ($this->session->userdata('level') == 'penjualan' || $this->session->userdata('level') == 'admin') { ?>
+      <?php if ($this->session->userdata('level') != 'pembelian' && $this->session->userdata('level') != 'stockist') { ?>
         <!-- Heading -->
         <hr class="sidebar-divider">
         <div class="sidebar-heading">
