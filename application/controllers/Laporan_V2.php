@@ -46,6 +46,7 @@ class Laporan_V2 extends CI_Controller
 		}
         $result = $this->m_laporan->laporan_rekap_penjualan($start, $end, $namabarang, $kategori);
         
+        $data['kategori'] = $kategori_param;
         $data['data'] = $result;
         $this->load->view('laporan_v2/cetak_rekap_penjualan', $data);
     }
@@ -74,6 +75,7 @@ class Laporan_V2 extends CI_Controller
 		}
         $result = $this->m_laporan->laporan_rekap_pembelian($start, $end, $namabarang, $kategori);
         
+        $data['kategori'] = $kategori_param;
         $data['data'] = $result;
         $this->load->view('laporan_v2/cetak_rekap_pembelian', $data);
     }

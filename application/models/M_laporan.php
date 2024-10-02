@@ -708,6 +708,7 @@ class M_laporan extends CI_Model
 		where Date(beli.beli_tanggal) between '".$start."' and '".$end."' and beli.status ='COMPLETE' and supplier.suplier_nama not like 'BELI%'
 		and
 		barang.barang_kategori_id = ".$kategori."
+		and barang.barang_nama like '".$namaBarang."'
 		order by beli.beli_suplier_id")
 		->result_array();
 		

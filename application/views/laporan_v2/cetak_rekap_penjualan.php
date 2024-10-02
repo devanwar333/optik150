@@ -42,8 +42,12 @@
 			<table border="1" align="center" style="width:1000px;margin-bottom:20px;">
 				<thead>
 					<?php 
-						$count = count($data['keys'])+5;
+						$count = count($data['keys'])+4;
+						if($kategori == "LG") {
+							$count += 1;
+						}
 					?>
+
 					
 					<tr>
 						<th colspan="<?php echo $count; ?>" style="text-align:left;">
@@ -53,7 +57,12 @@
 
 					<tr>
                         <th style="width: 100px;">NAMA BARANG</th>
-						<th style="width: 100px;">KETERANGAN</th>
+						<?php 
+							if($kategori == "LG") {
+						?>
+							<th style="width: 100px;">KETERANGAN</th>
+						<?php } ?>
+						
 						<th style="width: 100px;">KASIR</th>
 						<?php
 							foreach($data['keys'] as $column) {
@@ -79,7 +88,12 @@
                     ?>
                         <tr>
                             <td style="width: 100px;"><?php echo $item['nama_barang']; ?></td>
-							<td style="width: 100px;"><?php echo $item['keterangan']; ?></td>
+							<?php 
+								if($kategori == "LG") {
+							?>
+								<td style="width: 100px;"><?php echo $item['keterangan']; ?></td>
+							<?php } ?>
+							
 							<?php
                                 $total+= $item['kasir_count'] ?? 0;
                                 $allTotal['kasir_count'] += $item['kasir_count'] ?? 0;

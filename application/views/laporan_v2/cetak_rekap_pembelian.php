@@ -53,7 +53,13 @@
 
 					<tr>
                         <th style="width: 100px;">NAMA BARANG</th>
-						<th style="width: 100px;">KETERANGAN</th>
+						<?php 
+								if($kategori == "LG") {
+							?>
+							<th style="width: 100px;">KETERANGAN</th>
+						<?php } ?>
+							
+						
 						<?php
 							foreach($data['keys'] as $column) {
 								
@@ -70,15 +76,17 @@
 				<tbody>
 				<?php
                         $allTotal = [];
-
                         foreach($data['data'] as $item) {
-								
                             $total = 0;
-                            
                     ?>
                         <tr>
                             <td style="width: 100px;"><?php echo $item['nama_barang']; ?></td>
-							<td style="width: 100px;"><?php echo $item['keterangan']; ?></td>
+							<?php 
+								if($kategori == "LG") {
+							?>
+								<td style="width: 100px;"><?php echo $item['keterangan']; ?></td>
+							<?php } ?>
+							
                             <?php
                                 foreach($data['keys'] as $column) {
                                      
