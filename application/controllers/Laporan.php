@@ -750,12 +750,19 @@ GROUP BY jual_keterangan";
 		if($lgKategori != null) {
 			$lgKategoriId = $lgKategori->kategori_id;
 		}
+		$kpKategori = $this->m_kategori->getKategoriByName("KP");
+		$kpKategoriId = 0;
+		if($kpKategori != null) {
+			$kpKategoriId = $kpKategori->kategori_id;
+		}
+		$excludeKat = array($lgKategoriId, $kpKategoriId);
+
 		$data = $this->db->select('tbl_detail_jual.d_jual_barang_nama ,"" as description, sum(d_jual_qty) as total_qty, sum(d_jual_total) as total_bayar')->from('tbl_jual')->group_by('d_jual_barang_id')
 		->where('DATE(jual_tanggal)', $date)	
 		->where('jual_user_id', "!=",null)
 		->where('cabang', "")
 		->join('tbl_detail_jual', 'tbl_detail_jual.d_jual_nofak=tbl_jual.jual_nofak and tbl_jual.status in ("COMPLETE","KREDIT","DP")')
-		->where('tbl_detail_jual.d_jual_barang_kat_id != ', $lgKategoriId)
+		->where_not_in('tbl_detail_jual.d_jual_barang_kat_id ', $excludeKat)
 		->get()->result_array();
 		
 		if($lgKategori != null) {
