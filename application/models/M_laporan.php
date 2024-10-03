@@ -790,7 +790,7 @@ class M_laporan extends CI_Model
 			where jual.status='COMPLETE'
 			and jual.cabang = ''
 			and Date(jual.jual_tanggal) BETWEEN '".$start."' and '".$end."'
-			
+			and d_jual.d_jual_barang_nama like '".$namaBarang."'
 			group BY
 			d_jual.d_jual_barang_id,
 			if(d_jual.d_jual_barang_kat_id in('".$lgid."','".$kpId."'),  d_jual.d_jual_diskon, ''),
