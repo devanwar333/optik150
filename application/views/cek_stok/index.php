@@ -48,7 +48,7 @@
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="reset" class="btn btn-danger" >Close</button>
                 <button class="btn btn-success"><span class="fa fa-print"></span> Print</button>
             </div>
             </form>
