@@ -130,6 +130,7 @@
                   <a class="collapse-item" href="<?php echo site_url('jual_dp'); ?>">Pembayaran DP</a>
               <?php }
               } ?>
+              <a class="collapse-item" href="<?php echo site_url('cek_stok'); ?>">Cek Stok</a>
               <a class="collapse-item" href="<?php echo site_url('history_penjualan'); ?>">History Penjualan</a>
               <?php if ($this->session->userdata("level") == "admin") { ?>
                 <a class="collapse-item" href="<?php echo site_url('history_penjualan_cabang'); ?>">History Penjualan Cabang</a>

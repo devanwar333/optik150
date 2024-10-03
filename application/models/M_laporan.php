@@ -758,4 +758,49 @@ class M_laporan extends CI_Model
 		 ];
 		return $result;
 	}
+
+	public function cetak_cek_stok($start, $end, $namaBarang) {
+		$lg = $this->db->query("select * from tbl_kategori where kategori_nama = 'LG'")->row();
+		
+		$lgid = 0;
+		if($lg != null) {
+			$lgid = $lg->kategori_id;
+		}
+		
+		$kp = $this->db->query("select * from tbl_kategori where kategori_nama = 'KP'")->row();
+		
+		$kpId = 0;
+		if($kp != null) {
+			$kpId = $kp->kategori_id;
+		}
+		
+		$res = $this->db->query("
+			select DISTINCT d_jual.d_jual_barang_id, 
+			d_jual.d_jual_barang_nama,
+			if(d_jual.d_jual_barang_kat_id in('".$lgid."','".$kpId."'), d_jual.d_jual_diskon, '') as keterangan,
+			jual.jual_tanggal,
+			jual.jual_nofak,
+			customer.nama,
+			sum(d_jual.d_jual_qty) as qty
+			from tbl_jual as jual 
+			inner join tbl_detail_jual as d_jual
+			on jual.jual_nofak = d_jual.d_jual_nofak
+			inner join tbl_customer as customer
+			on customer.no_hp = jual.no_hp
+			where jual.status='COMPLETE'
+			and jual.cabang = ''
+			and Date(jual.jual_tanggal) BETWEEN '".$start."' and '".$end."'
+			
+			group BY
+			d_jual.d_jual_barang_id,
+			if(d_jual.d_jual_barang_kat_id in('".$lgid."','".$kpId."'),  d_jual.d_jual_diskon, ''),
+			jual.jual_tanggal,
+			jual.jual_nofak ,
+			customer.nama  
+			 ORDER BY `jual`.`jual_tanggal` ASC
+			
+		")->result_array();
+		
+		return $res;
+	}
 }
