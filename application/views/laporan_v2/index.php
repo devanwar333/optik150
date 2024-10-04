@@ -100,6 +100,7 @@
                         <select class="form-control" name="kategori">
                             <option value="UMUM" selected>UMUM</option>
                             <option value="LG" >LG</option>
+                            <option value="KP" >KP</option>
                         </select>
                     </div>
                 </div>
@@ -153,6 +154,7 @@
                         <select class="form-control" name="kategori">
                             <option value="UMUM" selected>UMUM</option>
                             <option value="LG" >LG</option>
+                            <option value="KP" >KP</option>
                         </select>
                     </div>
                 </div>
