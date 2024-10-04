@@ -1,6 +1,5 @@
 {
     "require": {
-        "phpoffice/phpspreadsheet": "^1.25",
-        "php-amqplib/php-amqplib": "^3.6"
+        "phpoffice/phpspreadsheet": "^1.25"
     }
 }

@@ -587,7 +587,7 @@ class M_laporan extends CI_Model
 		$type = "";
 		foreach ($dateRange as $key => $value) {
 		
-			$type .= ",(SELECT COALESCE(sum(t2.d_jual_qty),0) FROM tbl_jual as t1 inner join tbl_detail_jual as t2 on t1.jual_nofak=t2.d_jual_nofak WHERE Date(t1.jual_tanggal) = '".$value."'AND t1.cabang='' AND t1.status='COMPLETE'  AND t2.d_jual_barang_id = d_jual.d_jual_barang_id
+			$type .= ",(SELECT count(*) FROM tbl_jual as t1 inner join tbl_detail_jual as t2 on t1.jual_nofak=t2.d_jual_nofak WHERE Date(t1.jual_tanggal) = '".$value."'AND t1.cabang='' AND t1.status='COMPLETE'  AND t2.d_jual_barang_id = d_jual.d_jual_barang_id
 				and  if(d_jual.d_jual_barang_kat_id = '".$lgKategoriId."', t2.d_jual_diskon = d_jual.d_jual_diskon, true)
 			) as  '".$value."'";
 		}

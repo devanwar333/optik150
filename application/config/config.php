@@ -24,7 +24,7 @@ date_default_timezone_set('Asia/Jakarta');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://127.0.0.1/kasir';
+$config['base_url'] = 'http://192.168.1.150/kasir';
 
 /*
 |--------------------------------------------------------------------------
@@ -522,13 +522,3 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
-
-
-$config['rabbitmq'] = array(
-    'hostname' => 'localhost',
-    'port'     => 5672,
-    'username' => 'guest',
-    'password' => 'guest',
-    'vhost'    => '/',
-    'timeout'  => 5,
-);
