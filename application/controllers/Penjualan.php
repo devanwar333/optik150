@@ -227,6 +227,7 @@ class Penjualan extends CI_Controller
         $produk = $this->m_barang->get_barang1($kobar);
         $stok = $this->input->post("stok_ket");
         $qty = $this->input->post('jumlah_ket');
+        $ket = $this->input->post('keterangan');
         // Cek Stok
         // if ($qty > $stok) {
         //     $i = $produk->row_array();
@@ -235,13 +236,14 @@ class Penjualan extends CI_Controller
         // } else {
         $i = $produk->row_array();
         $data = array(
-            'id'       => $i['barang_id'],
+            'id'       => $i['barang_id'].$ket,
+            'id_barang' => $i['barang_id'],
             'id_kat_barang' => $i['barang_kategori_id'],
             'name'     => $i['barang_nama'],
             'satuan'   => $i['barang_satuan'],
             'harpok'   => $i['barang_harpok'],
             'price'    => str_replace(",", "", $this->input->post('harga_ket')),
-            'disc'     => $this->input->post('keterangan'),
+            'disc'     => $ket,
             'qty'      => $qty,
             'amount'      => str_replace(",", "", $this->input->post('harga_ket'))
         );
@@ -258,6 +260,7 @@ class Penjualan extends CI_Controller
         $i = $produk->row_array();
         $data = array(
             'id'       => $i['barang_id'],
+            'id_barang' => $i['barang_id'],
             'id_kat_barang' => $i['barang_kategori_id'],
             'name'     => $i['barang_nama'],
             'satuan'   => $i['barang_satuan'],
@@ -289,7 +292,7 @@ class Penjualan extends CI_Controller
                 <?php foreach ($this->cart->contents() as $items) : ?>
                     <?php echo form_hidden($i . '[rowid]', $items['rowid']); ?>
                     <tr>
-                        <td><?= $items['id']; ?></td>
+                        <td><?= $items['id_barang']; ?></td>
                         <td><?= $items['name']; ?></td>
                         <td style="text-align:center;"><?= $items['satuan']; ?></td>
                         <td style="text-align:right;"><?php echo number_format($items['amount']); ?></td>
@@ -494,7 +497,7 @@ class Penjualan extends CI_Controller
                 $kurang = $total_belanja - $total_a;
                 $kembalian = 0;
             }
-		var_dump("123");
+		
             $status = $this->input->post('status');
 		
 
