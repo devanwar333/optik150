@@ -86,7 +86,7 @@
                 </div>
                 <div class="form-group col-sm-2">
                     <label>Jumlah :</label>
-                    <input type="number" readonly id="jumlah_ket" name="jumlah_ket" class="form-control" min="0" />
+                    <input type="number" id="jumlah_ket" name="jumlah_ket" class="form-control" min="0" />
                 </div>
                 <div class="form-group col-sm-3">
                     <label>&nbsp;</label><br />

@@ -122,8 +122,9 @@ class History_penjualan_cabang extends CI_Controller
     $stok = $this->input->post("stok_ket");
     $qty = $this->input->post('jumlah_ket');
     $nofak = $this->input->post('nofak');
+    $keterangan = $this->input->post('keterangan');
 
-    $this->m_penjualan->edit_penjualan_cabang($nofak, $kobar, $qty);
+    $this->m_penjualan->edit_penjualan_cabang($nofak, $kobar, $qty, $keterangan);
 
     redirect('history_penjualan_cabang/edit/' . $nofak);
   }

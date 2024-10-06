@@ -82,7 +82,7 @@ class M_penjualan extends CI_Model
 		return true;
 	}
 
-	function edit_penjualan_cabang($nofak, $kobar, $qty)
+	function edit_penjualan_cabang($nofak, $kobar, $qty, $keterangan)
 	{
 
 		$select = $this->db->query("SELECT jual_total FROM tbl_jual WHERE jual_nofak='$nofak'")->row();
@@ -104,7 +104,8 @@ class M_penjualan extends CI_Model
 				'd_jual_barang_harpok'	=>	$produk['barang_harpok'],
 				'd_jual_barang_harjul'	=>	$produk['barang_harga_cabang'],
 				'd_jual_qty'			=>	$qty,
-				'd_jual_total'			=>	$total
+				'd_jual_total'			=>	$total,
+				'd_jual_diskon'			=>  $keterangan
 			);
 
 			// Add Items detail jual
