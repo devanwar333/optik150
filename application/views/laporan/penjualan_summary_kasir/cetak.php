@@ -16,6 +16,9 @@
 					<tr>
 						<th colspan="3" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal)); ?> <br></th>
 					</tr>
+					<tr>
+						<th colspan="3" style="text-align:left;">Tanggal Cetak : <?= date('d M Y h:i:s', strtotime($tanggalCetak)); ?> <br></th>
+					</tr>
 				<tr>
 					<th >Nama Barang</th>
 					<th >Qty</th>

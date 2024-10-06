@@ -102,6 +102,16 @@ Number.prototype.toRupiah = function() {
   $(document).ready(function() {
     $('#dataTable').DataTable();
   });
+  function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+}
 </script>
 <script type="text/javascript">
   $('#notifikasi').slideDown('slow').delay(5000).slideUp('slow');
@@ -126,6 +136,7 @@ Number.prototype.toRupiah = function() {
               url: "<?php echo site_url('Ajax/getResume'); ?>",
               success: function(msg) {
                 $('#resumewoi').html(msg);
+                $('#label_tanggal_cetak').text(formatDate(new Date()))
               }
             });
             $('#modalLaporanPenjualanResume').modal('show');
@@ -135,6 +146,7 @@ Number.prototype.toRupiah = function() {
               url: "<?php echo site_url('Ajax/getResume'); ?>",
               success: function(msg) {
                 $('#resumewoi').html(msg);
+                $('#label_tanggal_cetak').text(formatDate(new Date()))
               }
             });
             $('#modalLaporanPenjualanResume').modal('show');
@@ -165,6 +177,7 @@ Number.prototype.toRupiah = function() {
                   $('#modalLaporanPenjualanResume').modal('show');
 
                   $('#label_saldo_lap').text($('#saldo_response').val())
+                  $('#label_tanggal_cetak').text(formatDate(new Date()))
                 }
               });
             }
