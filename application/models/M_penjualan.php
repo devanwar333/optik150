@@ -86,7 +86,7 @@ class M_penjualan extends CI_Model
 	{
 
 		$select = $this->db->query("SELECT jual_total FROM tbl_jual WHERE jual_nofak='$nofak'")->row();
-		$select_barang = $this->db->query("SELECT d_jual_nofak,d_jual_qty FROM tbl_detail_jual WHERE d_jual_diskon='$keterangan' d_jual_nofak='$nofak' AND d_jual_barang_id='$kobar'")->result_array();
+		$select_barang = $this->db->query("SELECT d_jual_nofak,d_jual_qty FROM tbl_detail_jual WHERE d_jual_diskon='$keterangan' and d_jual_nofak='$nofak' AND d_jual_barang_id='$kobar'")->result_array();
 		$count = count($select_barang);
 		$produk = $this->m_barang->get_barang1($kobar)->result_array();
 
