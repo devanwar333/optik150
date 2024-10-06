@@ -779,6 +779,7 @@ GROUP BY jual_keterangan";
 		$x['data'] = $data;
 		$setting = $this->m_setting->get_setting_by_name("Nama Toko");
 		$x['nama_toko'] = $setting==null ? "" : $setting->fitur;
+		$x['tanggalCetak'] = date('Y-m-d h:i:s');
 		$this->load->view('laporan/penjualan_summary_kasir/cetak', $x);
 	}
 
