@@ -12,7 +12,7 @@ class M_pengeluaran extends CI_Model
         return $data;
     }
     function tampilDataByPage($size, $page, $query = "" )
-    {
+    {    
         $this->db->select('*');
         $this->db->from("pengeluaran");
         $this->db->like('jenis_pengeluaran', $query);
@@ -33,7 +33,7 @@ class M_pengeluaran extends CI_Model
         $this->db->or_like('keterangan', $query);
         $this->db->or_like('tanggal', $query);
         $this->db->or_like('nama_karyawan', $query);
-        return $this->db->count_all('pengeluaran'); // Adjust table name
+        return $this->db->count_all_results('pengeluaran'); // Adjust table name
     }
 
     function getPengeluaran($start, $end)
