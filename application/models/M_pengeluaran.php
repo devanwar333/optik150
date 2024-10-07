@@ -11,6 +11,30 @@ class M_pengeluaran extends CI_Model
         $data = $this->db->get()->result_array();
         return $data;
     }
+    function tampilDataByPage($size, $page, $query = "" )
+    {
+        $this->db->select('*');
+        $this->db->from("pengeluaran");
+        $this->db->like('jenis_pengeluaran', $query);
+        $this->db->or_like('keterangan', $query);
+        $this->db->or_like('tanggal', $query);
+        $this->db->or_like('nama_karyawan', $query);
+        // $this->db->join("karyawan b", "a.penerima=b.id", "left");
+        $this->db->order_by('id' , 'DESC');
+        $this->db->limit($size, $page);
+        
+        $data = $this->db->get()->result_array();
+        
+        return $data;
+    }
+
+    public function count_all($query = "") {
+        $this->db->like('jenis_pengeluaran', $query);
+        $this->db->or_like('keterangan', $query);
+        $this->db->or_like('tanggal', $query);
+        $this->db->or_like('nama_karyawan', $query);
+        return $this->db->count_all('pengeluaran'); // Adjust table name
+    }
 
     function getPengeluaran($start, $end)
     {

@@ -20,8 +20,22 @@
         (+) TAMBAH
       </button>
       <br>
+      <div class="row justify-content-end">
+        <div class="col-3 mb-3 ">
+        <form action="">
+        <div class="input-group">
+          <input type="text" class="form-control" name="search" placeholder="Search" value="<?php echo $search; ?>">
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Cari</button>
+            
+          </div>
+        </div>
+      </form>
+        </div>
+      </div>
+      
       <div class="table-responsive">
-        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <table class="table table-bordered" id="" width="100%" cellspacing="0">
           <thead>
             <tr>
               <th>No</th>
@@ -62,6 +76,10 @@
             <?php } ?>
           </tbody>
         </table>
+
+        <div>
+            <?php echo $links; ?> <!-- Pagination links -->
+        </div>
       </div>
     </div>
   </div>
