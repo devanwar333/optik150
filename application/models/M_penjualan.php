@@ -28,7 +28,7 @@ class M_penjualan extends CI_Model
 		foreach ($this->cart->contents() as $item) {
 			$data = array(
 				'd_jual_nofak' 			=>	$nofak,
-				'd_jual_barang_id'		=>	$item['id'],
+				'd_jual_barang_id'		=>	$item['id_barang'],
 				'd_jual_barang_kat_id'  =>  $item['id_kat_barang'],
 				'd_jual_barang_nama'	=>	$item['name'],
 				'd_jual_barang_satuan'	=>	$item['satuan'],
@@ -39,11 +39,13 @@ class M_penjualan extends CI_Model
 				'd_jual_total'			=>	$item['subtotal']
 			);
 
+			$id_barang = $item['id_barang'];
+
 			$this->db->insert('tbl_detail_jual', $data);
-			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$item[qty]' where barang_id='$item[id]'");
+			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$item[qty]' where barang_id='$id_barang'");
 			$this->db->query("update saldo set saldo=saldo+'$jml_uang' where id=1");
 			$this->db->query("update saldo set saldo=saldo-'$kembalian' where id=1");
-			log_message('error', 'simpan_penjualan - '. $item['id'].'-'.$item['qty']);
+			log_message('error', 'simpan_penjualan - '. $id_barang.'-'.$item['qty']);
 
 		}
 		return true;
@@ -62,7 +64,7 @@ class M_penjualan extends CI_Model
 		foreach ($this->cart->contents() as $item) {
 			$data = array(
 				'd_jual_nofak' 			=>	$nofak,
-				'd_jual_barang_id'		=>	$item['id'],
+				'd_jual_barang_id'		=>	$item['id_barang'],
 				'd_jual_barang_kat_id'  =>  $item['id_kat_barang'],
 				'd_jual_barang_nama'	=>	$item['name'],
 				'd_jual_barang_satuan'	=>	$item['satuan'],
@@ -72,11 +74,14 @@ class M_penjualan extends CI_Model
 				'd_jual_diskon'			=>	$item['disc'],
 				'd_jual_total'			=>	$item['subtotal']
 			);
+
+			$id_barang = $item['id_barang'];
+
 			$this->db->insert('tbl_detail_jual', $data);
-			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$item[qty]' where barang_id='$item[id]'");
+			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$item[qty]' where barang_id='$id_barang'");
 			$this->db->query("update saldo set saldo=saldo+'$jml_uang' where id=1");
 			$this->db->query("update saldo set saldo=saldo-'$kembalian' where id=1");
-			log_message('error', 'simpan_penjualan_cabang - '. $item['id'].'-'.$item['qty']);
+			log_message('error', 'simpan_penjualan_cabang - '. $id_barang.'-'.$item['qty']);
 
 		}
 		return true;
