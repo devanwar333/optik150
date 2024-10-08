@@ -237,7 +237,7 @@ class Penjualan extends CI_Controller
         // } else {
         $i = $produk->row_array();
         $data = array(
-            'id'       => $i['barang_id']."_".$ketValue,
+            'id'       => $i['barang_id'].$ketValue,
             'id_barang' => $i['barang_id'],
             'id_kat_barang' => $i['barang_kategori_id'],
             'name'     => $i['barang_nama'],
