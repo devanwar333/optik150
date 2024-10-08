@@ -137,7 +137,7 @@
               <?php foreach ($this->cart->contents() as $items) : ?>
                 <?php echo form_hidden($i . '[rowid]', $items['rowid']); ?>
                 <tr>
-                  <td><?= $items['id_barang']; ?></td>
+                  <td><?= $items['id']; ?></td>
                   <td><?= $items['name']; ?></td>
                   <td style="text-align:center;"><?= $items['satuan']; ?></td>
                   <td style="text-align:right;"><?php echo number_format($items['amount']); ?></td>
