@@ -228,7 +228,6 @@ class Penjualan extends CI_Controller
         $stok = $this->input->post("stok_ket");
         $qty = $this->input->post('jumlah_ket');
         $ket = $this->input->post('keterangan');
-        $ketValue = str_replace(" ", "_", $ket);
         // Cek Stok
         // if ($qty > $stok) {
         //     $i = $produk->row_array();
@@ -237,7 +236,7 @@ class Penjualan extends CI_Controller
         // } else {
         $i = $produk->row_array();
         $data = array(
-            'id'       => $i['barang_id'].$ketValue,
+            'id'       => $i['barang_id'].$ket,
             'id_barang' => $i['barang_id'],
             'id_kat_barang' => $i['barang_kategori_id'],
             'name'     => $i['barang_nama'],
