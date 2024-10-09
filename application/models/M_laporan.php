@@ -644,7 +644,7 @@ class M_laporan extends CI_Model
 		}
 
 		$cabang = [
-			'MANSYUR','HALAT','JOHOR','MARELAN','PANCING','RING ROAD' 
+			'KARYA','MANSYUR','HALAT','JOHOR','MARELAN','PANCING','RING ROAD' 
 		];
 		
 		$type = "";
@@ -742,7 +742,10 @@ class M_laporan extends CI_Model
 			on beli.beli_nofak = d_beli.d_beli_nofak
 			inner join tbl_barang as barang
 			on barang.barang_id = d_beli.d_beli_barang_id
+			inner join tbl_suplier as supplier
+			on supplier.suplier_id = beli.beli_suplier_id
 			where beli.status ='COMPLETE'
+			and supplier.suplier_nama not like 'BELI%'
 			and beli.beli_tanggal BETWEEN '".$start."' and '".$end."'
 			and barang.barang_kategori_id = ".$kategori."
 			and barang.barang_nama like '".$namaBarang."'
