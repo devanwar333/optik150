@@ -644,7 +644,7 @@ class M_laporan extends CI_Model
 		}
 
 		$cabang = [
-			'MANSYUR','HALAT','JOHOR','MARELAN','PANCING','RING ROAD' 
+			'KARYA','MANSYUR','HALAT','JOHOR','MARELAN','PANCING','RING ROAD' 
 		];
 		
 		$type = "";
