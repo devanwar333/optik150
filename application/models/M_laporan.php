@@ -806,4 +806,51 @@ class M_laporan extends CI_Model
 		
 		return $res;
 	}
-}
+
+	public function cetak_cek_pembelian($start, $end, $namaBarang, $keterangan){
+
+		$lg = $this->db->query("select * from tbl_kategori where kategori_nama = 'LG'")->row();
+		
+		$lgid = 0;
+		if($lg != null) {
+			$lgid = $lg->kategori_id;
+		}
+		
+		$kp = $this->db->query("select * from tbl_kategori where kategori_nama = 'KP'")->row();
+		
+		$kpId = 0;
+		if($kp != null) {
+			$kpId = $kp->kategori_id;
+		}
+		
+		$res = $this->db->query("
+			SELECT DISTINCT barang.barang_id, barang.barang_nama, 
+			if(barang.barang_kategori_id in('$lgid','$kpId'), d_beli.keterangan, '') as keterangan,
+			d_beli_nofak, 
+			beli.beli_tanggal, 
+			supplier.suplier_nama ,
+			sum(d_beli_jumlah) as qty
+			FROM `tbl_detail_beli` as d_beli
+			inner join tbl_beli as beli
+			on d_beli.d_beli_nofak = beli.beli_nofak
+			inner join tbl_barang as barang
+			on barang.barang_id = d_beli.d_beli_barang_id
+			inner join tbl_suplier as supplier
+			on supplier.suplier_id = beli.beli_suplier_id
+			where beli.status = 'COMPLETE'
+			and Date(beli.beli_tanggal) BETWEEN '$start' and '$end'
+			and barang.barang_nama like '$namaBarang'
+			and d_beli.keterangan like '$keterangan'
+			group BY
+			barang.barang_id,
+			if(barang.barang_kategori_id in('$lgid','$kpId'), d_beli.keterangan, ''),
+			d_beli.d_beli_nofak,
+			beli.beli_tanggal,
+			supplier.suplier_nama  
+			ORDER BY `d_beli`.`d_beli_nofak`  DESC
+		")->result_array();
+		
+		return $res;
+
+	}
+} 
