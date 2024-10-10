@@ -230,6 +230,7 @@
               <a class="collapse-item" href="<?php echo site_url('Suplier'); ?>">Data Suplier</a>
               <a class="collapse-item" href="<?php echo site_url('Pembelian'); ?>">Pembelian Barang</a>
               <a class="collapse-item" href="<?php echo site_url('history_pembelian'); ?>">History Pembelian Barang</a>
+              <a class="collapse-item" href="<?php echo site_url('cek_pembelian'); ?>">Cek Pembelian</a>
             </div>
           </div>
         </li>
