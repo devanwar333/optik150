@@ -105,7 +105,9 @@
 
       <!-- DATA PENJUALAN -->
       <!-- Divider -->
-      <?php if ($this->session->userdata('level') != 'pembelian') { ?>
+      <?php if ($this->session->userdata('level') != 'pembelian' && $this->session->userdata('level') != 'stockist' 
+        && $this->session->userdata('level') != 'akuntan' 
+      ) { ?>
         <!-- Heading -->
         <hr class="sidebar-divider">
         <div class="sidebar-heading">
@@ -242,7 +244,19 @@
             <span>Cabang</span></a>
         </li>
         <?php } ?>
-      <?php if ($this->session->userdata('level') == 'admin') { ?>
+        <?php if ($this->session->userdata('level') == 'stockist' ||  $this->session->userdata('level') == 'akuntan' ) { ?>
+          <!-- Heading -->
+          <div class="sidebar-heading">
+            Laporan
+          </div>
+
+          <li class="nav-item">
+            <a class="nav-link" href="<?php echo site_url('laporan'); ?>">
+              <i class="fas fa-print"></i>
+              <span>Laporan</span></a>
+          </li>
+          <?php } ?>
+        <?php if ($this->session->userdata('level') == 'admin' ) { ?>
 
         <div class="sidebar-heading">
           Master Data

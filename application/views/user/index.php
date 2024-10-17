@@ -131,6 +131,7 @@
                     <option value="Pembelian">Pembelian</option>
                     <option value="Penjualan">Penjualan</option>
                     <option value="Supervisor">Supervisor</option>
+                    <option value="Akuntan">Akuntan</option>
                   </select>
                 </div>
               </div>

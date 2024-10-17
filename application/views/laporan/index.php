@@ -35,7 +35,18 @@
                     </tr>
                   </tfoot> -->
                             <tbody>
-
+                            <?php if($this->session->userdata('level') == 'akuntan'  ) { ?>
+                                <tr>
+                                
+                                    <td style="text-align:center;vertical-align:middle">1</td>
+                                    <td style="vertical-align:middle;">Laporan Penjualan Kasir</td>
+                                    <td style="text-align:center;">
+                                        <a class="btn btn-sm btn-success" href="#penjualan_kasir_akuntan" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
+                                    </td>
+                                
+                                </tr>
+                                <?php }?>
+                                <?php if($this->session->userdata('level') != 'akuntan'  ) { ?>
                                 <tr>
                                     <td style="text-align:center;vertical-align:middle">1</td>
                                     <td style="vertical-align:middle;">Stok Barang</td>
@@ -143,6 +154,7 @@
                                         <a class="btn btn-sm btn-success" href="#lap_resume_cetak" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
+                                <?php }?>
                             </tbody>
                         </table>
                     </div>
@@ -201,6 +213,51 @@
             </div>
         </div>
 
+
+        <!---------------------------------------------Laporan Penjualan KASIR--------------------------------------------->
+       
+        <div class="modal fade" id="penjualan_kasir_akuntan">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Penjualan Kasir</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                          <?php
+                    $attributes = array('id' => 'penjualan_kasir_form',"target"=>"_blank");
+                     echo form_open('Laporan/lap_penjualan_kasir_cetak', $attributes) ?>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label class="control-label col-xs-3">Tanggal Awal</label>
+                            <div class="col-xs-9">
+                                <input type="date" class="form-control" name="tgl1" id="tgl1" value="" placeholder="Tanggal" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-xs-3">Tanggal Akhir</label>
+                            <div class="col-xs-9">
+                                <input type="date" class="form-control" name="tgl2" id="tgl2" value="" onchange="listCustomer()" placeholder="Tanggal" required>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button id="resetbtn" type="button" class="btn btn-info" >Reset</button>
+
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button class="btn btn-success"><span class="fa fa-print"></span> Cetak</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <!---------------------------------------------Laporan Penjualan KASIR--------------------------------------------->
        
         <div class="modal fade" id="penjualan_kasir">
