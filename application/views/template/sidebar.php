@@ -105,7 +105,9 @@
 
       <!-- DATA PENJUALAN -->
       <!-- Divider -->
-      <?php if ($this->session->userdata('level') != 'pembelian' && $this->session->userdata('level') != 'stockist') { ?>
+      <?php if ($this->session->userdata('level') != 'pembelian' && $this->session->userdata('level') != 'stockist' 
+        && $this->session->userdata('level') != 'akuntan' 
+      ) { ?>
         <!-- Heading -->
         <hr class="sidebar-divider">
         <div class="sidebar-heading">
@@ -246,7 +248,7 @@
             <span>Cabang</span></a>
         </li>
         <?php } ?>
-        <?php if ($this->session->userdata('level') == 'stockist' ) { ?>
+        <?php if ($this->session->userdata('level') == 'stockist' ||  $this->session->userdata('level') == 'akuntan' ) { ?>
           <!-- Heading -->
           <div class="sidebar-heading">
             Laporan

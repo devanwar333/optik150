@@ -56,6 +56,8 @@ class Auth extends CI_Controller
                         redirect('Pembelian');
                     } elseif($user['level'] == 'stockist') {
                         redirect('laporan');
+                    } else if($user['level'] == 'akuntan') {
+                        redirect('laporan');
                     }
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
