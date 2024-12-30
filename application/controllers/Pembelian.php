@@ -44,6 +44,11 @@ class Pembelian extends CI_Controller
 		$kobar = $this->input->post('kode_brg');
 		$produk = $this->m_barang->get_barang1($kobar);
 		$i = $produk->row_array();
+		if( $i == null) {
+            $this->session->set_flashdata('error', 'Produk tidak ditemukan.');
+			redirect('pembelian');
+			return;
+        }
 		$data = array(
 			'id'       => $i['barang_id'],
 			'name'     => $i['barang_nama'],

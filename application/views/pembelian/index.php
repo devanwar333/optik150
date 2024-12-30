@@ -103,7 +103,7 @@
                 </div>
                 <div class="form-group col-sm-2">
                   <label>Keterangan :</label>
-                  <input type="text" id="keterangan" name="keterangan" class="form-control" />
+                  <textarea name="keterangan" id="keterangan" class="form-control" rows="3"></textarea>
                 </div>
                 <div class="form-group ml-3">
                   <label>&nbsp;</label><br />
@@ -158,7 +158,7 @@
                         <td style="text-align:center;"><?= $items['satuan']; ?></td>
                         <td style="text-align:right;"><?php echo number_format($items['price']); ?></td>
                         <td style="text-align:center;"><?php echo number_format($items['qty']); ?></td>
-                        <td style="text-align:right;"><?php echo $items['keterangan']; ?></td>
+                        <td style="text-align:left;"><?php echo nl2br(htmlspecialchars($items['keterangan'])); ?></td>
                         <td style="text-align:right;"><?php echo number_format($items['subtotal']); ?></td>
                         <td style="text-align:center;"><a href="<?php base_url() ?>pembelian/remove/<?= $items['rowid']; ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a></td>
                       </tr>

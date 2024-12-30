@@ -85,7 +85,8 @@
         </div>
         <div class="form-group col-sm-4">
           <label>Keterangan :</label>
-          <input type="text" id="keterangan" name="keterangan" class="form-control" />
+          <textarea name="keterangan" id="keterangan" row="3"  class="form-control"></textarea>
+          
         </div>
         <div class="form-group col-sm-2">
           <label>Jumlah :</label>
@@ -141,7 +142,7 @@
                   <td><?= $items['name']; ?></td>
                   <td style="text-align:center;"><?= $items['satuan']; ?></td>
                   <td style="text-align:right;"><?php echo number_format($items['amount']); ?></td>
-                  <td style="text-align:right;"><?php echo $items['disc']; ?></td>
+                  <td style="text-align:left;"><?php echo nl2br(htmlspecialchars($items['disc'])) ?></td>
                   <td style="text-align:center;">
                     <form action="<?= base_url('penjualan/updateQty') ?>" method="post">
                       <input type="hidden" value="<?= $items['id'] ?>" name="update_kobar">

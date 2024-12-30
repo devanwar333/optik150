@@ -197,7 +197,10 @@ class History_pembelian extends CI_Controller
            }
            $newData[] = $value;
        }
-       if(!$updated) {
+       if($produk == null) {
+            $this->session->set_flashdata('error', 'Produk tidak ditemukan.');
+       }
+       if(!$updated && $produk != null) {
            $newData[] = [
                
                'd_beli_id' =>  '',

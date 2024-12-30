@@ -1,3 +1,6 @@
+
+<?php $this->session->unset_userdata('sukses'); // Manually unset flashdata ?>
+<?php $this->session->unset_userdata('error'); // Manually unset flashdata ?>
 <!-- Footer -->
 <footer class="sticky-footer bg-white">
   <div class="container my-auto">
