@@ -69,7 +69,7 @@
             <td class="text-center"><?= number_format($b['d_beli_harga']); ?></td>
             <td class="text-center"><?= $b['d_beli_jumlah']; ?></td>
             <td class="text-center"><?= number_format($b['d_beli_total']); ?></td>
-            <td class="text-center"><?= $b['keterangan']; ?></td>
+            <td class="text-center"><?= nl2br(htmlspecialchars($b['keterangan'])); ?></td>
           </tr>
           <?php } ?>
       </table>

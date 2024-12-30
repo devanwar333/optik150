@@ -76,7 +76,8 @@
             </div>
             <div class="form-group col-sm-4">
               <label>Keterangan :</label>
-              <input type="text" id="keterangan" name="keterangan" class="form-control" />
+              <textarea name="keterangan" id="keterangan" class="form-control" rows="3"></textarea>
+              
             </div>
             <div class="form-group col-sm-2">
               <label>Jumlah :</label>
@@ -119,7 +120,8 @@
                       <td><?php echo number_format($v["d_jual_barang_harjul"]); ?></td>
                       <form action="<?= base_url('penjualan_edit/update_qty_detail/' . $v['d_jual_barang_id']) ?>" method="POST">
                         <td>
-                          <input type="text" name="d_jual_diskon" value="<?= $v['d_jual_diskon'] ?>">
+                          <textarea name="d_jual_diskon" rows="3"><?= $v['d_jual_diskon'] ?></textarea>
+                          
                         </td>
                      
                         <td>

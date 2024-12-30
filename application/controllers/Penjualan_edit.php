@@ -163,7 +163,11 @@ class Penjualan_edit extends CI_Controller
             }
             $newData[] = $value;
         }
-        if(!$updated) {
+        if( $produk == null) {
+            $this->session->set_flashdata('error', 'Produk tidak ditemukan.');
+        }
+        
+        if(!$updated && $produk != null) {
             $newData[count($newData)] = [
                 
                 'd_jual_id' =>  '',

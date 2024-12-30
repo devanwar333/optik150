@@ -108,7 +108,8 @@
         </div>
         <div class="form-group col-sm-2">
             <label>Keterangan :</label>
-            <input type="text" id="keterangan" name="keterangan" class="form-control" />
+            <textarea name="keterangan" id="keterangan" class="form-control" rows="3"></textarea>
+            
         </div>
         <div class="form-group ml-3">
             <label>&nbsp;</label><br />
@@ -166,7 +167,7 @@
                         <td style="text-align:center;"><?= $items['barang_satuan']; ?></td>
                         <td style="text-align:right;"><input class="form-control" name="d_beli_harga" value="<?php echo $items['d_beli_harga']; ?>" type="number"></input></td>
                         <td style="text-align:center;"><input class="form-control" name="d_beli_jumlah" value="<?php echo number_format($items['d_beli_jumlah']); ?>" type="number"></td>
-                        <td style="text-align:right;"><input class="form-control" name="keterangan" value="<?php echo $items['keterangan']; ?>" type="text"></td>
+                        <td style="text-align:right;"><textarea class="form-control" name="keterangan" ><?php echo $items['keterangan']; ?></textarea></td>
                         <td style="text-align:right;"><?php echo number_format($items['d_beli_total']); ?></td>
                         <td style="text-align:center;">
                             <button class="btn btn-success" type="submit">Simpan</button>
