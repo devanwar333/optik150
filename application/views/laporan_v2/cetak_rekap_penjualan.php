@@ -91,7 +91,7 @@
 							<?php 
 								if($kategori == "LG") {
 							?>
-								<td style="width: 100px;"><?php echo $item['keterangan']; ?></td>
+								<td style="width: 100px;"><?php echo nl2br(htmlspecialchars( $item['keterangan'] ));?></td>
 							<?php } ?>
 							
 							<?php

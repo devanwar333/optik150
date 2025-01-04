@@ -72,7 +72,7 @@
                     ?>
                         <tr>
                             <td style="text-align:center;"><?php echo $item['barang_nama']; ?></td>
-                            <td style="text-align:center;"><?php echo $item['keterangan']; ?></td>
+                            <td style="text-align:left;"><?php echo nl2br(htmlspecialchars( $item['keterangan'])); ?></td>
                             <td style="text-align:center;"><?php echo $item['suplier_nama']; ?></td>
                             <td style="text-align:center;"><?php echo $item['beli_tanggal']; ?></td>
                             <td style="text-align:center;">

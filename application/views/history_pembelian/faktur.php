@@ -75,7 +75,7 @@
                     <th style="width:25px;font-size:15pt">No</th>
                     <th style="width:25px;font-size:15pt">Nama Barang</th>
                     <th style="width:25px;font-size:15pt">Qty</th>
-                    <th style="width:25px;font-size:15pt">Keterangan</th>
+                    <th style="width:25px;font-size:15pt;text-align:left">Keterangan</th>
                     
                 </tr>
             </thead>
@@ -95,7 +95,7 @@
                         <td style="text-align:center;font-size:15pt"><?php echo $no; ?></td>
                         <td style="text-align:center;font-size:15pt"><?php echo $nabar; ?></td>
                         <td style="text-align:center;font-size:15pt"><?php echo $qty; ?></td>
-                        <td style="text-align:center;font-size:15pt"><?php echo $keterangan; ?></td>
+                        <td style="text-align:left;font-size:15pt"><?php echo nl2br(htmlspecialchars( $keterangan)); ?></td>
                       
                     </tr>
                 <?php } ?>
