@@ -84,7 +84,7 @@
 							<td style="padding-left:5px;"><?php echo $nohp; ?></td>
 							<td style="text-align:center;"><?php echo $tgl; ?></td>
 							
-							<td style="text-align:left;"><?php echo $keterangan; ?></td>
+							<td style="text-align:left;"><?php echo nl2br(htmlspecialchars( $keterangan)); ?></td>
 							<td style="text-align:left;"><?php echo  'Rp ' . number_format($total);  ?></td>
 						</tr>
 					<?php } ?>

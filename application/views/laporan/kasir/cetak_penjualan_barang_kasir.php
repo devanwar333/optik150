@@ -78,7 +78,7 @@
 						?>
 						<tr>
 							<td style="text-align:center;"><?php echo $row['nama_barang']; ?></td>
-							<td style="text-align:center;"><?php echo $row['keterangan']; ?></td>
+							<td style="text-align:left;"><?php echo nl2br(htmlspecialchars( $row['keterangan'])); ?></td>
 							<?php 
 								$total = 0;
 								

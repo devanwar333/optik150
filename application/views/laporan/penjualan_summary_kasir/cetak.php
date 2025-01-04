@@ -41,7 +41,7 @@
 						
 						<td><?= ($items['d_jual_barang_nama']); ?></td>
 						<td><?= number_format($items['total_qty']); ?></td>
-						<td><?= $items['description'] ?></td>
+						<td><?= nl2br(htmlspecialchars( $items['description'])); ?></td>
 					</tr>
 				<?php endforeach; ?>
 	

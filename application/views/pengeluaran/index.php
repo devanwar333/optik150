@@ -52,7 +52,7 @@
                 <td><?= $p['jenis_pengeluaran']; ?></td>
                 <td>Rp. <?= number_format($p['nominal']); ?></td>
                 <td><?= $p['nama_karyawan']; ?></td>
-                <td><?= $p['keterangan']; ?></td>
+                <td><?= nl2br(htmlspecialchars( $p['keterangan'])); ?></td>
                 <td><?= $p['tanggal']; ?></td>
                 <td class="text-center">
                   <a class="badge badge-success" href="#modal-edit<?= $p['id']; ?>" data-toggle="modal" title="Edit"><span class="fas fa-fw fa-edit"></span> Edit</a>

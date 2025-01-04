@@ -76,7 +76,7 @@
                     <th style="width:25px;">No</th>
                     <th style="width:25px;">Nama Barang</th>
                     <th style="width:25px;">Qty</th>
-                    <th style="width:25px;">Keterangan</th>
+                    <th style="width:25px;text-align:left">Keterangan</th>
                     <th style="width:25px;">SubTotal</th>
                 </tr>
             </thead>
@@ -98,7 +98,7 @@
 
 
                         <td style="text-align:center;"><?php echo $qty; ?></td>
-                        <td style="text-align:center;"><?php echo $diskon; ?></td>
+                        <td style="text-align:left;"><?php echo nl2br(htmlspecialchars( $diskon)); ?></td>
                         <td style="text-align:center;"><?php echo 'Rp ' . number_format($total); ?></td>
                     </tr>
                 <?php } ?>
