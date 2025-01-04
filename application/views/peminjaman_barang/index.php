@@ -54,7 +54,7 @@
             <td><?= $a['nama']; ?></td>
             <td><?= $a['jumlah']; ?></td>
             <td><?= $a['tanggal']; ?></td>
-            <td><?= nl2br(htmlspecialchars($a['keterangan'])); ?></td>
+            <td><?= $a['keterangan']; ?></td>
             <td class="text-center">
               <a class="badge badge-success" href="#modal-edit<?= $a['id']; ?>" data-toggle="modal" title="Edit"><span class="fas fa-fw fa-edit"></span> Edit</a>
               <a class="badge badge-danger" href="#modal-hapus<?= $a['id']; ?>" data-toggle="modal" title="Hapus"><span class="fas fa-fw fa-trash"></span> Hapus</a>

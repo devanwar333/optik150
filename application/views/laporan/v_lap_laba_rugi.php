@@ -69,7 +69,7 @@ $no=0;
         <td style="text-align:right;"><?php echo 'Rp '.number_format($harjul);?></td>
         <td style="text-align:right;"><?php echo 'Rp '.number_format($untung_perunit);?></td>
         <td style="text-align:center;"><?php echo $qty;?></td>
-        <td style="text-align:left;"><?php nl2br(htmlspecialchars( $diskon)); ?></td>
+        <td style="text-align:right;"><?php $diskon; ?></td>
         <td style="text-align:right;"><?php echo 'Rp '.number_format($untung_bersih);?></td>
     </tr>
 <?php }?>

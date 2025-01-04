@@ -76,7 +76,7 @@
             <th class="text-center">Nama Barang</th>
             <th class="text-center">Harga</th>
             <th class="text-center">Qty</th>
-            <th class="">Keterangan</th>
+            <th class="text-center">Keterangan</th>
             <th class="text-center">Harga Total</th>
           </tr>
           <?php $no = 1;
@@ -86,7 +86,7 @@
               <td class="text-center"><?= $a['d_jual_barang_nama']; ?></td>
               <td class="text-center">Rp. <?= number_format($a['d_jual_barang_harjul']); ?></td>
               <td class="text-center"><?= $a['d_jual_qty']; ?></td>
-              <td class=""><?= nl2br(htmlspecialchars( $a['d_jual_diskon'])); ?></td>
+              <td class="text-center"><?= $a['d_jual_diskon']; ?></td>
               <td class="text-center">Rp. <?= number_format($a['d_jual_total']); ?></td>
             </tr>
           <?php } ?>

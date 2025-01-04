@@ -120,7 +120,7 @@
                       <td><?php echo number_format($v["d_jual_barang_harjul"]); ?></td>
                       <form action="<?= base_url('penjualan_edit/update_qty_detail/' . $v['d_jual_barang_id']) ?>" method="POST">
                         <td>
-                          <textarea name="d_jual_diskon" rows="3"><?= nl2br(htmlspecialchars( $v['d_jual_diskon'])); ?></textarea>
+                          <textarea name="d_jual_diskon" rows="3"><?= $v['d_jual_diskon'] ?></textarea>
                           
                         </td>
                      

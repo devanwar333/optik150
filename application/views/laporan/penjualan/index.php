@@ -43,7 +43,7 @@
 							<td style="text-align:left;"><?php echo $barang_satuan;?></td>
 							<td style="text-align:right;"><?php echo 'Rp '.number_format($barang_harjul);?></td>
 							<td style="text-align:center;"><?php echo $barang_qty;?></td>
-							<td style="text-align:left;"><?php echo nl2br(htmlspecialchars( $barang_diskon)); ?></td>
+							<td style="text-align:right;"><?php echo $barang_diskon;?></td>
 							<td style="text-align:right;"><?php echo 'Rp '.number_format($barang_total);?></td>
 						</tr>
 					<?php }?>

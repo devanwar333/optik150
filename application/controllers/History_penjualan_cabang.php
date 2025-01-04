@@ -261,7 +261,7 @@ class History_penjualan_cabang extends CI_Controller
                   <td class="text-center"><?= $a['d_jual_barang_nama']; ?></td>
                   <td class="text-center">Rp. <?= number_format($a['d_jual_barang_harjul']); ?></td>
                   <td class="text-center"><?= $a['d_jual_qty']; ?></td>
-                  <td class=""><?= nl2br(htmlspecialchars($a['d_jual_diskon'])); ?></td>
+                  <td class="text-center"><?= $a['d_jual_diskon']; ?></td>
                   <td class="text-center">Rp. <?= number_format($a['d_jual_total']); ?></td>
                 </tr>
               <?php }

@@ -96,7 +96,7 @@
 
 
                         <td style="text-align:center;font-size:10pt"><?php echo $qty; ?></td>
-                        <td style="text-align:left;font-size:10pt"><?php echo nl2br(htmlspecialchars( $diskon)); ?></td>
+                        <td style="text-align:center;font-size:10pt"><?php echo $diskon; ?></td>
                         <td style="text-align:center;font-size:10pt"><?php echo 'Rp ' . number_format($total); ?></td>
                     </tr>
                 <?php } ?>

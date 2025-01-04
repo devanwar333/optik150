@@ -144,7 +144,7 @@
                                         <td><?= $items['d_jual_barang_nama']; ?></td>
                                         <td style="text-align:center;"><?= $items['d_jual_barang_satuan']; ?></td>
                                         <td style="text-align:right;"><?php echo number_format($items['d_jual_barang_harjul']); ?></td>
-                                        <td style="text-align:left;"><?php echo nl2br(htmlspecialchars( $items['d_jual_diskon'])); ?></td>
+                                        <td style="text-align:right;"><?php echo $items['d_jual_diskon']; ?></td>
                                         <td style="text-align:center;">
                                         
                                                 <input type="hidden" value="<?= $items['d_jual_qty'] ?>" name="qty">

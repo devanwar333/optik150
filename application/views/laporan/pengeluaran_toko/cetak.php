@@ -47,7 +47,7 @@
 				<td><?= $no++; ?></td>
 				<td><?= $d['jenis_pengeluaran']; ?></td>
 				<td><?= $d['nama']; ?></td>
-				<td><?= nl2br(htmlspecialchars( $d['keterangan'])); ?></td>
+				<td><?= $d['keterangan']; ?></td>
 				<td><?= $d['tanggal']; ?></td>
 				<td>Rp. <?= number_format($d['nominal']); ?></td>
 			</tr>

@@ -15,7 +15,7 @@ class Barang extends CI_Controller
 
 		$this->load->model('m_kategori');
 		$this->load->model('m_barang');
-		// $this->load->library('Excel');
+		$this->load->library('Excel');
 		///$this->load->library('barcode');
 		if ($this->session->userdata('level') != TRUE) {
             redirect(base_url());

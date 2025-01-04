@@ -92,7 +92,7 @@
 							<td style="text-align:left;"><?php echo $satuan; ?></td>
 							<td style="text-align:right;"><?php echo 'Rp ' . number_format($harjul); ?></td>
 							<td style="text-align:center;"><?php echo $qty; ?></td>
-							<td style="text-align:left;"><?php echo nl2br(htmlspecialchars($diskon)); ?></td>
+							<td style="text-align:right;"><?php echo $diskon; ?></td>
 							<td style="text-align:right;"><?php echo 'Rp ' . number_format($total); ?></td>
 						</tr>
 					<?php } ?>
@@ -166,7 +166,7 @@
 									<td style="text-align:left;"><?php echo $satuan; ?></td>
 									<td style="text-align:right;"><?php echo 'Rp ' . number_format($harjul); ?></td>
 									<td style="text-align:center;"><?php echo $qty; ?></td>
-									<td style="text-align:right;"><?php echo nl2br(htmlspecialchars($diskon)); ?></td>
+									<td style="text-align:right;"><?php echo $diskon; ?></td>
 									<td style="text-align:right;"><?php echo 'Rp ' . number_format($total); ?></td>
 								</tr>
 							<?php } ?>
@@ -249,7 +249,7 @@
 									<td style="text-align:left;"><?php echo $satuan; ?></td>
 									<td style="text-align:right;"><?php echo 'Rp ' . number_format($harjul); ?></td>
 									<td style="text-align:center;"><?php echo $qty; ?></td>
-									<td style="text-align:right;"><?php echo nl2br(htmlspecialchars( $diskon)); ?></td>
+									<td style="text-align:right;"><?php echo $diskon; ?></td>
 									<td style="text-align:right;"><?php echo $cara_bayar1; ?></td>
 									<td style="text-align:right;"><?php echo $cara_bayar2; ?></td>
 									<td style="text-align:right;"><?php echo 'Rp ' . number_format($total); ?></td>
@@ -330,7 +330,7 @@
 									<td style="text-align:left;"><?php echo $satuan; ?></td>
 									<td style="text-align:right;"><?php echo 'Rp ' . number_format($harjul); ?></td>
 									<td style="text-align:center;"><?php echo $qty; ?></td>
-									<td style="text-align:right;"><?php echo nl2br(htmlspecialchars($diskon)); ?></td>
+									<td style="text-align:right;"><?php echo $diskon; ?></td>
 									<td style="text-align:right;"><?php echo 'Rp ' . number_format($total); ?></td>
 								</tr>
 							<?php } ?>
@@ -409,7 +409,7 @@
 									<td style="text-align:left;"><?php echo $satuan; ?></td>
 									<td style="text-align:right;"><?php echo 'Rp ' . number_format($harjul); ?></td>
 									<td style="text-align:center;"><?php echo $qty; ?></td>
-									<td style="text-align:right;"><?php echo nl2br(htmlspecialchars( $diskon)); ?></td>
+									<td style="text-align:right;"><?php echo $diskon; ?></td>
 									<td style="text-align:right;"><?php echo 'Rp ' . number_format($total); ?></td>
 								</tr>
 							<?php } ?>
